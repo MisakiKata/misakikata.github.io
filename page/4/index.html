@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/index-banner.jpg'); height: 80vh;">
+    
+      <div class="container">
+        <h1 class="title text-center"></h1>
+      </div>
+    
+  </div>
+
+  
+  
+    <div class="main main-raised">
+      <div class="container">
+      
+          <div class="section">
+            <div class="row">
+    <div class="col-md-10 offset-md-1">
+        
+        <div class="row post-card">
+            
+            
+                <div class="col-md-11">
+                    <a href="/2020/07/%E5%8F%88%E5%8F%92%E5%8F%92%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Eosquery%E7%9A%84%E7%9B%91%E6%8E%A7/" class="h3 title" target="_self">又叒叒一个基于osquery的监控</a>
+                    
+                    <p>又叒叒一个基于osquery的监控项目地址：https://github.com/MisakiKata/zeru
+此项目是基于osquery的数据收集分析项目，用来监控主机，从最初的学习项目到现在的具有一定使用价值的项目。
+数据流使用kafka来传输，客户端定时收集发送，服务的定时拉取，所以并没有实时监控。
+基于osquery的项目官方有很多推荐，...</p>
+                    
+                    
+                    <p class="h6">
+                        <i class="material-icons">date_range</i>2020-07-02
+                        
+                            <i class="material-icons">bookmark_border</i>
+                                
+                                    Open Source Security &nbsp;
+                                
+                        
+                    </p>
+                    
+                </div>
+        </div>
+       
+        
+        <div class="row post-card">
+            
+            
+                <div class="col-md-11">
+                    <a href="/2020/06/CVE-2020-14942-Python-Tendenci-Unserialize/" class="h3 title" target="_self">CVE-2020-14942-Python Tendenci Unserialize</a>
+                    
+                    <p>反序列化来自一个开源协会管理系统，文件tendenci\apps\helpdesk\views\staff.py
+def ticket_list(request):
+    context = &#123;&#125;
+    ......
+    if request.GET.get('saved_query', None):
+         ...</p>
+                    
+                    
+                    <p class="h6">
+                        <i class="material-icons">date_range</i>2020-06-22
+                        
+                            <i class="material-icons">bookmark_border</i>
+                                
+                                    python &nbsp;
+                                
+                        
+                    </p>
+                    
+                </div>
+        </div>
+       
+        
+        <div class="row post-card">
+            
+            
+                <div class="col-md-11">
+                    <a href="/2020/05/Python-%E8%BF%87%E6%BB%A4%E5%99%A8/" class="h3 title" target="_self">Python 过滤器</a>
+                    
+                    <p>布隆过滤器什么是布隆过滤器？本质上布隆过滤器( BloomFilter )是一种数据结构，比较巧妙的概率型数据结构（probabilistic data structure），特点是高效地插入和查询，可以用来告诉你 “某样东西一定不存在或者可能存在”。
+相比于传统的 Set、Map 等数据结构，它更高效、占用空间更少，但是缺点是其返回的结果是概率性...</p>
+                    
+                    
+                    <p class="h6">
+                        <i class="material-icons">date_range</i>2020-05-27
+                        
+                            <i class="material-icons">bookmark_border</i>
+                                
+                                    python &nbsp;
+                                
+                        
+                    </p>
+                    
+                </div>
+        </div>
+       
+        
+        <div class="row post-card">
+            
+            
+                <div class="col-md-11">
+                    <a href="/2020/04/python-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="h3 title" target="_self">python 反序列化</a>
+                    
+                    <p>反序列化库python 序列化和反序列化使用最为频繁的是cPickle和pickle，前者是C语言实现，据说速度比后者快很多。
+只不过python3标准库中不再叫cPickle，而是只有pickle。python2中两者都有。
+python2中的序列化文件如果想在python3中读取，需要修改编码。
+#python2
+with open(&#39;...</p>
+                    
+                    
+                    <p class="h6">
+                        <i class="material-icons">date_range</i>2020-04-26
+                        
+                            <i class="material-icons">bookmark_border</i>
+                                
+                                    python &nbsp;
+                                
+                        
+                    </p>
+                    
+                </div>
+        </div>
+       
+        
+        <div class="row post-card">
+            
+            
+                <div class="col-md-11">
+                    <a href="/2020/04/python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E4%B8%8ESSTI/" class="h3 title" target="_self">python 沙箱逃逸与SSTI</a>
+                    
+                    <p>沙箱逃逸概述沙箱逃逸就是在在一个严格限制的python环境中，通过绕过限制和过滤达到执行更高权限，甚至getshell的过程。
+既然是想getshell，或者说是执行命令就需要一个可执行命令的包。可直接执行命令的模块有
+os
+pty
+subprocess
+plarform
+commands
+
+有些时候，比如CTF，我们并不需要去执行命令，而是去读取...</p>
+                    
+                    
+                    <p class="h6">
+                        <i class="material-icons">date_range</i>2020-04-21
+                        
+                            <i class="material-icons">bookmark_border</i>
+                                
+                                    python &nbsp;
+                                
+                        
+                    </p>
+                    
+                </div>
+        </div>
+       
+        
+        <div class="row post-card">
+            
+            
+                <div class="col-md-11">
+                    <a href="/2020/04/%E5%9F%9F%E9%9D%B6%E5%9C%BAWP/" class="h3 title" target="_self">域靶场WP</a>
+                    
+                    <p>域环境利用已有靶场，简单方便http://vulnstack.qiyuanxuetang.net/vuln/detail/3/
+web环境漏洞FastJson。利用https://github.com/RealBearcat/FastJson-JdbcRowSetImpl-RCE 修改而来
+
+参数为json字符串，可以简单的使用如下探测是否存在问题...</p>
+                    
+                    
+                    <p class="h6">
+                        <i class="material-icons">date_range</i>2020-04-10
+                        
+                            <i class="material-icons">bookmark_border</i>
+                                
+                                    渗透测试 &nbsp;
+                                
+                        
+                    </p>
+                    
+                </div>
+        </div>
+       
+         
+        <br><br>
+        
+    <div class="text-center">
+        
+            <a class="btn btn-primary btn-just-icon btn-round" href="/page/3/">
+                <i class="material-icons">navigate_before</i>
+            </a>
+        
+        
+            <a class="btn btn-primary btn-just-icon btn-round" href="/page/5/">
+                <i class="material-icons">navigate_next</i>
+            </a>
+        
+    </div>
+
+
+    </div>
+</div>
+          </div>
+      
+      </div>
+    </div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
