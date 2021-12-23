@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>Android认证方式和绕过 ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">Android认证方式和绕过</h1>
+        <p class="text-center"><b>Wednesday, December 22nd 2021, 4:28 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p>源码来自：<a target="_blank" rel="noopener" href="https://github.com/Ch3nYe/httpstest">https://github.com/Ch3nYe/httpstest</a></p>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://ch3nye.top/Android-HTTPS%E8%AE%A4%E8%AF%81%E7%9A%84N%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E6%8A%97%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93">https://ch3nye.top/Android-HTTPS%E8%AE%A4%E8%AF%81%E7%9A%84N%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E6%8A%97%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93</a></p>
+<p>打包好的<a href="/images/file/httpstest.zip">APP</a>，启动目录下的http_server，同时修改host把<a href="http://www.test.com指向本地。包名为：com.example.httpstest">www.test.com指向本地。包名为：com.example.httpstest</a></p>
+<p>安装后如下所示：</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622097.png" alt="image-20211216112037976"></p>
+<p>然后为了方便代理，我们安装一个ProxyDroid：<a target="_blank" rel="noopener" href="https://github.com/madeye/proxydroid">https://github.com/madeye/proxydroid</a></p>
+<p>可以从谷歌商店代理下载：<a target="_blank" rel="noopener" href="https://apkpure.com/store/apps/details?id=org.proxydroid">https://apkpure.com/store/apps/details?id=org.proxydroid</a></p>
+<p>这个东西是利用Android iptables代理，捕获所有APP数据包。一般做WiFi代理的话，有些流量不会走代理，或者还可以使用VPN的代理模式比如Postern。</p>
+<p>一开始的两个直接做了代理就可以抓到，就不演示了。</p>
+<h3 id="HTTPS系统证书校验"><a href="#HTTPS系统证书校验" class="headerlink" title="HTTPS系统证书校验"></a>HTTPS系统证书校验</h3><p>在Android7以上的系统，用户证书不再信任，此处配置证书到系统证书目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">openssl x509 -inform DER -in burp.der -out cacert.pem
+openssl x509 -inform PEM -subject_hash_old -in cacert.pem     &#x3D;&gt;  hash
+mv cacert.pem &lt;hash&gt;.0
+adb push hash.0 &#x2F;sdcard    &#x2F;&#x2F;由于系统读写权限问题，不一定能直接上传到system目录。
+mount -o remount,rw &#x2F;system   &#x2F;&#x2F;root权限下执行
+cp &#x2F;sdcard&#x2F;hash.0 &#x2F;system&#x2F;etc&#x2F;security&#x2F;cacerts&#x2F;
+chmod 644 &#x2F;system&#x2F;etc&#x2F;security&#x2F;cacerts&#x2F;hash.0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>第一行就是那个hash</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622099.png" alt="image-20211216135309890"></p>
+<p>后续点击执行</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622100.png" alt="image-20211216135944342"></p>
+<h3 id="SSLPINNING-代码校验"><a href="#SSLPINNING-代码校验" class="headerlink" title="SSLPINNING 代码校验"></a>SSLPINNING 代码校验</h3><p>这里的校验是公钥，由于中间穿插了burp，所以burp即是客户端，又是服务端，app校验的是burp的公钥导致校验失败。此处使用的是frida，先去下载frida：<a target="_blank" rel="noopener" href="https://github.com/frida/frida/releases">https://github.com/frida/frida/releases</a></p>
+<pre class="line-numbers language-none"><code class="language-none">adb push frida-server &#x2F;data&#x2F;local&#x2F;tmp
+adb forward tcp:27042 tcp:27042
+adb forward tcp:27043 tcp:27043
+cd &#x2F;data&#x2F;local&#x2F;tmp&#x2F;
+chmod 755 frida-server
+.&#x2F;frida-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>作者提供了一个frida脚本，但是按照使用方式我这边会重启模拟器，也许是模拟器的原因？这里按照一个python脚本来调用这个js脚本。</p>
+<pre class="line-numbers language-none"><code class="language-none">#coding:utf8
+
+import frida, sys,os,json,codecs
+import subprocess
+import time
+import ctypes
+
+if (len(sys.argv) &#x3D;&#x3D; 3):
+    jsfile &#x3D; str(sys.argv[1].strip())
+    package_name &#x3D; str(sys.argv[2]).strip()
+else:
+  print &quot;Usage: python frida_attach.py [hook.js] [package_name] &quot;
+  sys.exit(1)
+
+def print_result(message):
+    print (&quot;[!] Received: [%s]&quot; %(message))
+
+def stringFromArray(data):
+    ret &#x3D; &#39;&#39;
+    for i in data:
+        value &#x3D; ctypes.c_uint8(i).value
+        if value &#x3D;&#x3D; 0:
+            continue
+        if value &lt;&#x3D;127:
+            ret +&#x3D; chr(value)
+        else:
+            ret +&#x3D; &#39;\\x&#39; + hex(value)[2:]
+    return ret
+
+def hex_stringFromArray(data):
+    ret &#x3D; &#39;[&#39;
+    for i in data:
+        value &#x3D; ctypes.c_uint8(i).value
+        ret +&#x3D; hex(value) + &quot;,&quot;
+    return ret + &quot;]&quot;
+
+def on_message(message, data):
+    print(data)
+    if &#39;payload&#39; in message:
+        data &#x3D; message[&#39;payload&#39;]
+        if type(data) is list:
+            print stringFromArray(data)
+        else:
+            print data   
+    else:
+        if message[&#39;type&#39;] &#x3D;&#x3D; &#39;error&#39;:
+            print (message[&#39;stack&#39;])
+        else:
+            print message
+
+def main():
+    with codecs.open(jsfile, &#39;r&#39;, encoding&#x3D;&#39;utf8&#39;) as f:
+         jscode  &#x3D; f.read()
+    process &#x3D; frida.get_device_manager().enumerate_devices()[-1].attach(package_name)
+    script &#x3D; process.create_script(jscode)
+    script.on(&#39;message&#39;, on_message)
+    script.load()
+    sys.stdin.read()
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    main()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>执行如下后，就可以bypass。</p>
+<pre class="line-numbers language-none"><code class="language-none">python .\frida_attach.py .\new_sslpinning.js httpstest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622101.png" alt="image-20211216154316093"></p>
+<p>配置文件校验跟上面的形式差不多，只是一个代码实现，一个在<code>res/xml/network_security_config.xml</code>配置文件中实现。</p>
+<p>单向校验的话，还可以使用Xposed和justtrustme一起配合来绕过。</p>
+<h3 id="双向校验"><a href="#双向校验" class="headerlink" title="双向校验"></a>双向校验</h3><p>需要先启动目录下的http_server服务，如果访问的话，浏览器会显示异常的链接请求。</p>
+<p>需要先把certs目录下的client.p12安装到访问浏览器，密码是clientpassword。再去访问浏览器发现可以显示，同样需要把证书加到burp，让证书可以用证书进行认证。</p>
+<p>在user options – TLS – Client TLS certificates中添加，填入域名<a target="_blank" rel="noopener" href="http://www.test.com,输入密码即可./">www.test.com，输入密码即可。</a></p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622102.png" alt="image-20211216161336849"></p>
+<p>也就是如果需要绕过这种双向验证，需要客户端的证书来对请求进行身份验证。一般情况下这个证书获取从APP</p>
+<p>解压，查看assets或者res目录内，查找是否有pfx、cer、p12格式的证书。最后我们需要导入p12的证书。</p>
+<h4 id="frida-1"><a href="#frida-1" class="headerlink" title="frida(1)"></a>frida(1)</h4><p>当然不少的APP可能存在加壳加密等办法，证书和密码的获取不是那么简单，这里提供一种利用frida来获取证书和密钥的办法。</p>
+<p>下载frida-extract-keystore：<a target="_blank" rel="noopener" href="https://gist.github.com/ceres-c/cb3b69e53713d5ad9cf6aac9b8e895d2">https://gist.github.com/ceres-c/cb3b69e53713d5ad9cf6aac9b8e895d2</a></p>
+<p>运行脚本后，会自动的启动APP，需要在脚本内修改APP包名，点击需要执行的功能，也就是触发请求。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622103.png" alt="image-20211217113149894"></p>
+<p>脚本会自动抓取写在代码内的密码和保存证书，以jks的形式。然后需要去提取公钥。</p>
+<pre class="line-numbers language-none"><code class="language-none">keytool -list -rfc -keystore .\keystore1.jks -storepass clientpassword<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>把显示的内容保存在cer格式的证书中。导出私钥先转换为pfx。</p>
+<pre class="line-numbers language-none"><code class="language-none">keytool -v -importkeystore -srckeystore server.jks -srcstoretype jks -srcstorepass clientpassword -destkeystore server.pfx -deststoretype pkcs12 -deststorepass clientpassword -destkeypass 12345678<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>利用pfx导出key，密码还是上面查到的密码</p>
+<pre class="line-numbers language-none"><code class="language-none">openssl pkcs12 -in server.pfx -nocerts -nodes -out server.key<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>再利用key和证书生成p12证书，可以导入burp的那种，密码是我们上面设置的12345678。</p>
+<pre class="line-numbers language-none"><code class="language-none">openssl pkcs12 -export -clcerts -in client-cert.cer -inkey client-key.key -out client.p12<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>当没有配置证书的时候，抓包显示Communication error。配置进行这个p12。密码为12345678</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622104.png" alt="image-20211217134216895"></p>
+<p>再次访问即可成功。</p>
+<h4 id="frida-2"><a href="#frida-2" class="headerlink" title="frida(2)"></a>frida(2)</h4><p>如果能获取证书，但是需要查找密码，而又懒得去解包或者不好脱壳，可以尝试查密码的frida脚本。</p>
+<p>frida js ：<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/m0bilesecurity/Frida-Mobile-Scripts/master/Android/tracer_keystore.js">https://raw.githubusercontent.com/m0bilesecurity/Frida-Mobile-Scripts/master/Android/tracer_keystore.js</a></p>
+<p>使用上面的python2脚本来调用。</p>
+<pre class="line-numbers language-none"><code class="language-none">python .\frida_attach.py .\tracer_keystore.js httpstest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>点击触发功能，会显示如下</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112231622105.png" alt="image-20211217134908128"></p>
+<p>由于可以解包获取其中的p12证书，所以直接导入证书和密码到burp即可。</p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2021/12/Android%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F%E5%92%8C%E7%BB%95%E8%BF%87/">https://misakikata.github.io/2021/12/Android%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F%E5%92%8C%E7%BB%95%E8%BF%87/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2021/12/Android%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F%E5%92%8C%E7%BB%95%E8%BF%87/">December 22nd 2021, 4:28:34 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2021/12/Android%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F%E5%92%8C%E7%BB%95%E8%BF%87/">December 23rd 2021, 4:28:27 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;Android逆向</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2021/12/Android认证方式和绕过/'; 
+            this.page.identifier = '/2021/12/Android认证方式和绕过/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
