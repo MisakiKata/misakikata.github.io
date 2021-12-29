@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://misakikata.github.io/"/>
-  <updated>2021-12-23T08:28:27.718Z</updated>
+  <updated>2021-12-28T10:31:44.854Z</updated>
   <id>https://misakikata.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go 内存泄露</title>
+    <link href="https://misakikata.github.io/2021/12/Go-%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/"/>
+    <id>https://misakikata.github.io/2021/12/Go-内存泄露/</id>
+    <published>2021-12-28T10:30:03.000Z</published>
+    <updated>2021-12-28T10:31:44.854Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="goroutine泄露"><a href="#goroutine泄露" class="headerlink" title="goroutine泄露"></a>goroutine泄露</h3><p>这里所说的Go内存泄露是指goroutine泄露。如果你启动了1个goroutine，但并没有符合预期的退出，直到程序结束，此goroutine才退出，这种情况就是goroutine泄露。在此之前先来认识一下pprof，pprof是Go的性能分析工具，在程序运行过程中，可以记录程序的运行信息，可以是CPU使用情况、内存使用情况、goroutine运行情况等。</p><p>Go已经有一个封装好的<code>net/http/pprof</code>，使用简单的几行命令，就可以开启pprof，记录运行信息，并且提供了Web服务。</p><p>如果一个存在的Go内存泄露情况如下：</p><pre class="line-numbers language-none"><code class="language-none">http:&#x2F;&#x2F;xxxx&#x2F;debug&#x2F;pprof&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831635.png" alt="image-20211228111613802"></p><p>allocs：所有过去内存分配的样本<br>block：导致同步阻塞的堆栈跟踪<br>cmdline：当前程序的命令行调用<br>goroutine：所有当前 goroutine 的堆栈跟踪<br>heap：活动对象的内存分配示例。 您可以指定 gc GET 参数以在获取堆样本之前运行 GC。<br>mutex：竞争互斥体持有者的堆栈跟踪<br>profile：CPU 配置文件。 您可以在 seconds GET 参数中指定持续时间。 获取配置文件后，使用 go tool pprof 命令调查配置文件。<br>threadcreate：导致创建新操作系统线程的堆栈跟踪<br>trace：当前程序执行的轨迹。 您可以在 seconds GET 参数中指定持续时间。 获取跟踪文件后，使用 go tool trace 命令调查跟踪。</p><p>比如点一个cmdline，查看运行的命令，也许会包括账号密码。</p><pre class="line-numbers language-none"><code class="language-none">&#x2F;debug&#x2F;pprof&#x2F;cmdline?debug&#x3D;1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831637.png" alt="image-20211228111836637"></p><p>点击profile或者trace的时候会下载一个编译的文件，里面含有进程信息以及程序信息。使用如下命令查看，可以看到这是一个so文件。</p><pre class="line-numbers language-none"><code class="language-none">go tool pprof .\profile# go tool pprof http:&#x2F;&#x2F;xxx&#x2F;profile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831638.png" alt="image-20211228112643219"></p><p>查看进程函数占用，查看命令介绍可以使用help。</p><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831639.png" alt="image-20211228113041465"></p><p>也可以下载heap查看，需要删掉链接上自动带的debug=1。</p><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831640.png" alt="image-20211228131632457"></p><p>这个heap文件写的是什么</p><pre class="line-numbers language-none"><code class="language-none">&#x2F;debug&#x2F;pprof&#x2F;goroutine?debug&#x3D;1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831641.png" alt="image-20211228133437841"></p><p>大概能看出来的是有62个goroutine被挂起，不能退出。这里面有6个goroutine挂在了wss_client.go的104行。</p><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831642.png" alt="image-20211228134321120"></p><h3 id="pprof分析"><a href="#pprof分析" class="headerlink" title="pprof分析"></a>pprof分析</h3><p>先安装一个graphviz：<a href="https://graphviz.gitlab.io/_pages/Download/Download_windows.html">https://graphviz.gitlab.io/_pages/Download/Download_windows.html</a> </p><pre class="line-numbers language-none"><code class="language-none">go tool pprof --http&#x3D;&quot;:8999&quot; https:&#x2F;&#x2F;xxxx&#x2F;debug&#x2F;pprof&#x2F;heap<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831643.png" alt="image-20211228142010787"></p><p>颜色越深越大的代表占用和耗时越多</p><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831644.png" alt="image-20211228142130766"></p><h3 id="goroutine-泄露的场景"><a href="#goroutine-泄露的场景" class="headerlink" title="goroutine 泄露的场景"></a>goroutine 泄露的场景</h3><p>goroutine泄露的本质是channel阻塞，无法继续向下执行，导致此goroutine关联的内存都无法释放，进一步造成内存泄露。</p><ol><li>channel的读或者写：<ol><li>无缓冲channel的阻塞通常是写操作因为没有读而阻塞</li><li>有缓冲的channel因为缓冲区满了，写操作阻塞</li><li>期待从channel读数据，结果没有goroutine写</li></ol></li><li>select操作，select里也是channel操作，如果所有case上的操作阻塞，goroutine也无法继续执行。</li></ol><p>参考文章：</p><p><a href="https://segmentfault.com/a/1190000019222661">https://segmentfault.com/a/1190000019222661</a></p><p><a href="https://segmentfault.com/a/1190000019644257">https://segmentfault.com/a/1190000019644257</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;goroutine泄露&quot;&gt;&lt;a href=&quot;#goroutine泄露&quot; class=&quot;headerlink&quot; title=&quot;goroutine泄露&quot;&gt;&lt;/a&gt;goroutine泄露&lt;/h3&gt;&lt;p&gt;这里所说的Go内存泄露是指goroutine泄露。如果你启动了1个g
+      
+    
+    </summary>
+    
+    
+      <category term="web安全" scheme="https://misakikata.github.io/tags/web%E5%AE%89%E5%85%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>Android认证方式和绕过</title>
@@ -462,29 +485,6 @@
     
     
       <category term="web安全" scheme="https://misakikata.github.io/tags/web%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>又叒叒一个基于osquery的监控</title>
-    <link href="https://misakikata.github.io/2020/07/%E5%8F%88%E5%8F%92%E5%8F%92%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Eosquery%E7%9A%84%E7%9B%91%E6%8E%A7/"/>
-    <id>https://misakikata.github.io/2020/07/又叒叒一个基于osquery的监控/</id>
-    <published>2020-07-02T07:54:01.000Z</published>
-    <updated>2020-07-02T07:58:23.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="又叒叒一个基于osquery的监控"><a href="#又叒叒一个基于osquery的监控" class="headerlink" title="又叒叒一个基于osquery的监控"></a>又叒叒一个基于osquery的监控</h3><p>项目地址：<a href="https://github.com/MisakiKata/zeru">https://github.com/MisakiKata/zeru</a></p><p>此项目是基于osquery的数据收集分析项目，用来监控主机，从最初的学习项目到现在的具有一定使用价值的项目。</p><p>数据流使用kafka来传输，客户端定时收集发送，服务的定时拉取，所以并没有实时监控。</p><p>基于osquery的项目官方有很多推荐，至于自己写一方面是为了学习django，一方面是为了二次开发。如果需要更完善和美观的项目可以采用官方的推荐。</p><h4 id="osquery配置"><a href="#osquery配置" class="headerlink" title="osquery配置"></a>osquery配置</h4><p>以下配置只是用来表示文件监控的一部分，至于其他的配置并没有使用。<code>/etc/osquery/osquery.conf</code></p><pre class="line-numbers language-none"><code class="language-none">&#123;&quot;options&quot;: &#123;&quot;config_plugin&quot;:&quot;filesystem&quot;,&quot;logger_plugin&quot;:&quot;filesystem&quot;,&quot;logger_path&quot;:&quot;&#x2F;var&#x2F;log&#x2F;osquery&quot;,&quot;disable_logging&quot;:&quot;false&quot;,&quot;schedule_splay_percent&quot;:&quot;10&quot;,&quot;verbose&quot;:&quot;false&quot;,&quot;pidfile&quot;:&quot;&#x2F;var&#x2F;osquery&#x2F;osquery.pidfile&quot;,&quot;enable_syslog&quot;: &quot;true&quot;,&quot;worker_threads&quot;:&quot;5&quot;,&quot;host_identifier&quot;:&quot;hostname&quot;,&quot;disable_events&quot;:&quot;false&quot;,&quot;disable_audit&quot;:&quot;false&quot;,&quot;audit_allow_config&quot;:&quot;true&quot;,&quot;audit_allow_sockets&quot;:&quot;true&quot;&#125;,&quot;file_paths&quot;: &#123;&quot;html&quot;: [&quot;&#x2F;var&#x2F;www&#x2F;%%&quot;]&#125;,&quot;schedule&quot;: &#123;&quot;file_events&quot;: &#123;&quot;query&quot;: &quot;SELECT * FROM file_events;&quot;,&quot;removed&quot;: false,&quot;interval&quot;: 600&#125;&#125;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h4><p>配置根据官方推荐来即可，如果不在同一台主机，需要注意跨主机访问的配置。</p><h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>默认django的非debug模式，需要开启监控，到设置中上面的选择开启即可。如果有问题可以先关闭再调试。agent目录为客户端文件，定时运行即可。默认定时为十分钟拉取一次，需要修改到<code>apps/threat/views.py</code>修改即可。</p><p>需要主机的IP做处理，所以最好先定义agent中的IP地址。如果不定义会自己识别，但不一定正确。</p><p>系统信息中会显示全部存在的信息，为了避免大量数据加载，所以只默认显示最近七天的数据。如果需要修改时间，可以到<code>apps/logcat/views.py</code>中修改。</p><h4 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h4><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200702135635.png" alt="image-20200702135628638"></p><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200702140400.png" alt="image-20200702140400754"></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;又叒叒一个基于osquery的监控&quot;&gt;&lt;a href=&quot;#又叒叒一个基于osquery的监控&quot; class=&quot;headerlink&quot; title=&quot;又叒叒一个基于osquery的监控&quot;&gt;&lt;/a&gt;又叒叒一个基于osquery的监控&lt;/h3&gt;&lt;p&gt;项目地址：&lt;a hr
-      
-    
-    </summary>
-    
-    
-      <category term="Open Source Security" scheme="https://misakikata.github.io/tags/Open-Source-Security/"/>
     
   </entry>
   

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>Go 内存泄露 ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">Go 内存泄露</h1>
+        <p class="text-center"><b>Tuesday, December 28th 2021, 6:30 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h3 id="goroutine泄露"><a href="#goroutine泄露" class="headerlink" title="goroutine泄露"></a>goroutine泄露</h3><p>这里所说的Go内存泄露是指goroutine泄露。如果你启动了1个goroutine，但并没有符合预期的退出，直到程序结束，此goroutine才退出，这种情况就是goroutine泄露。在此之前先来认识一下pprof，pprof是Go的性能分析工具，在程序运行过程中，可以记录程序的运行信息，可以是CPU使用情况、内存使用情况、goroutine运行情况等。</p>
+<p>Go已经有一个封装好的<code>net/http/pprof</code>，使用简单的几行命令，就可以开启pprof，记录运行信息，并且提供了Web服务。</p>
+<p>如果一个存在的Go内存泄露情况如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">http:&#x2F;&#x2F;xxxx&#x2F;debug&#x2F;pprof&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831635.png" alt="image-20211228111613802"></p>
+<p>allocs：所有过去内存分配的样本<br>block：导致同步阻塞的堆栈跟踪<br>cmdline：当前程序的命令行调用<br>goroutine：所有当前 goroutine 的堆栈跟踪<br>heap：活动对象的内存分配示例。 您可以指定 gc GET 参数以在获取堆样本之前运行 GC。<br>mutex：竞争互斥体持有者的堆栈跟踪<br>profile：CPU 配置文件。 您可以在 seconds GET 参数中指定持续时间。 获取配置文件后，使用 go tool pprof 命令调查配置文件。<br>threadcreate：导致创建新操作系统线程的堆栈跟踪<br>trace：当前程序执行的轨迹。 您可以在 seconds GET 参数中指定持续时间。 获取跟踪文件后，使用 go tool trace 命令调查跟踪。</p>
+<p>比如点一个cmdline，查看运行的命令，也许会包括账号密码。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;debug&#x2F;pprof&#x2F;cmdline?debug&#x3D;1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831637.png" alt="image-20211228111836637"></p>
+<p>点击profile或者trace的时候会下载一个编译的文件，里面含有进程信息以及程序信息。使用如下命令查看，可以看到这是一个so文件。</p>
+<pre class="line-numbers language-none"><code class="language-none">go tool pprof .\profile
+# go tool pprof http:&#x2F;&#x2F;xxx&#x2F;profile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831638.png" alt="image-20211228112643219"></p>
+<p>查看进程函数占用，查看命令介绍可以使用help。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831639.png" alt="image-20211228113041465"></p>
+<p>也可以下载heap查看，需要删掉链接上自动带的debug=1。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831640.png" alt="image-20211228131632457"></p>
+<p>这个heap文件写的是什么</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;debug&#x2F;pprof&#x2F;goroutine?debug&#x3D;1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831641.png" alt="image-20211228133437841"></p>
+<p>大概能看出来的是有62个goroutine被挂起，不能退出。这里面有6个goroutine挂在了wss_client.go的104行。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831642.png" alt="image-20211228134321120"></p>
+<h3 id="pprof分析"><a href="#pprof分析" class="headerlink" title="pprof分析"></a>pprof分析</h3><p>先安装一个graphviz：<a target="_blank" rel="noopener" href="https://graphviz.gitlab.io/_pages/Download/Download_windows.html">https://graphviz.gitlab.io/_pages/Download/Download_windows.html</a> </p>
+<pre class="line-numbers language-none"><code class="language-none">go tool pprof --http&#x3D;&quot;:8999&quot; https:&#x2F;&#x2F;xxxx&#x2F;debug&#x2F;pprof&#x2F;heap<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831643.png" alt="image-20211228142010787"></p>
+<p>颜色越深越大的代表占用和耗时越多</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202112281831644.png" alt="image-20211228142130766"></p>
+<h3 id="goroutine-泄露的场景"><a href="#goroutine-泄露的场景" class="headerlink" title="goroutine 泄露的场景"></a>goroutine 泄露的场景</h3><p>goroutine泄露的本质是channel阻塞，无法继续向下执行，导致此goroutine关联的内存都无法释放，进一步造成内存泄露。</p>
+<ol>
+<li>channel的读或者写：<ol>
+<li>无缓冲channel的阻塞通常是写操作因为没有读而阻塞</li>
+<li>有缓冲的channel因为缓冲区满了，写操作阻塞</li>
+<li>期待从channel读数据，结果没有goroutine写</li>
+</ol>
+</li>
+<li>select操作，select里也是channel操作，如果所有case上的操作阻塞，goroutine也无法继续执行。</li>
+</ol>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000019222661">https://segmentfault.com/a/1190000019222661</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000019644257">https://segmentfault.com/a/1190000019644257</a></p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2021/12/Go-%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/">https://misakikata.github.io/2021/12/Go-%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2021/12/Go-%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/">December 28th 2021, 6:30:03 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2021/12/Go-%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/">December 28th 2021, 6:31:44 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;web安全</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2021/12/Go-内存泄露/'; 
+            this.page.identifier = '/2021/12/Go-内存泄露/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
