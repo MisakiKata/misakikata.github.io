@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>Unidbg运行SO ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">Unidbg运行SO</h1>
+        <p class="text-center"><b>Saturday, July 9th 2022, 7:56 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h3 id="下载unidbg"><a href="#下载unidbg" class="headerlink" title="下载unidbg"></a>下载unidbg</h3><p>地址：<a target="_blank" rel="noopener" href="https://github.com/zhkl0228/unidbg">https://github.com/zhkl0228/unidbg</a></p>
+<p>unidbg需要在IDEA端进行调试一下，等待依赖自动安装后，运行<code>unidbg-android/src/test/java/com/bytedance/frameworks/core/encrypt/TTEncrypt.java</code>文件。如果显示如下则代表运行正常。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160655.png" alt="image-20220708143215761"></p>
+<p>使用一个基础的模板，后续可以根据此模板来进行修改</p>
+<pre class="line-numbers language-none"><code class="language-none">public SignUtil() &#123;
+       emulator &#x3D; AndroidEmulatorBuilder.for32Bit()
+               .setProcessName(&quot;com.anjuke.android.app&quot;)
+               .build();
+       Memory memory &#x3D; emulator.getMemory();
+       memory.setLibraryResolver(new AndroidResolver(23));
+       vm &#x3D; emulator.createDalvikVM();
+       vm.setDvmClassFactory(new ProxyClassFactory());
+       vm.setVerbose(false);
+       DalvikModule dm &#x3D; vm.loadLibrary(new File(&quot;unidbg-android&#x2F;src&#x2F;test&#x2F;resources&#x2F;example_binaries&#x2F;armeabi-v7a&#x2F;libsignutil.so&quot;), false);
+       cSignUtil &#x3D; vm.resolveClass(&quot;com&#x2F;anjuke&#x2F;mobile&#x2F;sign&#x2F;SignUtil&quot;);
+       dm.callJNI_OnLoad(emulator);
+   &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其中需要注意的是：</p>
+<ol>
+<li>setProcessName为进程名，可以自己去赋值。</li>
+<li>setLibraryResolver有19、23两个SDK可以选，一般使用23。</li>
+<li>createDalvikVM的时候里面为APK的目录，可以为空。</li>
+<li>loadLibrary为需要加载到内存的so文件。</li>
+<li>resolveClass为调用了so加密函数的Java代码位置。</li>
+<li>callJNI_OnLoad为调用JNI_load，有时候这个方法会报错Illegal JNI version，这是文件修不不正常导致。</li>
+</ol>
+<h3 id="so文件测试"><a href="#so文件测试" class="headerlink" title="so文件测试"></a>so文件测试</h3><p>先用一个吾爱老哥的文件进行一下测试使用</p>
+<p>地址：<a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1322512-1-1.html">https://www.52pojie.cn/thread-1322512-1-1.html</a></p>
+<p>编写一个TestJni.java，需要注意的是，这里做了一点修改，由于AndroidARMEmulator为受保护的方法，并不能直接调用，可能是unidbg做了变化，修改为AndroidEmulatorBuilder，代码为：</p>
+<pre class="line-numbers language-none"><code class="language-none">package com.misaki;
+
+import com.github.unidbg.AndroidEmulator;
+import com.github.unidbg.Module;
+import com.github.unidbg.arm.ARMEmulator;
+import com.github.unidbg.arm.backend.DynarmicFactory;
+import com.github.unidbg.linux.android.AndroidARMEmulator;
+import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
+import com.github.unidbg.linux.android.AndroidResolver;
+import com.github.unidbg.linux.android.dvm.*;
+import com.github.unidbg.linux.android.dvm.jni.ProxyClassFactory;
+import com.github.unidbg.linux.android.dvm.jni.ProxyDvmObject;
+import com.github.unidbg.memory.Memory;
+
+import java.io.File;
+import java.io.IOException;
+
+public class TestJni extends AbstractJni &#123;
+    &#x2F;&#x2F; ARM模拟器
+    private final AndroidEmulator emulator;
+    &#x2F;&#x2F; vm
+    private final VM vm;
+    &#x2F;&#x2F; 载入的模块
+    private final Module module;
+    
+    private final DvmClass TTEncryptUtils;
+
+    &#x2F;**
+     *
+     * @param soFilePath   需要执行的so文件路径
+     * @param classPath    需要执行的函数所在的Java类路径
+     * @throws IOException
+     *&#x2F;
+    public TestJni(String soFilePath, String classPath) throws IOException &#123;
+        &#x2F;&#x2F; 创建app进程，包名可任意写
+        emulator &#x3D; AndroidEmulatorBuilder
+                        .for32Bit()
+                        .addBackendFactory(new DynarmicFactory(true))
+                        .setProcessName(&quot;com.rs&quot;)
+                        .build();
+        Memory memory &#x3D; emulator.getMemory();
+        &#x2F;&#x2F; 作者支持19和23两个sdk
+        memory.setLibraryResolver(new AndroidResolver(23));
+        &#x2F;&#x2F; 创建DalvikVM，利用apk本身，可以为null
+        vm &#x3D; emulator.createDalvikVM((File) null);
+        vm.setDvmClassFactory(new ProxyClassFactory());
+        vm.setVerbose(true);
+&#x2F;&#x2F;        vm.setJni(this);
+        &#x2F;&#x2F; （关键处1）加载so，填写so的文件路径
+        DalvikModule dm &#x3D; vm.loadLibrary(new File(soFilePath), false);
+        &#x2F;&#x2F; 调用jni, 加入此代码有可能会报错 Illegal JNI version，环境原因
+&#x2F;&#x2F;        dm.callJNI_OnLoad(emulator);
+
+        module &#x3D; dm.getModule();
+        &#x2F;&#x2F; （关键处2）加载so文件中的哪个类，填写完整的类路径
+        TTEncryptUtils &#x3D; vm.resolveClass(classPath);
+    &#125;
+
+    &#x2F;**
+     * 调用so文件中的指定函数
+     * @param methodSign 传入你要执行的函数信息，需要完整的smali语法格式的函数签名
+     * @param args       是即将调用的函数需要的参数
+     * @return 函数调用结果
+     *&#x2F;
+    private String myJni(String methodSign, Object ...args) &#123;
+        &#x2F;&#x2F; 使用jni调用传入的函数签名对应的方法（）
+        Object value &#x3D; TTEncryptUtils.callStaticJniMethodObject(emulator, methodSign, args).getValue();
+        return value.toString();
+    &#125;
+
+
+    &#x2F;**
+     * 关闭模拟器
+     * @throws IOException
+     *&#x2F;
+    private void destroy() throws IOException &#123;
+        emulator.close();
+        System.out.println(&quot;emulator destroy...&quot;);
+    &#125;
+
+    public static void main(String[] args) throws IOException &#123;
+        &#x2F;&#x2F; 1、需要调用的so文件所在路径
+        String soFilePath &#x3D; &quot;unidbg-android&#x2F;src&#x2F;test&#x2F;resources&#x2F;myso&#x2F;libinyu-lib.so&quot;;
+        &#x2F;&#x2F; 2、需要调用加密函数所在的Java类完整路径，比如a&#x2F;b&#x2F;c&#x2F;d等等，注意需要用&#x2F;代替点，只需要填写即可。
+        String classPath &#x3D; &quot;water&#x2F;android&#x2F;io&#x2F;inyustring&#x2F;InyuString&quot;;
+        &#x2F;&#x2F; 3、需要调用方法,再jadx中找到对应的方法，然后点击下面的Smail,复制方法的Smail代码。
+        String methodSign &#x3D; &quot;getUrlSign(Ljava&#x2F;lang&#x2F;String;Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;String;&quot;;
+        TestJni testJni &#x3D; new TestJni(soFilePath, classPath);
+        &#x2F;&#x2F; 输出getGameKey方法调用结果
+        System.err.println(testJni.myJni(methodSign,&quot;&#x2F;v1&#x2F;login&#x2F;mobile&#x2F;code?mobile&#x3D;13888888888&amp;country_code&#x3D;0086&amp;__plat&#x3D;android&amp;__version&#x3D;2.21.0&amp;__app&#x3D;inyu&quot;,&quot;1607237431&quot;));
+        testJni.destroy();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其中大部分都不需要修改，只需要修改main中的参数，classPath是加密so函数的Java代码所在类，但是并不需要实际添加进去。运行的结果如下所示。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160656.png" alt="image-20220708164633607"></p>
+<h3 id="APP"><a href="#APP" class="headerlink" title="APP"></a>APP</h3><p>测试APP来源猿人学的一次活动</p>
+<p>地址：<a target="_blank" rel="noopener" href="http://download.python-spider.com/yuanrenxuem106.apk">http://download.python-spider.com/yuanrenxuem106.apk</a></p>
+<p>WP：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/CXsbzt4IWyDaV006JdIYsQ">https://mp.weixin.qq.com/s/CXsbzt4IWyDaV006JdIYsQ</a></p>
+<p>先找到这个包的包名<code>com.yuanrenxue.match2022</code>，基本在这个目录下，这个app做了代码混淆，先不管。</p>
+<p>根据提示找到<code>/app2</code>这个接口对应的代码处。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160657.png" alt="image-20220709123156188"></p>
+<p>其中sign为加密后的字符串，搜索这个字符串，在包下面找相关的字段。</p>
+<p>只有两处相关<code>com.yuanrenxue.match2022.fragment.challenge</code>和<code>com.yuanrenxue.match2022.security</code></p>
+<p>在类<code>ChallengeTwoFragment</code>中可以看到明显的第二题代码，查看最后的sign的加密。加载了match02的so文件。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160658.png" alt="image-20220709130744364"></p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160659.png" alt="image-20220709130754983"></p>
+<p>传入一个参数，类型为str，然后需要找个调用这个sign的地方，看上面的调用。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160700.png" alt="image-20220709140354427"></p>
+<p>这里有两个需要注意，其中v0代表的是获取string中的资源，根据对应的查找发现是<code>%d:%d</code>。</p>
+<p>还有一个是int类型的v1，其中 <code>this.OooO0O0</code>代表是page字段，这个在下面也有定义，<code>arg5.OooO00o()</code>赋值为long类型的v5，也就是这个是ts字段。所以v1就是一个page和ts的数组。</p>
+<p>最后返回的时候，可以看到这个函数和一开始的是一致的。sign中的字符串格式化就是<code>String.format(&quot;%d:%d&quot;, &#123;page, ts&#125;)</code>。</p>
+<p>知道传入sign的字符串参数的形式后，我们自己来调用so来输出。</p>
+<pre class="line-numbers language-none"><code class="language-none">package com.misaki;
+
+import com.github.unidbg.AndroidEmulator;
+import com.github.unidbg.Module;
+import com.github.unidbg.arm.ARMEmulator;
+import com.github.unidbg.arm.backend.DynarmicFactory;
+import com.github.unidbg.arm.backend.Unicorn2Factory;
+import com.github.unidbg.linux.android.AndroidARMEmulator;
+import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
+import com.github.unidbg.linux.android.AndroidResolver;
+import com.github.unidbg.linux.android.dvm.*;
+import com.github.unidbg.linux.android.dvm.jni.ProxyClassFactory;
+import com.github.unidbg.linux.android.dvm.jni.ProxyDvmObject;
+import com.github.unidbg.memory.Memory;
+
+import java.io.File;
+import java.io.IOException;
+
+public class TestJni extends AbstractJni &#123;
+    &#x2F;&#x2F; ARM模拟器
+    private final AndroidEmulator emulator;
+    &#x2F;&#x2F; vm
+    private final VM vm;
+    &#x2F;&#x2F; 载入的模块
+    private final Module module;
+    
+    private final DvmClass TTEncryptUtils;
+
+
+    public TestJni(String soFilePath, String classPath) throws IOException &#123;
+        emulator &#x3D; AndroidEmulatorBuilder
+                        .for64Bit()
+                        .addBackendFactory(new Unicorn2Factory(true))
+                        .setProcessName(&quot;com.yuanrenxue.match2022&quot;)
+                        .build();
+        Memory memory &#x3D; emulator.getMemory();
+        memory.setLibraryResolver(new AndroidResolver(23));
+        vm &#x3D; emulator.createDalvikVM((File) null);
+        vm.setDvmClassFactory(new ProxyClassFactory());
+        vm.setVerbose(true);
+        vm.setJni(this);
+        DalvikModule dm &#x3D; vm.loadLibrary(new File(soFilePath), true);
+        dm.callJNI_OnLoad(emulator);
+        module &#x3D; dm.getModule();
+        TTEncryptUtils &#x3D; vm.resolveClass(classPath);
+    &#125;
+
+    private String myJni(String methodSign, Object ...args) &#123;
+        Object value &#x3D; TTEncryptUtils.callStaticJniMethodObject(emulator, methodSign, args).getValue();
+        return value.toString();
+    &#125;
+
+    private void destroy() throws IOException &#123;
+        emulator.close();
+        System.out.println(&quot;emulator destroy...&quot;);
+    &#125;
+
+    public static void main(String[] args) throws IOException &#123;
+        String soFilePath &#x3D; &quot;unidbg-android&#x2F;src&#x2F;test&#x2F;resources&#x2F;myso&#x2F;libmatch02.so&quot;;
+        String classPath &#x3D; &quot;com&#x2F;yuanrenxue&#x2F;match2022&#x2F;fragment&#x2F;challenge&#x2F;ChallengeTwoFragment&quot;;
+        String methodSign &#x3D; &quot;sign(java&#x2F;lang&#x2F;String;)java&#x2F;lang&#x2F;String;&quot;;
+        TestJni testJni &#x3D; new TestJni(soFilePath, classPath);
+        System.err.println(testJni.myJni(methodSign,&quot;1:1657348328&quot;));
+));
+        testJni.destroy();
+    &#125;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160701.png" alt="image-20220709144802020"></p>
+<p>然后再来看一下第四题，这个看完后发现基本跟第二题没太大区别。同样找到sign方法，里面有两个参数，去找这两个参数对应的值。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160702.png" alt="image-20220709152257853"></p>
+<p>代码为：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> lambda$initListeners$<span class="token function">0</span><span class="token punctuation">(</span>o0000O arg8<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">long</span> v1 <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> v3 <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getResources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token number">0x7F100053</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// string:format_match_04_sign "%d:%d"</span>
+        <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> v4 <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span>v1<span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        oOO00O<span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span> v3_1 <span class="token operator">=</span> oOO00O<span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">.</span><span class="token class-name">OooO0oO</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">OooO0O0</span> v1_1 <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0Oo</span><span class="token punctuation">;</span>
+        com<span class="token punctuation">.</span>yuanrenxue<span class="token punctuation">.</span>match2022<span class="token punctuation">.</span>fragment<span class="token punctuation">.</span>challenge<span class="token punctuation">.</span><span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span> v2 <span class="token operator">=</span> <span class="token keyword">new</span> o00O0<span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span>arg8<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">public</span> <span class="token keyword">final</span> o0000O <span class="token class-name">OooO0O0</span><span class="token punctuation">;</span>
+            <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token class-name">ChallengeFourFragment</span> <span class="token class-name">OooO0OO</span><span class="token punctuation">;</span>
+            <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> o00o00o<span class="token punctuation">.</span><span class="token class-name">OooOo00</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span> <span class="token class-name">OooO0Oo</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">&#123;</span>
+                com<span class="token punctuation">.</span>yuanrenxue<span class="token punctuation">.</span>match2022<span class="token punctuation">.</span>fragment<span class="token punctuation">.</span>challenge<span class="token punctuation">.</span><span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span><span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token punctuation">&#123;</span>
+                <span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token keyword">this</span> <span class="token operator">=</span> arg1<span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span> <span class="token operator">=</span> arg2<span class="token punctuation">;</span>
+                <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>  <span class="token comment">// o00O0.OooO0O0</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>  <span class="token comment">// o00O0.OooO0O0</span>
+            <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token class-name">OooO0OO</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">OooO</span> v8 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">OooO</span><span class="token punctuation">(</span><span class="token string">"ChallengeFourFragment.java"</span><span class="token punctuation">,</span> com<span class="token punctuation">.</span>yuanrenxue<span class="token punctuation">.</span>match2022<span class="token punctuation">.</span>fragment<span class="token punctuation">.</span>challenge<span class="token punctuation">.</span><span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                com<span class="token punctuation">.</span>yuanrenxue<span class="token punctuation">.</span>match2022<span class="token punctuation">.</span>fragment<span class="token punctuation">.</span>challenge<span class="token punctuation">.</span><span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span><span class="token punctuation">.</span><span class="token class-name">OooO0Oo</span> <span class="token operator">=</span> v8<span class="token punctuation">.</span><span class="token class-name">OooO0oO</span><span class="token punctuation">(</span><span class="token string">"method-execution"</span><span class="token punctuation">,</span> v8<span class="token punctuation">.</span><span class="token class-name">OooO0o</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token string">"onError"</span><span class="token punctuation">,</span> <span class="token string">"com.yuanrenxue.match2022.fragment.challenge.ChallengeFourFragment$1"</span><span class="token punctuation">,</span> <span class="token string">"java.lang.Throwable"</span><span class="token punctuation">,</span> <span class="token string">"t"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> <span class="token string">"void"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">103</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token class-name">OooO0o</span><span class="token punctuation">(</span>com<span class="token punctuation">.</span>yuanrenxue<span class="token punctuation">.</span>match2022<span class="token punctuation">.</span>fragment<span class="token punctuation">.</span>challenge<span class="token punctuation">.</span><span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span> arg0<span class="token punctuation">,</span> <span class="token class-name">Throwable</span> arg1<span class="token punctuation">,</span> <span class="token class-name">OooOo00</span> arg2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                arg0<span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onError</span><span class="token punctuation">(</span>arg1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                arg1<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                arg0<span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>  <span class="token comment">// o00O0.OooO0O0</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token class-name">OooO0o0</span><span class="token punctuation">(</span><span class="token class-name">Object</span> arg1<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0oO</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>oOO00O<span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">)</span>arg1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token class-name">OooO0oO</span><span class="token punctuation">(</span>oOO00O<span class="token punctuation">.</span><span class="token class-name">OooO0OO</span> arg5<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">ArrayList</span> v0 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                v0<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> o00O000<span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">(</span><span class="token string">"padding"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">Iterator</span> v5 <span class="token operator">=</span> arg5<span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">while</span><span class="token punctuation">(</span>v5<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    v5<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    v0<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> o00O000<span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token class-name">OooO</span><span class="token punctuation">(</span><span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token class-name">OooO</span><span class="token punctuation">(</span>v0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>  <span class="token comment">// o00O0.OooO0O0</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onError</span><span class="token punctuation">(</span><span class="token class-name">Throwable</span> arg5<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">OooOo00</span> v0 <span class="token operator">=</span> <span class="token class-name">OooO</span><span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">(</span>com<span class="token punctuation">.</span>yuanrenxue<span class="token punctuation">.</span>match2022<span class="token punctuation">.</span>fragment<span class="token punctuation">.</span>challenge<span class="token punctuation">.</span><span class="token class-name">ChallengeFourFragment</span><span class="token punctuation">.</span><span class="token class-name">OooO00o</span><span class="token punctuation">.</span><span class="token class-name">OooO0Oo</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">,</span> arg5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                o000O0<span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">OooOOO0</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">&#123;</span><span class="token keyword">this</span><span class="token punctuation">,</span> arg5<span class="token punctuation">,</span> v0<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token number">0x11010</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        v1_1<span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>oOO00O<span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">)</span>v3_1<span class="token punctuation">.</span><span class="token class-name">OooO0O0</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">sign</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>v3<span class="token punctuation">,</span> v4<span class="token punctuation">)</span><span class="token punctuation">,</span> v1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token class-name">OooO0OO</span><span class="token punctuation">(</span>v1<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> v2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>还是字符串格式化，还是<code>%d:%d</code>类型的格式化，但是参数变了。v4是<code>&#123;((int)this.OooO0O0), ((long)v1)&#125;</code>，而<code>this.OooO0O0</code>上面有赋值，应该也还是page，v1是<code>System.currentTimeMillis()</code>，获取当前的总毫秒数。所以第一页的时候，v4就是<code>&#123;1:1657351690000&#125;</code>。</p>
+<p>所以sign的传参就是<code>this.sign(String.format(&quot;%d:%d&quot;, &#123;1,1657351690000&#125;), 1657351690000)</code></p>
+<p>修改上面的Java代码来调用。</p>
+<pre class="line-numbers language-none"><code class="language-none">package com.misaki;
+
+import com.github.unidbg.AndroidEmulator;
+import com.github.unidbg.Module;
+import com.github.unidbg.arm.backend.DynarmicFactory;
+import com.github.unidbg.arm.backend.Unicorn2Factory;
+import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
+import com.github.unidbg.linux.android.AndroidResolver;
+import com.github.unidbg.linux.android.dvm.*;
+import com.github.unidbg.linux.android.dvm.jni.ProxyClassFactory;
+import com.github.unidbg.linux.android.dvm.jni.ProxyDvmObject;
+import com.github.unidbg.memory.Memory;
+
+import java.io.File;
+import java.io.IOException;
+
+public class TestJni extends AbstractJni &#123;
+    &#x2F;&#x2F; ARM模拟器
+    private final AndroidEmulator emulator;
+    &#x2F;&#x2F; vm
+    private final VM vm;
+    &#x2F;&#x2F; 载入的模块
+    private final Module module;
+    private final DvmClass TTEncryptUtils;
+
+
+    public TestJni(String soFilePath, String classPath) throws IOException &#123;
+        emulator &#x3D; AndroidEmulatorBuilder
+                        .for64Bit()
+                        .addBackendFactory(new DynarmicFactory(true))
+                        .setProcessName(&quot;com.yuanrenxue.match2022&quot;)
+                        .build();
+        Memory memory &#x3D; emulator.getMemory();
+        memory.setLibraryResolver(new AndroidResolver(23));
+        vm &#x3D; emulator.createDalvikVM((File) null);
+        vm.setDvmClassFactory(new ProxyClassFactory());
+        vm.setVerbose(true);
+        vm.setJni(this);
+        DalvikModule dm &#x3D; vm.loadLibrary(new File(soFilePath), true);
+        dm.callJNI_OnLoad(emulator);
+
+        module &#x3D; dm.getModule();
+        TTEncryptUtils &#x3D; vm.resolveClass(classPath);
+    &#125;
+
+    private String myJni(String methodSign, String data1, Long data2) &#123;
+        Object value &#x3D; TTEncryptUtils.callStaticJniMethodObject(emulator, methodSign, data1, data2).getValue();
+        return value.toString();
+    &#125;
+
+    private void destroy() throws IOException &#123;
+        emulator.close();
+        System.out.println(&quot;emulator destroy...&quot;);
+    &#125;
+
+    public static void main(String[] args) throws IOException &#123;
+        String soFilePath &#x3D; &quot;unidbg-android&#x2F;src&#x2F;test&#x2F;resources&#x2F;myso&#x2F;libmatch04.so&quot;;
+        String classPath &#x3D; &quot;com&#x2F;yuanrenxue&#x2F;match2022&#x2F;fragment&#x2F;challenge&#x2F;ChallengeFourFragment&quot;;
+        String methodSign &#x3D; &quot;sign(java&#x2F;lang&#x2F;String;J)java&#x2F;lang&#x2F;String;&quot;;
+        TestJni testJni &#x3D; new TestJni(soFilePath, classPath);
+        System.err.println(testJni.myJni(methodSign,&quot;1:1657351690000&quot;, 1657351690000L));
+));
+        testJni.destroy();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>结果为：</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20220709160703.png" alt="image-20220709154136336"></p>
+<p><strong>备注：</strong></p>
+<p>这里是记录一些类型的描述符，方便后续修改查询</p>
+<table>
+<thead>
+<tr>
+<th align="center">变量类型</th>
+<th align="center">类型描述符</th>
+<th align="center">包装类</th>
+<th align="center">包装类类型描述符(包含分号)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int</td>
+<td align="center">I(大写i)</td>
+<td align="center">Integer</td>
+<td align="center">Ljava/lang/Integer;</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">S</td>
+<td align="center">Short</td>
+<td align="center">Ljava/lang/Short;</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">J</td>
+<td align="center">Long</td>
+<td align="center">Ljava/lang/Long;</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">Z</td>
+<td align="center">Boolean</td>
+<td align="center">Ljava/lang/Boolean;</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">C</td>
+<td align="center">Character</td>
+<td align="center">Ljava/lang/Character;</td>
+</tr>
+<tr>
+<td align="center">byte</td>
+<td align="center">B</td>
+<td align="center">Byte</td>
+<td align="center">Ljava/lang/Byte;</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">F</td>
+<td align="center">Float</td>
+<td align="center">Ljava/lang/Float;</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">D</td>
+<td align="center">Double</td>
+<td align="center">Ljava/lang/Double;</td>
+</tr>
+<tr>
+<td align="center">void</td>
+<td align="center">V</td>
+<td align="center">Void</td>
+<td align="center">Ljava/lang/Void;</td>
+</tr>
+<tr>
+<td align="center">Object</td>
+<td align="center">L+类名(使用’/‘作为分隔符)+;如: Ljava/lang/Object;Lorg/objectweb/asm/MethodVisitor;</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">String</td>
+<td align="center">Ljava/lang/String;</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">————–</td>
+<td align="center">数组写法:</td>
+<td align="center">——–</td>
+<td align="center">—————-</td>
+</tr>
+<tr>
+<td align="center">X的N维数组</td>
+<td align="center">N个[+X的类型描述符</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">int[]</td>
+<td align="center">[I(大写的i)</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">byte[][]</td>
+<td align="center">[[B</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">String[]</td>
+<td align="center">[Ljava/lang/String;</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">Object[][]</td>
+<td align="center">[[Ljava/lang/Object;</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+</tbody></table>
+<p>方法描述符</p>
+<table>
+<thead>
+<tr>
+<th align="center">源文件中的方法声明</th>
+<th align="center">方法描述符</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">void m(int i, float f)</td>
+<td align="center">(IF)V</td>
+<td align="center">接收一个int和float型参数且无返回值</td>
+</tr>
+<tr>
+<td align="center">int m(Object o)</td>
+<td align="center">(Ljava/lang/Object;)I</td>
+<td align="center">接收Object型参数返回int</td>
+</tr>
+<tr>
+<td align="center">int[] m(int i, String s)</td>
+<td align="center">(ILjava/lang/String;)[I</td>
+<td align="center">接受int和String返回一个int[]</td>
+</tr>
+<tr>
+<td align="center">Object m(int[] i)</td>
+<td align="center">([I)Ljava/lang/Object;</td>
+<td align="center">接受一个int[]返回Object</td>
+</tr>
+</tbody></table>
+<p><strong>参考文章</strong></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/407839659">https://zhuanlan.zhihu.com/p/407839659</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/425355837">https://zhuanlan.zhihu.com/p/425355837</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/CXsbzt4IWyDaV006JdIYsQ">https://mp.weixin.qq.com/s/CXsbzt4IWyDaV006JdIYsQ</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1322512-1-1.html">https://www.52pojie.cn/thread-1322512-1-1.html</a></p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2022/07/Unidbg%E8%BF%90%E8%A1%8CSO/">https://misakikata.github.io/2022/07/Unidbg%E8%BF%90%E8%A1%8CSO/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2022/07/Unidbg%E8%BF%90%E8%A1%8CSO/">July 9th 2022, 7:56:03 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2022/07/Unidbg%E8%BF%90%E8%A1%8CSO/">July 9th 2022, 7:56:03 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;Android逆向</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2022/07/Unidbg运行SO/'; 
+            this.page.identifier = '/2022/07/Unidbg运行SO/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
