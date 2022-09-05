@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>HTB Challenges Mobile ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://raw.githubusercontent.com/MisakiKata/misakikata.github.io/master/img/wxmini.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">HTB Challenges Mobile</h1>
+        <p class="text-center"><b>Monday, September 5th 2022, 6:00 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h2 id="APKey"><a href="#APKey" class="headerlink" title="APKey"></a>APKey</h2><p><a target="_blank" rel="noopener" href="https://app.hackthebox.com/5a438e22-07d2-4f61-9ab5-040db08fae2e">https://app.hackthebox.com/5a438e22-07d2-4f61-9ab5-040db08fae2e</a></p>
+<p>安装APP界面是一个输入用户名和密码，用GDA打开apk，发现这个是固定用户名为admin来验证passwd的一个过程，验证成功则返回flag。</p>
+<pre class="line-numbers language-none"><code class="language-none">public void onClick(View p0)&#123;
+       Toast toast;
+       try&#123;
+          if (this.b.c.getText().toString().equals(&quot;admin&quot;)) &#123;
+             MainActivity b &#x3D; this.b;
+             String str &#x3D; b.d.getText().toString();
+             try&#123;
+                MessageDigest instance &#x3D; MessageDigest.getInstance(&quot;MD5&quot;);
+                instance.update(str.getBytes());
+                byte[] uobyteArray &#x3D; instance.digest();
+                StringBuffer str1 &#x3D; new StringBuffer();
+                for (int i &#x3D; 0; i &lt; uobyteArray.length; i &#x3D; i + 1) &#123;
+                   str1.append(Integer.toHexString((uobyteArray[i] &amp; 0x00ff)));
+                &#125;
+                str &#x3D; str1.toString();
+             &#125;catch(java.security.NoSuchAlgorithmException e5)&#123;
+                str.printStackTrace();
+                str &#x3D; &quot;&quot;;
+             &#125;
+             if (str.equals(&quot;a2a3d412e92d896134d9c9126d756f&quot;)) &#123;
+                MainActivity b1 &#x3D; this.b;
+                toast &#x3D; Toast.makeText(this.b.getApplicationContext(), b.a(g.a()), 1);
+             label_0077 :
+                toast.show();
+             &#125;
+          &#125;
+          toast &#x3D; Toast.makeText(this.b.getApplicationContext(), &quot;Wrong Credentials!&quot;, 0);
+          goto label_0077 ;
+       &#125;catch(java.lang.Exception e5)&#123;
+          p0.printStackTrace();
+       &#125;
+       return;
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看到把密码进行md5加密后还会对字节再进行一次&amp;运算。因此这里不去对hash进行碰撞解密。有几种解密的办法。</p>
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>修改smail代码，把判断的if函数进行修改，原代码为</p>
+<pre class="line-numbers language-none"><code class="language-none">const-string p1, &quot;&quot;
+​
+    :goto_1
+    const-string v1, &quot;a2a3d412e92d896134d9c9126d756f&quot;
+​
+    .line 2
+    invoke-virtual &#123;p1, v1&#125;, Ljava&#x2F;lang&#x2F;String;-&gt;equals(Ljava&#x2F;lang&#x2F;Object;)Z
+​
+    move-result p1
+​
+    if-eqz p1, :cond_1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>p1为0的话进程跳转，但是这个cond_1是报错，所以我们需要它不跳转。修改为if-nez。然后用AKill进行编译和安装，记得删除原包，然后输入admin/aaaaa，点击会显示flag。</p>
+<p>同样也可以修改新增一个赋值。</p>
+<pre class="line-numbers language-none"><code class="language-none">:cond_0
+    invoke-virtual &#123;v1&#125;, Ljava&#x2F;lang&#x2F;StringBuffer;-&gt;toString()Ljava&#x2F;lang&#x2F;String;
+​
+    move-result-object p1
+    
+    const-string p1, &quot;a2a3d412e92d896134d9c9126d756f&quot;  &#x2F;&#x2F;新增
+    
+    :try_end_1
+    .catch Ljava&#x2F;security&#x2F;NoSuchAlgorithmException; &#123;:try_start_1 .. :try_end_1&#125; :catch_0
+    .catch Ljava&#x2F;lang&#x2F;Exception; &#123;:try_start_1 .. :try_end_1&#125; :catch_1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这时候不需要属于密码，点击login即可显示flag。</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>上面的办法近乎于偷懒解决，现在我们开始解决一下这个代码的计算过程。先找到<code>g.a()</code>这个方法。</p>
+<pre class="line-numbers language-none"><code class="language-none">public static String a()&#123;
+       ArrayList uArrayList &#x3D; new ArrayList();
+       uArrayList.add(&quot;722gFc&quot;);
+       uArrayList.add(&quot;n778Hk&quot;);
+       uArrayList.add(&quot;jvC5bH&quot;);
+       uArrayList.add(&quot;lSu6G6&quot;);
+       uArrayList.add(&quot;HG36Hj&quot;);
+       uArrayList.add(&quot;97y43E&quot;);
+       uArrayList.add(&quot;kjHf5d&quot;);
+       uArrayList.add(&quot;85tR5d&quot;);
+       uArrayList.add(&quot;1UlBm2&quot;);
+       uArrayList.add(&quot;kI94fD&quot;);
+       uArrayList &#x3D; new ArrayList();
+       uArrayList.add(&quot;ue7888&quot;);
+       uArrayList.add(&quot;6HxWkw&quot;);
+       uArrayList.add(&quot;gGhy77&quot;);
+       uArrayList.add(&quot;837gtG&quot;);
+       uArrayList.add(&quot;HyTg67&quot;);
+       uArrayList.add(&quot;GHR673&quot;);
+       uArrayList.add(&quot;ftr56r&quot;);
+       uArrayList.add(&quot;kikoi9&quot;);
+       uArrayList.add(&quot;kdoO0o&quot;);
+       uArrayList.add(&quot;2DabnR&quot;);
+       uArrayList &#x3D; new ArrayList();
+       uArrayList.add(&quot;jH67k8&quot;);
+       uArrayList.add(&quot;8Huk89&quot;);
+       uArrayList.add(&quot;fr5GtE&quot;);
+       uArrayList.add(&quot;Hg5f6Y&quot;);
+       uArrayList.add(&quot;o0J8G5&quot;);
+       uArrayList.add(&quot;Wod2bk&quot;);
+       uArrayList.add(&quot;Yuu7Y5&quot;);
+       uArrayList.add(&quot;kI9ko0&quot;);
+       uArrayList.add(&quot;dS4Er5&quot;);
+       uArrayList.add(&quot;h93Fr5&quot;);
+       return new StringBuilder()+uArrayList.get(8)+h.a()+i.a()+f.a()+e.a()+uArrayList.get(9)+c.a()+uArrayList.get(5)+d.a()+a.a();
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>从结果上看，就是<code>uArrayList.get(8)=1UlBm2</code>，<code>h.a()=kHtZuV</code>，然后依次类推，得到返回的是<code>1UlBm2kHtZuVrSE6qY6HxWkwHyeaX92DabnRFlEGyLWod2bkwAxcoc85S94kFpV1</code>。</p>
+<p>最后再去查看<code>b.a()</code></p>
+<pre class="line-numbers language-none"><code class="language-none">public static String a(String p0)&#123;
+       Cipher instance &#x3D; Cipher.getInstance(g.b());
+       instance.init(2, new SecretKeySpec(new StringBuilder()+String.valueOf(h.a().charAt(0))+String.valueOf(a.a().charAt(8))+String.valueOf(e.a().charAt(5))+String.valueOf(i.a().charAt(4))+String.valueOf(h.a().charAt(1)).toLowerCase()+String.valueOf(h.a().charAt(4))+String.valueOf(h.a().charAt(3)).toLowerCase()+String.valueOf(h.a().charAt(3))+String.valueOf(h.a().charAt(0))+String.valueOf(a.a().charAt(8)).toLowerCase()+String.valueOf(a.a().charAt(8)).toLowerCase()+String.valueOf(i.a().charAt(0))+String.valueOf(c.a().charAt(3)).toLowerCase()+String.valueOf(f.a().charAt(3))+String.valueOf(f.a().charAt(0))+String.valueOf(c.a().charAt(0)).getBytes(), g.b()));
+       return new String(instance.doFinal(Base64.decode(p0, 0)), &quot;utf-8&quot;);
+    &#125;  &#x2F;&#x2F;这里有个问题最后的getbytes写的是最后一个字节的，实际上是全部的，这是gda的伪代码bug。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这是一段加密的东东，这个<code>g.b()</code>指的是加密算法。</p>
+<pre class="line-numbers language-none"><code class="language-none">public static String b()&#123;
+       return new StringBuilder()+String.valueOf(d.a().charAt(1))+String.valueOf(i.a().charAt(2))+String.valueOf(i.a().charAt(1));   &#x2F;&#x2F;AES
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>先把上面的那一段字符找出来，结果是<code>kV9qhuzZkvvrgW6F</code>，至此密钥也有了，拿去解密一下。</p>
+<p>于是在ECB模式下，pkcs7，128位解密出来的为：<code>HTB&#123;m0r3_0bfusc4t1on_w0uld_n0t_hurt&#125;</code></p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759336.png" alt="image-20220831154334828"></p>
+<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>这个办法已经有点过分了，打开JEB，没错它会自动给你计算出来</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759338.png" alt="image-20220831154358852"></p>
+<p>呜呜呜，一开始不知道，还在那一个字节一个字节的算半天，结果这边直接给你搞出来了。</p>
+<h2 id="SeeTheSharpFlag"><a href="#SeeTheSharpFlag" class="headerlink" title="SeeTheSharpFlag"></a>SeeTheSharpFlag</h2><p>这个APP完美的诠释了复杂，一个简单的功能搞得贼复杂，这个是x86架构，一般app都是arm或者至少支持arm和x86，这个玩意只有这个架构，只能在模拟器中运行。</p>
+<p>反编译后可以看到里面的包，Main在crc644cebad5a72cca3b1.MainActivity下。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759339.png" alt="image-20220901101054390"></p>
+<p>从代码上看大量调用了native方法，也就是引用了so文件，没错一开始我就是这么想的，但是搜了半天没搜到调用的so代码。</p>
+<p>觉得这个包mono和Xamarin有点问题，看起来就像是调用的框架一样，搜一下Xamarin发现还真是开源平台。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/xamarin/get-started/what-is-xamarin">https://docs.microsoft.com/zh-cn/xamarin/get-started/what-is-xamarin</a></p>
+<pre class="line-numbers language-none"><code class="language-none">Xamarin 是一个开放源代码平台，用于通过 .NET 构建适用于 iOS、Android 和 Windows 的新式高性能应用程序。 Xamarin 是一个抽象层，可管理共享代码与基础平台代码的通信。 Xamarin 在提供便利（如内存分配和垃圾回收）的托管环境中运行。
+​
+Xamarin 使开发人员可以跨平台共享其应用程序（平均 90%）。 此模式允许开发人员以一种语言编写所有业务逻辑（或重复使用现有应用程序代码），但在每个平台上实现本机性能和外观。
+​
+Xamarin 应用程序可以在电脑或 Mac 上进行编写并编译为本机应用程序包，如 Android 上的 .apk 文件，或 iOS 上的 .ipa 文件。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>所以这个东西是用C#当作中间语言进行编写的，适用本机的应用程序，而且mono是执行环境。所以这大概就是为啥给的一个x86的。</p>
+<p>里面的so看起来都是框架的so，也没有自己编写的加解密so。进入手机端查看是不是还生成了啥。</p>
+<p>Xamarin的文件目录在<code>/data/user/0/com.companyname.seethesharpflag/</code>下，可惜啥都没有，难道真要去分析这些代码不成。</p>
+<p>终于在想起来解压一下看看资源文件的时候发现assemblies目录，里面有一对dll文件，同时还存在一个SeeTheSharpFlag的这种dll，好家伙在这等着你呢。</p>
+<h3 id="方法一：-1"><a href="#方法一：-1" class="headerlink" title="方法一："></a>方法一：</h3><p>使用010editor打开查看一下，发现文件头是58414C5A，不是标准的PE头4D5A。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759340.png" alt="image-20220901111330401"></p>
+<p>然后搜索<code>XALZ dll</code>，发现了这么一个项目：<a target="_blank" rel="noopener" href="https://github.com/NickstaDB/xamarin-decompress">https://github.com/NickstaDB/xamarin-decompress</a></p>
+<p>所以这个dll是被xamarin项目进行压缩过，只需要解压缩就可以正常反编译了。</p>
+<p>关于这个Xamarin项目和dll的介绍：<a target="_blank" rel="noopener" href="https://cihansol.com/blog/index.php/2021/08/09/unpacking-xamarin-android-mobile-applications/">https://cihansol.com/blog/index.php/2021/08/09/unpacking-xamarin-android-mobile-applications/</a></p>
+<p>在这里多说一句，项目的打包方式分为两种：非捆绑构建和捆绑构建，最直观的区别在其中的dll文件是否直接显示在文件内，捆绑构建会把dll打包为一个so文件，需要进一步解包才能拿到dll文件。如果遇到捆绑式打包则可以使用上文中的工具进行解包：<a target="_blank" rel="noopener" href="https://github.com/cihansol/XamAsmUnZ">https://github.com/cihansol/XamAsmUnZ</a></p>
+<p>使用dnspy打开解压缩后的dll，在SeeTheSharpFlag.decompressed.dll中可以找到关键处。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759341.png" alt="image-20220901121802638"></p>
+<p>点击右键编辑IL指令，修改33行的brfalse.s为brtrue.s。保存替换原dll。但这种只是破解，在这种需要输出的情况下不能达到目的，只是让显示成功而已。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759342.png" alt="image-20220901140820471"></p>
+<p>所以我们需要输出的是streamReader.ReadToEnd()。将指令中其他无关的指令nop掉</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759343.png" alt="image-20220901162025169"></p>
+<p>结果为如下，这样我们只需要输入任意值，均可显示这个flag参数。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759344.png" alt="image-20220901162035742"></p>
+<p>看起来很不错，但是问题在覆写了dll后，APK打包签名后不能执行，因为这里有几点需要注意一下：</p>
+<ol>
+<li>因为已经解压缩了，所以全部的dll都要解压缩一起打包。</li>
+<li>不能压缩，只能用压缩工具进行打包，如果压缩了会造成文件错误。</li>
+<li>还需要进行APK的字节对齐，使用zipalign优化即可。这一步使用的集成工具进行。</li>
+<li>修改zip包为apk，然后进行签名安装即可，如果是上述修改则不需要输入，直接点击即可。</li>
+</ol>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759345.png" alt="image-20220901162316280"></p>
+<h3 id="方法二：-1"><a href="#方法二：-1" class="headerlink" title="方法二："></a>方法二：</h3><p>换一种思路，尝试把这个方法自己运行一遍，找个在线运行C#的网站：<a target="_blank" rel="noopener" href="https://www.bejson.com/runcode/csharp/">https://www.bejson.com/runcode/csharp/</a>。运行以下代码：</p>
+<pre class="line-numbers language-none"><code class="language-none">using System;
+using System.CodeDom.Compiler;
+using System.IO;
+using System.Reflection;
+using System.Security.Cryptography;
+​
+class Program
+&#123;
+    public static void Main(string[] args)
+    &#123;
+        byte[] array &#x3D; Convert.FromBase64String(&quot;sjAbajc4sWMUn6CHJBSfQ39p2fNg2trMVQ&#x2F;MmTB5mno&#x3D;&quot;);
+        byte[] array2 &#x3D; Convert.FromBase64String(&quot;6F+WgzEp5QXodJV+iTli4Q&#x3D;&#x3D;&quot;);
+        byte[] array3 &#x3D; Convert.FromBase64String(&quot;DZ6YdaWJlZav26VmEEQ31A&#x3D;&#x3D;&quot;);
+        using (AesManaged aesManaged &#x3D; new AesManaged())
+            &#123;
+                using (ICryptoTransform cryptoTransform &#x3D; aesManaged.CreateDecryptor(array2, array3))
+                &#123;
+                    using (MemoryStream memoryStream &#x3D; new MemoryStream(array))
+                    &#123;
+                        using (CryptoStream cryptoStream &#x3D; new CryptoStream(memoryStream, cryptoTransform, 0))
+                        &#123;
+                            using (StreamReader streamReader &#x3D; new StreamReader(cryptoStream))
+                            &#123;
+                                Console.WriteLine(streamReader.ReadToEnd());
+                            &#125;
+                        &#125;
+                    &#125;
+                &#125;
+            &#125;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以得到结果：</p>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n70" mdtype="fences">HTB{MyPasswordIsVerySecure}</pre>
+
+<h2 id="SAW"><a href="#SAW" class="headerlink" title="SAW"></a>SAW</h2><p>下载后，这个APP大概两M不到，安装需要SDK29以上，手头没有这么高的安卓版本，尝试降级也不行，后来查了一下论坛发现有人提示需要发送一个“send”特定的东西，重新看了一下代码，发现onCreate里有验证，不存在会直接被finish进程。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759346.png" alt="image-20220905153036735"></p>
+<p>解决办法也很简单，我直接把这一段的smail代码干掉了。结果就是这样，下面是重新编译重新打开的。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759347.png" alt="image-20220905153129666"></p>
+<p>顺便把alert方法内的也做掉了，虽然看起来不太影响</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759348.png" alt="image-20220905153254942"></p>
+<p>虽然能打开，但是显示click me，但是点击还是会结束，看了半天发现是显示窗口上应该是有覆盖，修改<code>new LayoutParams(200, 200, 2, 8, -2)</code>中的-2为-4，这样点击虽然能显示这个白色窗口，但还没显示后续的alert方法内的窗口。也就是这个窗口没有显示在最上层，依然被覆盖。这个没解决，但从代码上看只需要查看so应该就可以了。</p>
+<p>调用的a方法参数，第一个是FILE_PATH_PREFIX，应该是APP的数据存储位置，第二个是answer，不知道是啥，但是应该是需要输入的东西。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759349.png" alt="image-20220905154405154"></p>
+<p>查看so内的a方法，里面有一个关键方法是_Z1aP7_JNIEnvP8_1，从传参得知，参数a2并不是很关键，他的作用更是一种判断，这里不去管做啥的。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759350.png" alt="image-20220905154249620"></p>
+<p>现在需要找到jni_def，这个数组和0x64进行了异或，然后写入文件，这里的路径就是有权限写的应该就是数据存储目录<code>/data/user/0/com.stego.saw/</code>，jni_def是如下的一堆十六进制数据。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759351.png" alt="image-20220905155222110"></p>
+<p>构造一个c代码，先输出v11，看看到底异或成啥了。</p>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n100" mdtype="fences">#include &lt;stdio.h&gt;<br/>#include &lt;string.h&gt;<br/>#include &lt;stdlib.h&gt;<br/><br/>int main() {<br/><br/>    int jni_def[] = {0, 1, 0x1C, 0x6E, 0x54, 0x57, 0x51, 0x64, 0xAB, 7,<br/>                     0x98, 0x60, 0xA2, 0xE6, 0xB3, 1, 0xEB, 0xC1, 0x19,<br/>                     0xB4, 0x39, 0xE, 0x74, 0xA1, 0x79, 0xE3, 0xE9, 0x50,<br/>                     0x9B, 0xE2, 0x5D, 0x9E, 0x7C, 0x67, 0x64, 0x64, 0x14,<br/>                     0x64, 0x64, 0x64, 0x1C, 0x32, 0x50, 0x76, 0x64, 0x64,<br/>                     0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x1C, 0x66, 0x64,<br/>                     0x64, 0x6B, 0x64, 0x64, 0x64, 0x14, 0x64, 0x64, 0x64,<br/>                     0x63, 0x64, 0x64, 0x64, 0xC8, 0x64, 0x64, 0x64, 0x67,<br/>                     0x64, 0x64, 0x64, 0xAC, 0x64, 0x64, 0x64, 0x65, 0x64,<br/>                     0x64, 0x64, 0x88, 0x64, 0x64, 0x64, 0x61, 0x64, 0x64,<br/>                     0x64, 0x90, 0x64, 0x64, 0x64, 0x65, 0x64, 0x64, 0x64,<br/>                     0x78, 0x65, 0x64, 0x64, 0xB8, 0x65, 0x64, 0x64, 0x58,<br/>                     0x65, 0x64, 0x64, 0xFE, 0x65, 0x64, 0x64, 0xC6, 0x65,<br/>                     0x64, 0x64, 0xD0, 0x65, 0x64, 0x64, 0xAF, 0x65, 0x64,<br/>                     0x64, 0xBB, 0x65, 0x64, 0x64, 0x97, 0x65, 0x64, 0x64,<br/>                     0x63, 0x66, 0x64, 0x64, 0x68, 0x66, 0x64, 0x64, 0x6B,<br/>                     0x66, 0x64, 0x64, 0x77, 0x66, 0x64, 0x64, 0x4C, 0x66,<br/>                     0x64, 0x64, 0x50, 0x66, 0x64, 0x64, 0x5A, 0x66, 0x64,<br/>                     0x64, 0x20, 0x66, 0x64, 0x64, 0x2D, 0x66, 0x64, 0x64,<br/>                     0x66, 0x64, 0x64, 0x64, 0x67, 0x64, 0x64, 0x64, 0x60,<br/>                     0x64, 0x64, 0x64, 0x61, 0x64, 0x64, 0x64, 0x62, 0x64,<br/>                     0x64, 0x64, 0x63, 0x64, 0x64, 0x64, 0x6D, 0x64, 0x64,<br/>                     0x64, 0x63, 0x64, 0x64, 0x64, 0x61, 0x64, 0x64, 0x64,<br/>                     0x64, 0x64, 0x64, 0x64, 0x6C, 0x64, 0x64, 0x64, 0x61,<br/>                     0x64, 0x64, 0x64, 0xE8, 0x65, 0x64, 0x64, 0x6C, 0x64,<br/>                     0x64, 0x64, 0x61, 0x64, 0x64, 0x64, 0xF0, 0x65, 0x64,<br/>                     0x64, 0x67, 0x64, 0x64, 0x64, 0x69, 0x64, 0x64, 0x64,<br/>                     0x64, 0x64, 0x65, 0x64, 0x6A, 0x64, 0x64, 0x64, 0x65,<br/>                     0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x60, 0x64,<br/>                     0x64, 0x64, 0x64, 0x64, 0x64, 0x64, 0x60, 0x64, 0x64,<br/>                     0x64, 0x6F, 0x64, 0x64, 0x64, 0x60, 0x64, 0x66, 0x64,<br/>                     0x68, 0x64, 0x64, 0x64, 0x60, 0x64, 0x64, 0x64, 0x64,<br/>                     0x64, 0x64, 0x64, 0x65, 0x64, 0x64, 0x64, 0x64, 0x64,<br/>                     0x64, 0x64, 0x6E, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64,<br/>                     0x64, 0, 0x66, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64,<br/>                     0x65, 0x64, 0x65, 0x64, 0x65, 0x64, 0x64, 0x64, 0x36,<br/>                     0x66, 0x64, 0x64, 0x60, 0x64, 0x64, 0x64, 0x14, 0x74,<br/>                     0x65, 0x64, 0x64, 0x64, 0x6A, 0x64, 0x66, 0x64, 0x64,<br/>                     0x64, 0x66, 0x64, 0x64, 0x64, 0x33, 0x66, 0x64, 0x64,<br/>                     0x6C, 0x64, 0x64, 0x64, 6, 0x64, 0x64, 0x64, 0x7E,<br/>                     0x65, 0x65, 0x64, 0xA, 0x44, 0x64, 0x64, 0x74, 0x64,<br/>                     0x6A, 0x64, 0x65, 0x64, 0x65, 0x64, 0x64, 0x64, 0x64,<br/>                     0x64, 0x39, 0x66, 0x64, 0x64, 0x60, 0x64, 0x64, 0x64,<br/>                     0x15, 0x64, 0x67, 0x64, 0x64, 0x64, 0x6A, 0x64, 0x65,<br/>                     0x64, 0x64, 0x64, 0x66, 0x64, 0x64, 0x64, 0x65, 0x64,<br/>                     0x64, 0x64, 0x62, 0x64, 0x62, 0x58, 0xD, 0xA, 0xD,<br/>                     0x10, 0x5A, 0x64, 0x74, 0x2C, 0x30, 0x26, 0x1F, 0x37,<br/>                     5, 0x13, 0x37, 0x54, 0x20, 0x27, 0x28, 0xD, 0xA, 3,<br/>                     0x19, 0x64, 0x71, 0x28, 0xE, 5, 0x12, 5, 0x4B, 0xD,<br/>                     0xB, 0x4B, 0x34, 0x16, 0xD, 0xA, 0x10, 0x37, 0x10,<br/>                     0x16, 1, 5, 9, 0x5F, 0x64, 0x76, 0x28, 0xE, 5, 0x12,<br/>                     5, 0x4B, 8, 5, 0xA, 3, 0x4B, 0x2B, 6, 0xE, 1, 7, 0x10,<br/>                     0x5F, 0x64, 0x76, 0x28, 0xE, 5, 0x12, 5, 0x4B, 8, 5,<br/>                     0xA, 3, 0x4B, 0x37, 0x10, 0x16, 0xD, 0xA, 3, 0x5F,<br/>                     0x64, 0x76, 0x28, 0xE, 5, 0x12, 5, 0x4B, 8, 5, 0xA,<br/>                     3, 0x4B, 0x37, 0x1D, 0x17, 0x10, 1, 9, 0x5F, 0x64,<br/>                     0x67, 0x28, 0x1C, 0x5F, 0x64, 0x65, 0x32, 0x64, 0x66,<br/>                     0x32, 0x28, 0x64, 0x77, 0x3F, 0x28, 0xE, 5, 0x12, 5,<br/>                     0x4B, 8, 5, 0xA, 3, 0x4B, 0x37, 0x10, 0x16, 0xD, 0xA,<br/>                     3, 0x5F, 0x64, 0x6E, 5, 6, 7, 0, 1, 0x4A, 0xE, 5, 0x12,<br/>                     5, 0x64, 0x6C, 8, 0xB, 3, 0x14, 0x16, 0xD, 0xA, 0x10,<br/>                     0x64, 0x60, 9, 5, 0xD, 0xA, 0x64, 0x67, 0xB, 0x11,<br/>                     0x10, 0x64, 0x63, 0x14, 0x16, 0xD, 0xA, 0x10, 8, 0xA,<br/>                     0x64, 0x65, 0x64, 0x63, 0x6A, 0x64, 0x60, 0x64, 0x63,<br/>                     0x6A, 0x1C, 0x64, 0x63, 0x65, 0x64, 0x63, 0x6A, 0x58,<br/>                     0x64, 0x64, 0x64, 0x67, 0x64, 0x66, 0xE4, 0xE4, 0x60,<br/>                     0xD8, 0x66, 0x65, 0x6D, 0xB0, 0x66, 0x65, 0x6D, 0x90,<br/>                     0x66, 0x64, 0x64, 0x69, 0x64, 0x64, 0x64, 0x64, 0x64,<br/>                     0x64, 0x64, 0x65, 0x64, 0x64, 0x64, 0x64, 0x64, 0x64,<br/>                     0x64, 0x65, 0x64, 0x64, 0x64, 0x6B, 0x64, 0x64, 0x64,<br/>                     0x14, 0x64, 0x64, 0x64, 0x66, 0x64, 0x64, 0x64, 0x63,<br/>                     0x64, 0x64, 0x64, 0xC8, 0x64, 0x64, 0x64, 0x67, 0x64,<br/>                     0x64, 0x64, 0x67, 0x64, 0x64, 0x64, 0xAC, 0x64, 0x64,<br/>                     0x64, 0x60, 0x64, 0x64, 0x64, 0x65, 0x64, 0x64, 0x64,<br/>                     0x88, 0x64, 0x64, 0x64, 0x61, 0x64, 0x64, 0x64, 0x61,<br/>                     0x64, 0x64, 0x64, 0x90, 0x64, 0x64, 0x64, 0x62, 0x64,<br/>                     0x64, 0x64, 0x65, 0x64, 0x64, 0x64, 0x78, 0x65, 0x64,<br/>                     0x64, 0x65, 0x44, 0x64, 0x64, 0x67, 0x64, 0x64, 0x64,<br/>                     0x58, 0x65, 0x64, 0x64, 0x65, 0x74, 0x64, 0x64, 0x66,<br/>                     0x64, 0x64, 0x64, 0xE8, 0x65, 0x64, 0x64, 0x66, 0x44,<br/>                     0x64, 0x64, 0x6B, 0x64, 0x64, 0x64, 0xFE, 0x65, 0x64,<br/>                     0x64, 0x67, 0x44, 0x64, 0x64, 0x67, 0x64, 0x64, 0x64,<br/>                     0x36, 0x66, 0x64, 0x64, 0x64, 0x44, 0x64, 0x64, 0x65,<br/>                     0x64, 0x64, 0x64, 0, 0x66, 0x64, 0x64, 0x64, 0x74,<br/>                     0x64, 0x64, 0x65, 0x64, 0x64, 0x64, 0x1C, 0x66, 0x64,<br/>                     0x64<br/>                    };<br/><br/>    char v11[800];<br/>    char *a1 = &#34;/data/user/0/com.stego.saw/&#34;;<br/>    int v5;<br/>    char *v6;  // r5<br/>    char *v7; // r0<br/>    FILE *v8; // r0<br/>    FILE *v9;<br/><br/>    for ( int i = 0; i != 792; ++i )<br/>        v11[i] = jni_def[i] ^ 0x64;<br/>    printf(v11);<br/>    v5 = strlen(a1);<br/>    v6 = calloc(v5 + 2, 1u);<br/>    v7 = strcpy(v6, a1);<br/>    * &amp;v6[strlen(v7)] = 104;<br/>    v8 = fopen(v6, &#34;wb&#34;);<br/>    if ( !v8 )<br/>        return 0;<br/>    v9 = v8;<br/>    for ( int j = 0; j != 792; ++j )<br/>        fputc(v11[j], v9);<br/>    fclose(v9);<br/>    return 1;<br/>}</pre>
+
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759352.png" alt="image-20220905155340979"></p>
+<p>应该是生成一个dex文件，但是由于我是本机去运行，不能按照上面的a1进行写文件，需要重新赋值修改a1的值。</p>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n106" mdtype="fences">char *a1 = &#34;file&#34;;</pre>
+
+<p>运行后在当前文件目录生成一个fileh文件，打开即可看到里面的flag。<br><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/202209051759353.png" alt="image-20220905155543596"></p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2022/09/HTB-Challenges-Mobile/">https://misakikata.github.io/2022/09/HTB-Challenges-Mobile/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2022/09/HTB-Challenges-Mobile/">September 5th 2022, 6:00:02 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2022/09/HTB-Challenges-Mobile/">September 5th 2022, 6:04:43 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;Android逆向</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2022/09/HTB-Challenges-Mobile/'; 
+            this.page.identifier = '/2022/09/HTB-Challenges-Mobile/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
