@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>ART脱壳源码修改点 ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">ART脱壳源码修改点</h1>
+        <p class="text-center"><b>Friday, October 21st 2022, 2:46 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <p>在将 dex 文件编译为 oat 文件的过程中 , 只要出现了 DexFile 对象 , 就可以将该对象对应的 dex 文件导出</p>
+<h2 id="已知的脱壳点"><a href="#已知的脱壳点" class="headerlink" title="已知的脱壳点"></a>已知的脱壳点</h2><p><strong>/art/runtime/dex_file.cc#OpenMemory</strong><br>OpenMemory算是常见的脱壳点，在# frida-unpack中也是使用此脱壳点来导出dex对象。</p>
+<pre class="line-numbers language-none"><code class="language-none">std::unique_ptr&lt;const DexFile&gt; DexFile::OpenMemory(const uint8_t* base, 
+size_t size,  
+const std::string&amp; location,   
+uint32_t location_checksum,  
+MemMap* mem_map, 
+const OatDexFile* oat_dex_file, 
+std::string* error_msg) &#123; 
+CHECK_ALIGNED(base, 4);  &#x2F;&#x2F; various dex file structures must be word aligned  
+std::unique_ptr&lt;DexFile&gt; dex_file(
+     new DexFile(base, size, location, location_checksum, mem_map, oat_dex_file)); 
+if (!dex_file-&gt;Init(error_msg)) &#123;
+    dex_file.reset();
+  &#125;
+  return std::unique_ptr&lt;const DexFile&gt;(dex_file.release());
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>添加导出代码</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;sys&#x2F;types.h&gt;  &#x2F;&#x2F;添加额外的库
+#include &lt;sys&#x2F;stat.h&gt;
+#include &lt;fcntl.h&gt;
+
+int dexCount &#x3D; 0;  &#x2F;&#x2F;注意位置
+
+  char output[100]&#x3D;&#123;0&#125;;
+  int pid &#x3D; getpid();
+  sprintf(output, &quot;&#x2F;sdcard&#x2F;%d_%d_output.dex&quot;, pid, dexCount);
+  dexCount++;
+  int fd &#x3D; open(output,O_CREAT|O_RDWR,666);
+  if (fd &gt; 0)
+  &#123;
+  	write(fd, base, size);
+  	close(fd);
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>DexFile::DexFile()</strong></p>
+<p>在17年的DEF CON 25 黑客大会中，Avi Bashan 和 SlavaMakkaveev 提出的通过修改DexFile的构造函数DexFile::DexFile()，以及OpenAndReadMagic()函数来实现对加壳应用的内存中的dex的dump来脱壳技术</p>
+<pre class="line-numbers language-none"><code class="language-none">DexFile::DexFile(const uint8_t* base, size_t size,
+                 const std::string&amp; location,
+                 uint32_t location_checksum,
+                 MemMap* mem_map,
+                 const OatDexFile* oat_dex_file)
+    : begin_(base),
+      size_(size),
+      location_(location),
+      location_checksum_(location_checksum),
+      mem_map_(mem_map),
+      header_(reinterpret_cast&lt;const Header*&gt;(base)),
+      string_ids_(reinterpret_cast&lt;const StringId*&gt;(base + header_-&gt;string_ids_off_)),
+      type_ids_(reinterpret_cast&lt;const TypeId*&gt;(base + header_-&gt;type_ids_off_)),
+      field_ids_(reinterpret_cast&lt;const FieldId*&gt;(base + header_-&gt;field_ids_off_)),
+      method_ids_(reinterpret_cast&lt;const MethodId*&gt;(base + header_-&gt;method_ids_off_)),
+      proto_ids_(reinterpret_cast&lt;const ProtoId*&gt;(base + header_-&gt;proto_ids_off_)),
+      class_defs_(reinterpret_cast&lt;const ClassDef*&gt;(base + header_-&gt;class_defs_off_)),
+      find_class_def_misses_(0),
+      class_def_index_(nullptr),
+      oat_dex_file_(oat_dex_file) &#123;
+  CHECK(begin_ !&#x3D; nullptr) &lt;&lt; GetLocation();
+  CHECK_GT(size_, 0U) &lt;&lt; GetLocation();
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>添加代码</p>
+<pre class="line-numbers language-none"><code class="language-none">+   &#x2F;&#x2F;------------------------------------------------------------------
++   &#x2F;&#x2F; DEX file unpacking
++   &#x2F;&#x2F;------------------------------------------------------------------
++
++   &#x2F;&#x2F; let&#39;s limit processing file list
++
+    
+LOG(WARNING) &lt;&lt; &quot;Dex File: Filename: &quot;&lt;&lt; location;
+if (location.find(&quot;&#x2F;data&#x2F;data&#x2F;&quot;) !&#x3D; std::string::npos) &#123;
+    LOG(WARNING) &lt;&lt; &quot;Dex File: OAT file unpacking launched&quot;;
+    std::ofstream dst(location + &quot;__unpacked_oat&quot;, std::ios::binary);
+    dst.write(reinterpret_cast&lt;const char*&gt;(base), size);
+    dst.close();
+&#125; else &#123;
+    LOG(WARNING) &lt;&lt; &quot;Dex File: OAT file unpacking not launched&quot;;
+&#125;
+          
++   &#x2F;&#x2F;------------------------------------------------------------------<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>OpenFile</strong><br>这个函数跟OpenMemory类似，同样是调用了OpenMemory的返回，也可以在这里直接导出dexfile.</p>
+<pre class="line-numbers language-none"><code class="language-none">std::unique_ptr&lt;const DexFile&gt; dex_file(OpenMemory(location, dex_header-&gt;checksum_, map.release(), error_msg));
+  if (dex_file.get() &#x3D;&#x3D; nullptr) &#123;
+    *error_msg &#x3D; StringPrintf(&quot;Failed to open dex file &#39;%s&#39; from memory: %s&quot;, location, error_msg-&gt;c_str());
+    return nullptr;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>Execute</strong><br>这个函数是寒冰大佬公布的，dex2oat对类的初始化函数并没有进行编译，进入到interpreter.cc文件中的Execute函数，进而进入ART下的解释器解释执行。</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;fcntl.h&gt;
+ static inline JValue Execute(Thread* self, const DexFile::CodeItem* code_item,
+                            ShadowFrame&amp; shadow_frame, JValue result_register) &#123;
+ char *dexfilepath&#x3D;(char*)malloc(sizeof(char)*1000);   
+    if(dexfilepath!&#x3D;nullptr)
+    &#123;
+    ArtMethod* artmethod&#x3D;shadow_frame.GetMethod();
+    const DexFile* dex_file &#x3D; artmethod-&gt;GetDexFile();
+    const uint8_t* begin_&#x3D;dex_file-&gt;Begin();  &#x2F;&#x2F; Start of data.
+    size_t size_&#x3D;dex_file-&gt;Size();  &#x2F;&#x2F; Length of data.
+    int size_int_&#x3D;(int)size_;
+    int fcmdline &#x3D;-1;
+    char szCmdline[64]&#x3D; &#123;0&#125;;
+    char szProcName[256] &#x3D; &#123;0&#125;;
+    int procid &#x3D; getpid();
+    sprintf(szCmdline,&quot;&#x2F;proc&#x2F;%d&#x2F;cmdline&quot;, procid);
+    fcmdline &#x3D; open(szCmdline, O_RDONLY,0644);
+    if(fcmdline &gt;0)
+    &#123;
+        read(fcmdline, szProcName,256);
+        close(fcmdline);
+    &#125;
+             
+    if(szProcName[0])
+    &#123;
+            memset(dexfilepath,0,1000);               
+            sprintf(dexfilepath,&quot;&#x2F;sdcard&#x2F;%s_%d_dexfile.dex&quot;,szProcName,size_int_);     
+            int dexfilefp&#x3D;open(dexfilepath,O_RDONLY,0666);
+            if(dexfilefp&gt;0)&#123;
+                                close(dexfilefp);
+                                dexfilefp&#x3D;0;
+                                       
+                            &#125;else&#123;
+                                        int fp&#x3D;open(dexfilepath,O_CREAT|O_RDWR,666);
+                                        if(fp&gt;0)
+                                        &#123;
+                                            write(fp,(void*)begin_,size_);
+                                            fsync(fp); 
+                                            close(fp);  
+                                            &#125;  
+                             
+                                &#125;
+    &#125;
+ 
+    if(dexfilepath!&#x3D;nullptr)
+    &#123;
+        free(dexfilepath);
+        dexfilepath&#x3D;nullptr;
+    &#125;                        
+   &#125;
+&#x2F;&#x2F;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="其他脱壳点"><a href="#其他脱壳点" class="headerlink" title="其他脱壳点"></a>其他脱壳点</h2><p>看了寒冰大佬的文章，按照寻找脱壳点的办法找到几个新的脱壳点，这里也来记录一下，利用的是dexcache来到出dexfile。曾经有过类似的调用，也有不少利用dexcache来查找和导出的办法，比如在Java层hook函数getDex。</p>
+<p><strong>DexCache_getDexNative</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">namespace art &#123;
+static jobject DexCache_getDexNative(JNIEnv* env, jobject javaDexCache) &#123;
+  ScopedFastNativeObjectAccess soa(env);
+  mirror::DexCache* dex_cache &#x3D; soa.Decode&lt;mirror::DexCache*&gt;(javaDexCache);
+  &#x2F;&#x2F; Should only be called while holding the lock on the dex cache.
+  DCHECK_EQ(dex_cache-&gt;GetLockOwnerThreadId(), soa.Self()-&gt;GetThreadId());
+  const DexFile* dex_file &#x3D; dex_cache-&gt;GetDexFile();
+  &#x2F;&#x2F; &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;新增
+int fcmdline &#x3D; -1;
+char szCmdline[64] &#x3D; &#123; 0 &#125;;
+char szProcName[256] &#x3D; &#123; 0 &#125;;
+int procid &#x3D; getpid();
+sprintf(szCmdline, &quot;&#x2F;proc&#x2F;%d&#x2F;cmdline&quot;, procid);
+fcmdline &#x3D; open(szCmdline, O_RDONLY, 0644);
+if (fcmdline &gt; 0) &#123;
+    read(fcmdline, szProcName, 256);
+    close(fcmdline);
+&#125;
+char *dexfilepath &#x3D; (char *) malloc(sizeof(char) * 2000);
+const uint8_t *begin_ &#x3D; dex_file-&gt;Begin();   &#x2F;&#x2F;dex的起始和大小
+size_t size_ &#x3D; dex_file-&gt;Size();
+
+memset(dexfilepath, 0, 2000);
+int size_int_ &#x3D; (int) size_;
+
+memset(dexfilepath, 0, 2000);
+sprintf(dexfilepath, &quot;%s&quot;, &quot;&#x2F;sdcard&#x2F;fiart&quot;);
+mkdir(dexfilepath, 0777);
+
+memset(dexfilepath, 0, 2000);
+sprintf(dexfilepath, &quot;&#x2F;sdcard&#x2F;fiart&#x2F;%s&quot;,szProcName);  &#x2F;&#x2F;创建保存的文件
+mkdir(dexfilepath, 0777);
+
+memset(dexfilepath, 0, 2000);
+sprintf(dexfilepath,&quot;&#x2F;sdcard&#x2F;fiart&#x2F;%s&#x2F;%d_dexfile.dex&quot;,szProcName, size_int_);
+int dexfilefp &#x3D; open(dexfilepath, O_RDONLY, 0666);
+if (dexfilefp &gt; 0) &#123;
+    close(dexfilefp);
+    dexfilefp &#x3D; 0;
+&#125; else &#123;
+    dexfilefp &#x3D; open(dexfilepath, O_CREAT | O_RDWR,0666);
+    if (dexfilefp &gt; 0) &#123;
+        write(dexfilefp, (void *) begin_,size_);
+        fsync(dexfilefp);
+        close(dexfilefp);
+	&#125;
+&#125;
+&#x2F;&#x2F; &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  if (dex_file &#x3D;&#x3D; nullptr) &#123;
+    return nullptr;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>GetNameAsString</strong><br>按照如下新增代码，需要新增库。</p>
+<pre class="line-numbers language-none"><code class="language-none">mirror::String* ArtMethod::GetNameAsString(Thread* self) &#123;
+  CHECK(!IsProxyMethod());
+  StackHandleScope&lt;1&gt; hs(self);
+  Handle&lt;mirror::DexCache&gt; dex_cache(hs.NewHandle(GetDexCache()));
+  auto* dex_file &#x3D; dex_cache-&gt;GetDexFile();
+  &#x2F;&#x2F; &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+    char *dexfilepath&#x3D;(char*)malloc(sizeof(char)*1000);   
+    const uint8_t* begin_&#x3D;dex_file-&gt;Begin();  &#x2F;&#x2F; Start of data.
+    size_t size_&#x3D;dex_file-&gt;Size();  &#x2F;&#x2F; Length of data.
+    int size_int_&#x3D;(int)size_;
+    int fcmdline &#x3D;-1;
+    char szCmdline[64]&#x3D; &#123;0&#125;;
+    char szProcName[256] &#x3D; &#123;0&#125;;
+    int procid &#x3D; getpid();
+    sprintf(szCmdline,&quot;&#x2F;proc&#x2F;%d&#x2F;cmdline&quot;, procid);
+    fcmdline &#x3D; open(szCmdline, O_RDONLY,0644);
+    if(fcmdline &gt;0)
+    &#123;
+        read(fcmdline, szProcName,256);
+        close(fcmdline);
+    &#125;
+             
+    if(szProcName[0])
+    &#123;
+            memset(dexfilepath,0,1000);               
+            sprintf(dexfilepath,&quot;&#x2F;sdcard&#x2F;%s_%d_dexfile.dex&quot;,szProcName,size_int_);     
+            int dexfilefp&#x3D;open(dexfilepath,O_RDONLY,0666);
+            if(dexfilefp&gt;0)&#123;
+                 close(dexfilefp);
+                 dexfilefp&#x3D;0;
+                 &#125;else&#123;
+                 int fp&#x3D;open(dexfilepath,O_CREAT|O_APPEND|O_RDWR,0666);
+                 if(fp&gt;0)
+                      &#123;
+                       write(fp,(void*)begin_,size_);
+                       fsync(fp); 
+                       close(fp);  
+                       &#125;  
+             &#125;
+    &#125;
+ 
+    if(dexfilepath!&#x3D;nullptr)
+    &#123;
+        free(dexfilepath);
+        dexfilepath&#x3D;nullptr;
+    &#125; 
+  &#x2F;&#x2F;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  uint32_t dex_method_idx &#x3D; GetDexMethodIndex();
+  const DexFile::MethodId&amp; method_id &#x3D; dex_file-&gt;GetMethodId(dex_method_idx);
+  return Runtime::Current()-&gt;GetClassLinker()-&gt;ResolveString(*dex_file, method_id.name_idx_,dex_cache);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>EqualParameters</strong></p>
+<p>也是类似如上，利用dex缓存来导出的dexfile。</p>
+<pre class="line-numbers language-none"><code class="language-none">bool ArtMethod::EqualParameters(Handle&lt;mirror::ObjectArray&lt;mirror::Class&gt;&gt; params) &#123;
+  auto* dex_cache &#x3D; GetDexCache();
+  auto* dex_file &#x3D; dex_cache-&gt;GetDexFile();
+  &#x2F;&#x2F;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  char *dexfilepath&#x3D;(char*)malloc(sizeof(char)*1000);   
+    const uint8_t* begin_&#x3D;dex_file-&gt;Begin();  &#x2F;&#x2F; Start of data.
+    size_t size_&#x3D;dex_file-&gt;Size();  &#x2F;&#x2F; Length of data.
+    int size_int_&#x3D;(int)size_;
+    int fcmdline &#x3D;-1;
+    char szCmdline[64]&#x3D; &#123;0&#125;;
+    char szProcName[256] &#x3D; &#123;0&#125;;
+    int procid &#x3D; getpid();
+    sprintf(szCmdline,&quot;&#x2F;proc&#x2F;%d&#x2F;cmdline&quot;, procid);
+    fcmdline &#x3D; open(szCmdline, O_RDONLY,0644);
+    if(fcmdline &gt;0)
+    &#123;
+        read(fcmdline, szProcName,256);
+        close(fcmdline);
+    &#125;
+    if(szProcName[0])
+    &#123;
+        memset(dexfilepath,0,1000);               
+        sprintf(dexfilepath,&quot;&#x2F;sdcard&#x2F;%s_%d_dexfile.dex&quot;,szProcName,size_int_);     
+        int dexfilefp&#x3D;open(dexfilepath,O_RDONLY,0666);
+        if(dexfilefp&gt;0)&#123;
+             close(dexfilefp);
+             dexfilefp&#x3D;0;
+                                       
+         &#125;else&#123;
+             int fp&#x3D;open(dexfilepath,O_CREAT|O_APPEND|O_RDWR,0666);
+             if(fp&gt;0)&#123;
+                  write(fp,(void*)begin_,size_);
+                  fsync(fp); 
+                  close(fp);  
+              &#125;  
+          &#125;
+    &#125;
+ 	if(dexfilepath!&#x3D;nullptr)
+    &#123;
+        free(dexfilepath);
+        dexfilepath&#x3D;nullptr;
+    &#125;                        
+    &#x2F;&#x2F;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+  const auto&amp; method_id &#x3D; dex_file-&gt;GetMethodId(GetDexMethodIndex());
+  const auto&amp; proto_id &#x3D; dex_file-&gt;GetMethodPrototype(method_id);
+  const DexFile::TypeList* proto_params &#x3D; dex_file-&gt;GetProtoParameters(proto_id);
+  auto count &#x3D; proto_params !&#x3D; nullptr ? proto_params-&gt;Size() : 0u;
+  auto param_len &#x3D; params.Get() !&#x3D; nullptr ? params-&gt;GetLength() : 0u;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2022/10/ART%E8%84%B1%E5%A3%B3%E6%BA%90%E7%A0%81%E4%BF%AE%E6%94%B9%E7%82%B9/">https://misakikata.github.io/2022/10/ART%E8%84%B1%E5%A3%B3%E6%BA%90%E7%A0%81%E4%BF%AE%E6%94%B9%E7%82%B9/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2022/10/ART%E8%84%B1%E5%A3%B3%E6%BA%90%E7%A0%81%E4%BF%AE%E6%94%B9%E7%82%B9/">October 21st 2022, 2:46:30 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2022/10/ART%E8%84%B1%E5%A3%B3%E6%BA%90%E7%A0%81%E4%BF%AE%E6%94%B9%E7%82%B9/">October 21st 2022, 2:46:30 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;Android逆向</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2022/10/ART脱壳源码修改点/'; 
+            this.page.identifier = '/2022/10/ART脱壳源码修改点/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>

