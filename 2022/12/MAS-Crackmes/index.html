@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>MAS Crackmes ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.t00ls.net/members-profile-12179.html" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitch"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">MAS Crackmes</h1>
+        <p class="text-center"><b>Monday, December 19th 2022, 4:25 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h2 id="UnCrackable-Level1"><a href="#UnCrackable-Level1" class="headerlink" title="UnCrackable-Level1"></a>UnCrackable-Level1</h2><p>下载地址: <a target="_blank" rel="noopener" href="https://mas.owasp.org/crackmes/">https://mas.owasp.org/crackmes/</a></p>
+<p>国际惯例，JEB打开APK，找到main。看到onCreate里有两个提示，应该是检测了ROOT和调试的环境，可以使用frida来修改返回，或者执行修改APK判断，这里直接修改判断，为了少写代码。</p>
+<p>直接把验证部分删了：</p>
+<pre class="line-numbers language-none"><code class="language-none">.method protected onCreate(Bundle)V
+          .registers 3
+00000000  invoke-static       c-&gt;a()Z
+00000006  move-result         v0
+00000008  if-nez              v0, :24
+:C
+0000000C  invoke-static       c-&gt;b()Z
+00000012  move-result         v0
+00000014  if-nez              v0, :24
+:18
+00000018  invoke-static       c-&gt;c()Z
+0000001E  move-result         v0
+00000020  if-eqz              v0, :2E
+:24
+00000024  const-string        v0, &quot;Root detected!&quot;
+00000028  invoke-direct       MainActivity-&gt;a(String)V, p0, v0
+:2E
+0000002E  invoke-virtual      MainActivity-&gt;getApplicationContext()Context, p0
+00000034  move-result-object  v0
+00000036  invoke-static       b-&gt;a(Context)Z, v0
+0000003C  move-result         v0
+0000003E  if-eqz              v0, :4C
+:42
+00000042  const-string        v0, &quot;App is debuggable!&quot;
+00000046  invoke-direct       MainActivity-&gt;a(String)V, p0, v0
+:4C
+0000004C  invoke-super        Activity-&gt;onCreate(Bundle)V, p0, p1
+00000052  const&#x2F;high16        p1, 0x7F030000        # layout:activity_main
+00000056  invoke-virtual      MainActivity-&gt;setContentView(I)V, p0, p1
+0000005C  return-void
+.end method
+​<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改为</p>
+<pre class="line-numbers language-none"><code class="language-none">.method protected onCreate(Bundle)V
+          .registers 3
+0000004C  invoke-super        Activity-&gt;onCreate(Bundle)V, p0, p1
+00000052  const&#x2F;high16        p1, 0x7F030000        # layout:activity_main
+00000056  invoke-virtual      MainActivity-&gt;setContentView(I)V, p0, p1
+0000005C  return-void
+.end method
+​<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>编译，签名安装即可。</p>
+<p>整个验证的逻辑在verify内：</p>
+<pre class="line-numbers language-none"><code class="language-none">public void verify(View arg4) &#123;
+        String v4_1;
+        String v4 &#x3D; ((EditText)this.findViewById(0x7F020001)).getText().toString();  &#x2F;&#x2F; id:edit_text
+        AlertDialog v0 &#x3D; new AlertDialog.Builder(this).create();
+        if(a.a(v4)) &#123;
+            v0.setTitle(&quot;Success!&quot;);
+            v4_1 &#x3D; &quot;This is the correct secret.&quot;;
+        &#125;
+        else &#123;
+            v0.setTitle(&quot;Nope...&quot;);
+            v4_1 &#x3D; &quot;That\&#39;s not it. Try again.&quot;;
+        &#125;
+​
+        v0.setMessage(v4_1);
+        v0.setButton(-3, &quot;OK&quot;, new DialogInterface.OnClickListener() &#123;
+            @Override  &#x2F;&#x2F; android.content.DialogInterface$OnClickListener
+            public void onClick(DialogInterface arg1, int arg2) &#123;
+                arg1.dismiss();
+            &#125;
+        &#125;);
+        v0.show();
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其中a函数，因此加密密钥和加密内容就已知。</p>
+<pre class="line-numbers language-none"><code class="language-none">public static boolean a(String arg5) &#123;
+        byte[] v1 &#x3D; Base64.decode(&quot;5UJiFctbmgbDoLXmpL12mkno8HT4Lv8dlat8FxR2GOc&#x3D;&quot;, 0);
+        byte[] v2 &#x3D; new byte[0];
+        try &#123;
+            return arg5.equals(new String(sg.vantagepoint.a.a.a(new byte[]&#123;(byte)0x8D, 18, 0x76, (byte)0x84, -53, -61, 0x7C, 23, 97, 109, (byte)0x80, 108, -11, 4, 0x73, -52&#125;, v1)));
+        &#125;
+        catch(Exception v0) &#123;
+            Log.d(&quot;CodeCheck&quot;, &quot;AES error:&quot; + v0.getMessage());
+            return arg5.equals(new String(v2));
+        &#125;
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然而这里Cipher.init中的是2，也就是解密，我们需要知道解密后的内容。hook</p>
+<pre class="line-numbers language-none"><code class="language-none">sg.vantagepoint.a.a.a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>随便输入一段内容，获取到输出为</p>
+<pre class="line-numbers language-none"><code class="language-none">ZenTracer:::&#123;&quot;cmd&quot;:&quot;exit&quot;,&quot;data&quot;:[&quot;1&quot;,&quot;73,32,119,97,110,116,32,116,111,32,98,101,108,105,101,118,101&quot;]&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>转换为字符串就是：</p>
+<pre class="line-numbers language-none"><code class="language-none">I want to believe<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>当然如果你直接分析加密代码，然后代码还原出来那就是：</p>
+<pre class="line-numbers language-none"><code class="language-none">import java.util.Base64;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+​
+​
+public class owasp &#123;
+    public static void main(String[] args) throws Exception &#123;
+        System.out.println(a());
+    &#125;
+​
+    public static String a() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException &#123;
+        byte[] arg2 &#x3D; new byte[]&#123;(byte)0x8D, 18, 0x76, (byte)0x84, -53, -61, 0x7C, 23, 97, 109, (byte)0x80, 108, -11, 4, 0x73, -52&#125;;
+        byte[] arg3 &#x3D; Base64.getDecoder().decode(&quot;5UJiFctbmgbDoLXmpL12mkno8HT4Lv8dlat8FxR2GOc&#x3D;&quot;);
+        SecretKeySpec v0 &#x3D; new SecretKeySpec(arg2, &quot;AES&quot;);
+        Cipher v2 &#x3D; Cipher.getInstance(&quot;AES&#x2F;ECB&#x2F;PKCS5Padding&quot;);
+        v2.init(Cipher.DECRYPT_MODE, v0);
+        return new String(v2.doFinal(arg3));
+​
+    &#125;
+​
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="UnCrackable-Level2"><a href="#UnCrackable-Level2" class="headerlink" title="UnCrackable-Level2"></a>UnCrackable-Level2</h2><p>看到这个大概就知道这货想干啥了</p>
+<pre class="line-numbers language-none"><code class="language-none">static &#123;
+        System.loadLibrary(&quot;foo&quot;);
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>先按照流程来看一下，跟上面差不多，几个检测，不过这里先加载so的init函数。</p>
+<p>然后加密的方法被写到了so的</p>
+<pre class="line-numbers language-none"><code class="language-none">public class CodeCheck &#123;
+    public boolean a(String arg1) &#123;
+        return this.bar(arg1.getBytes());
+    &#125;
+
+    private native boolean bar(byte[] arg1) &#123;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后去so中找一下这两个函数，其中init中关键函数是sub_93C</p>
+<pre class="line-numbers language-none"><code class="language-none">.text:00000BA4                 PUSH            &#123;R7,LR&#125;
+.text:00000BA6                 MOV             R7, SP
+.text:00000BA8                 BL              sub_93C
+.text:00000BAC                 LDR             R0, &#x3D;(byte_400C - 0xBB4)
+.text:00000BAE                 MOVS            R1, #1
+.text:00000BB0                 ADD             R0, PC  ; byte_400C
+.text:00000BB2                 STRB            R1, [R0]
+.text:00000BB4                 POP             &#123;R7,PC&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>sub_93C的伪代码是，是一个验证app调试行为的检测。</p>
+<pre class="line-numbers language-none"><code class="language-none">int sub_93C()
+&#123;
+  __pid_t v0; &#x2F;&#x2F; r4
+  pthread_t newthread; &#x2F;&#x2F; [sp+4h] [bp-1Ch] BYREF
+  int stat_loc[6]; &#x2F;&#x2F; [sp+8h] [bp-18h] BYREF
+
+  dword_4008 &#x3D; fork();
+  if ( dword_4008 )
+  &#123;
+    pthread_create(&amp;newthread, 0, sub_914, 0);
+  &#125;
+  else
+  &#123;
+    v0 &#x3D; getppid();
+    if ( !ptrace(PTRACE_ATTACH, v0, 0, 0) )
+    &#123;
+      waitpid(v0, stat_loc, 0);
+      while ( 1 )
+      &#123;
+        ptrace(PTRACE_CONT, v0, 0, 0);
+        if ( !waitpid(v0, stat_loc, 0) )
+          break;
+        if ( (stat_loc[0] &amp; 0x7F) !&#x3D; 127 )
+          exit(0);
+      &#125;
+    &#125;
+  &#125;
+  return _stack_chk_guard - stat_loc[1];
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>另一个bar函数</p>
+<pre class="line-numbers language-none"><code class="language-none">bool __fastcall Java_sg_vantagepoint_uncrackable2_CodeCheck_bar(_JNIEnv *a1, _JavaVM *a2, int a3)
+&#123;
+  const char *v5; &#x2F;&#x2F; r8
+  _BOOL4 result; &#x2F;&#x2F; r0
+  char s2[24]; &#x2F;&#x2F; [sp+4h] [bp-2Ch] BYREF
+
+  result &#x3D; 0;
+  if ( byte_400C &#x3D;&#x3D; 1 )
+  &#123;
+    strcpy(s2, &quot;Thanks for all the fish&quot;);
+    v5 &#x3D; a1-&gt;functions-&gt;GetByteArrayElements(a1, a3, 0);
+    if ( a1-&gt;functions-&gt;GetArrayLength(a1, a3) &#x3D;&#x3D; 23 &amp;&amp; !strncmp(v5, s2, 0x17u) )
+      result &#x3D; 1;
+  &#125;
+  return result;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>因为我们需要把result返回1，也就是让后续的判断为真，所以需要查看内部流程。</p>
+<p>有两个要求，其中是字节数组长度为23，跟上面的字符比较必须相等，这里有个小问题，byte_400C是init里来加载赋值的，也就是修改代码的时候不能去掉这个函数的渲染。</p>
+<pre class="line-numbers language-none"><code class="language-none">.method protected onCreate(Landroid&#x2F;os&#x2F;Bundle;)V
+    .locals 4
+    
+    invoke-direct &#123;p0&#125;, Lsg&#x2F;vantagepoint&#x2F;uncrackable2&#x2F;MainActivity;-&gt;init()V
+    
+    new-instance v0, Lsg&#x2F;vantagepoint&#x2F;uncrackable2&#x2F;CodeCheck;
+
+    invoke-direct &#123;v0&#125;, Lsg&#x2F;vantagepoint&#x2F;uncrackable2&#x2F;CodeCheck;-&gt;&lt;init&gt;()V
+
+    iput-object v0, p0, Lsg&#x2F;vantagepoint&#x2F;uncrackable2&#x2F;MainActivity;-&gt;m:Lsg&#x2F;vantagepoint&#x2F;uncrackable2&#x2F;CodeCheck;
+
+    invoke-super &#123;p0, p1&#125;, Landroid&#x2F;support&#x2F;v7&#x2F;app&#x2F;c;-&gt;onCreate(Landroid&#x2F;os&#x2F;Bundle;)V
+
+    const p1, 0x7f09001b
+
+    invoke-virtual &#123;p0, p1&#125;, Lsg&#x2F;vantagepoint&#x2F;uncrackable2&#x2F;MainActivity;-&gt;setContentView(I)V
+
+    return-void
+.end method<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>编译安装，输入上面的字符串即可</p>
+<pre class="line-numbers language-none"><code class="language-none">Thanks for all the fish<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="UnCrackable-Level3"><a href="#UnCrackable-Level3" class="headerlink" title="UnCrackable-Level3"></a>UnCrackable-Level3</h2><p>形似如上，但是多了一个文件的校验verifyLibs，这个返回不正常的时候会给tampered一个非0的值，导致后续的判断中失败。</p>
+<p>但是这个app有一个麻烦的地方在于，他的检测跟上面的不一样，首先是Java层，删除MainActivity$2，还有MainActivity中的调用部分即可，但是安装后还是会闪退，这个现象明显不是Java层代码控制的。</p>
+<p>从函数中可以看到一个goodbye函数，在sub_23C4中发现有调用，但是没有明显调用存在这个函数的地方，也没有明写在JNI_Onload中，大概在init_array中，于是发现有函数的调用。sub_2468中调用了sub_23C4</p>
+<pre class="line-numbers language-none"><code class="language-none">.init_array:00005DF0 ; Segment type: Pure data
+.init_array:00005DF0                 AREA .init_array, DATA
+.init_array:00005DF0                 ; ORG 0x5DF0
+.init_array:00005DF0                 DCD sub_2468+1
+.init_array:00005DF0 ; .init_array   ends
+.init_array:00005DF0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>于是我们需要修改sub_23C4这个函数的判断逻辑。</p>
+<p>由于原逻辑是如下判断：</p>
+<pre class="line-numbers language-none"><code class="language-none">void __noreturn sub_23C4()
+&#123;
+  FILE *v0; &#x2F;&#x2F; r4
+  char v1[536]; &#x2F;&#x2F; [sp+0h] [bp-218h] BYREF
+
+  while ( 1 )
+  &#123;
+    v0 &#x3D; fopen(&quot;&#x2F;proc&#x2F;self&#x2F;maps&quot;, &quot;r&quot;);
+    if ( !v0 )
+      break;
+    while ( fgets(v1, 512, v0) )
+    &#123;
+      if ( strstr(v1, &quot;frida&quot;) || strstr(v1, &quot;xposed&quot;) )
+      &#123;
+        _android_log_print(2, &quot;UnCrackable3&quot;, &quot;Tampering detected! Terminating...&quot;);
+LABEL_10:
+        goodbye();
+      &#125;
+    &#125;
+    fclose(v0);
+    usleep(0x1F4u);
+  &#125;
+  _android_log_print(2, &quot;UnCrackable3&quot;, &quot;Error opening &#x2F;proc&#x2F;self&#x2F;maps! Terminating...&quot;);
+  goto LABEL_10;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这时候可以在日志过滤查看，验证一下想法，可以发现确实是显示了<code>Tampering detected! Terminating...</code>。</p>
+<p>先修改了，但是这样发现还是会报错，于是直接在最后退出的地方，修改掉exit()。</p>
+<pre class="line-numbers language-none"><code class="language-none">.text:000023EA loc_23EA                                ; CODE XREF: sub_23C4+48↓j
+.text:000023EA                                         ; sub_23C4+66↓j
+.text:000023EA                 MOV             R0, R6  ; s
+.text:000023EC                 MOV.W           R1, #0x200 ; n
+.text:000023F0                 MOV             R2, R4  ; stream
+.text:000023F2                 BLX             fgets
+.text:000023F6                 CBZ             R0, loc_2410
+.text:000023F8                 MOV             R0, R6  ; char *
+.text:000023FA                 MOV             R1, R10 ; char *
+.text:000023FC                 BLX             strstr
+.text:00002400                 CBZ             R0, loc_2436 ; Keypatch modified this from:
+.text:00002400                                         ;   CBNZ R0, loc_2436
+.text:00002402                 MOV             R0, R6  ; char *
+.text:00002404                 MOV             R1, R5  ; char *
+.text:00002406                 BLX             strstr
+.text:0000240A                 CMP             R0, #0
+.text:0000240C                 BNE             loc_23EA ; Keypatch modified this from:
+.text:0000240C                                         ;   BEQ loc_23EA
+.text:0000240E                 B               loc_2436<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>把最后的BLX指令给nop掉，修改Hex为00000000</p>
+<pre class="line-numbers language-none"><code class="language-none">.text:0000238C _Z7goodbyev                             ; CODE XREF: goodbye(void)+8↑j
+.text:0000238C                                         ; DATA XREF: LOAD:000002A0↑o ...
+.text:0000238C ; __unwind &#123;
+.text:0000238C                 PUSH            &#123;R7,LR&#125;
+.text:0000238E                 MOV             R7, SP
+.text:00002390                 MOVS            R0, #6  ; sig
+.text:00002392                 BLX             raise
+.text:00002396                 MOVS            R0, #0  ; status
+.text:00002398                 BLX             _exit
+.text:00002398 ; &#125; &#x2F;&#x2F; starts at 238C<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>重新打包安装，即可正常打开app。然后再来看后续的逻辑。</p>
+<p>主逻辑还是在so中，找到init函数</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+  char *v5; &#x2F;&#x2F; r6
+
+  sub_24BC(a1, a2);    &#x2F;&#x2F;需要调试可以nop掉
+  v5 &#x3D; a1-&gt;functions-&gt;GetByteArrayElements(a1, a3, 0);
+  strncpy(byte_6034, v5, 0x18u);
+  a1-&gt;functions-&gt;ReleaseByteArrayElements(a1, a3, v5, 2);
+  return ++dword_6030;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>还是获取一个输入字节的作用，然后主要是bar</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+  jbyte *v5; &#x2F;&#x2F; r6
+  unsigned int i; &#x2F;&#x2F; r0
+  int result; &#x2F;&#x2F; r0
+  _BYTE v8[28]; &#x2F;&#x2F; [sp+0h] [bp-38h] BYREF
+
+  memset(v8, 0, 0x19u);
+  if ( dword_6030 !&#x3D; 2 )
+    goto LABEL_9;
+  sub_EBC(v8);
+  v5 &#x3D; a1-&gt;functions-&gt;GetByteArrayElements(a1, a3, 0);
+  if ( a1-&gt;functions-&gt;GetArrayLength(a1, a3) !&#x3D; 24 )
+    goto LABEL_9;
+  for ( i &#x3D; 0; i &lt;&#x3D; 0x17; ++i )
+  &#123;
+    if ( v5[i] !&#x3D; (v8[i] ^ *(&amp;dword_6030 + i + 4)) )   &#x2F;&#x2F;dword_6030 &#x3D; 2
+      goto LABEL_9;
+  &#125;
+  if ( i &#x3D;&#x3D; 24 )
+    result &#x3D; 1;
+  else
+LABEL_9:
+    result &#x3D; 0;
+  return result;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>基本可以知道如果需要得到这个v5就是我们输入的值也就是需要得到的值，那我们需要知道v8这个值，但是sub_EBC不知道在干啥，有两千多行，但是你把参数修改为一个值的时候就会发现，其实只有最后几行进行了操作，开辟了一个24字节的空间。</p>
+<pre class="line-numbers language-none"><code class="language-none">if ( result )
+  &#123;
+    memset(key, 0, 0x19u);
+    *key &#x3D; 319883293;   &#x2F;&#x2F;0x1311081d
+    key[1] &#x3D; 357111567;  &#x2F;&#x2F;0x1549170f
+    key[2] &#x3D; 419627021;   &#x2F;&#x2F;0x1903000d
+    key[3] &#x3D; 353574234;  &#x2F;&#x2F;0x15131d5a
+    *(key + 8) &#x3D; 3592;
+    result &#x3D; (&amp;loc_1412 + 1);
+    *(key + 18) &#x3D; 135725146;
+    *(key + 11) &#x3D; 5139;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>arm默认是小端格式，所以这个key就是<code>1d0811130f1749150d0003195a1d1315080e5a0017081314</code>，然后最奇怪的地方来了，从伪代码上看这里是跟一个常量进行了异或，但是这个明显不正常，异或的结果也不对，后来查了一下发现一开始传入的xorkey被忽略掉了，虽然这里没细看出来调用关系，但是确实是调用了，使用Ghidra就可以看到。</p>
+<p>使用脚本进行异或，得到结果<code>making owasp great again</code>。</p>
+<pre class="line-numbers language-none"><code class="language-none">secret &#x3D; &quot;&quot;
+other_key &#x3D; bytes.fromhex(&quot;1d0811130f1749150d0003195a1d1315080e5a0017081314&quot;)
+pizza &#x3D; bytes(&quot;pizzapizzapizzapizzapizz&quot;,&#39;utf-8&#39;)
+for (a, b) in zip(pizza, other_key):
+    secret &#x3D; secret + chr(a ^ b)
+print(secret)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="UnCrackable-Level4"><a href="#UnCrackable-Level4" class="headerlink" title="UnCrackable-Level4"></a>UnCrackable-Level4</h2><p>这个有点复杂，别问，问就是不会。/(ㄒoㄒ)/~~</p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2022/12/MAS-Crackmes/">https://misakikata.github.io/2022/12/MAS-Crackmes/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2022/12/MAS-Crackmes/">December 19th 2022, 4:25:33 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2022/12/MAS-Crackmes/">December 19th 2022, 4:25:33 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;Android逆向</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2022/12/MAS-Crackmes/'; 
+            this.page.identifier = '/2022/12/MAS-Crackmes/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
