@@ -138,7 +138,7 @@ cd &#x2F;dev&#x2F;block&#x2F;platform&#x2F;7824900.sdhci&#x2F;by-name&#x2F;
 dd if&#x3D;&#x2F;dev&#x2F;block&#x2F;mmcblk0p22 of&#x3D;&#x2F;sdcard&#x2F;boot.img<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554185489216.png" alt="1554185489216"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554185489216.png" alt="1554185489216"></p>
 <p>把boot转移到可以下载的目录，由于adb权限问题，复制到sd卡目录下。</p>
 <pre class="line-numbers language-none"><code class="language-none">adb pull &#x2F;sdcard&#x2F;boot.img d:\a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -146,18 +146,18 @@ dd if&#x3D;&#x2F;dev&#x2F;block&#x2F;mmcblk0p22 of&#x3D;&#x2F;sdcard&#x2F;boot.i
 <pre class="line-numbers language-none"><code class="language-none">git clone https:&#x2F;&#x2F;github.com&#x2F;pbatard&#x2F;bootimg-tools.git
 make<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554185769689.png" alt="1554185769689"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554185769689.png" alt="1554185769689"></p>
 <p>此时已经生成二进制文件，在mkbootimg目录下，进入此目录使用unmkbootimg，提取kernel</p>
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554185817995.png" alt="1554185817995"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554185817995.png" alt="1554185817995"></p>
 <p>提取原始zImage</p>
 <p>将kernel文件复制为文件名为zImage.gz的文件，并使用010editor查找十六进制1f 8b 08 00，找到后把前面的数据全删掉，使文件变成标准的gzip压缩文件，这样子就可以使用gunzip解压了。</p>
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554185942154.png" alt="1554185942154"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554185942154.png" alt="1554185942154"></p>
 <p>修改完成后，解压缩文件，提取zImage</p>
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554185966036.png" alt="1554185966036"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554185966036.png" alt="1554185966036"></p>
 <h4 id="二、-提位、修改关键代码"><a href="#二、-提位、修改关键代码" class="headerlink" title="二、  提位、修改关键代码"></a>二、  提位、修改关键代码</h4><p>zImage文件可以直接使用 IDA 去打开，但需要设置参数。（建议使用6.8版本，因为在索引函数时可以自动识别，而7.0则不可）</p>
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554186082956.png" alt="1554186082956"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554186082956.png" alt="1554186082956"></p>
 <p>点击OK后，确定进入ARM，然后弹出此对话框，填入0xc0008000</p>
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554186088780.png" alt="1554186088780"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554186088780.png" alt="1554186088780"></p>
 <p>原文要求修改函数指令来达到修改的效果，但在修改过程中发现，对不同kernel，最后查到的对应proc_pid_status函数操作指令不一致。</p>
 <pre class="line-numbers language-none"><code class="language-none">echo 0 &gt; &#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;kptr_restrict
 关闭符号屏蔽
@@ -167,11 +167,11 @@ cat &#x2F;proc&#x2F;kallsyms |grep __task_pid_nr_ns<span aria-hidden="true" clas
 
 
 
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554187063821.png" alt="1554187063821"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554187063821.png" alt="1554187063821"></p>
 <p>为了避免修改出错刷入手机成砖的风险，采用了另一方式，shift+f12来打开字符串窗口，查找TracerPid，修改其后的占位符，把%d修改为0和%09(30  09)。</p>
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554186414392.png" alt="1554186414392"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554186414392.png" alt="1554186414392"></p>
 <p>其对应的Hex窗口修改为如下所示：</p>
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554186447080.png" alt="1554186447080"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554186447080.png" alt="1554186447080"></p>
 <p>使用<code>gzip -n -f -9 zImage</code>压缩修改后的内核裸文件，压缩后会比原来的小，必须比原来的文件小才可以。得到zImage.gz，我们使用010分别打开zImage.gz和boot.img，搜索1F 8B 08 00。按下insert键，将010改为overwrite，注意这里必须是覆盖，这样就不用考虑插入后大小的问题了，把zImage.gz的内容复制到boot.img的相应位置。boot.img会有两个1F 8B 08 00，修改第一个，把其中的十六进制改为zImage.gz文件的十六进制值，在edit选项中进行覆写。</p>
 <p>修改完成后，刷入手机，利用SDK自带的fastboot。</p>
 <pre class="line-numbers language-none"><code class="language-none">adb reboot bootloader   # 启动fastboot模式
@@ -182,8 +182,8 @@ fastboot reboot  #重启<span aria-hidden="true" class="line-numbers-rows"><span
 
 
 
-<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554186828423.png" alt="1554186828423"></p>
-<h4 id="调试查看"><a href="#调试查看" class="headerlink" title="调试查看"></a>调试查看</h4><p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/%5C1554187063866.png" alt="1554187063866"></p>
+<p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554186828423.png" alt="1554186828423"></p>
+<h4 id="调试查看"><a href="#调试查看" class="headerlink" title="调试查看"></a>调试查看</h4><p><img src="/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/1554187063866.png" alt="1554187063866"></p>
 <p>如想使用修改函数操作指令的方式可以参考原作者方式：</p>
 <p>1、<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/91aa37f3a972">逆向修改手机内核，绕过反调试</a></p>
 <p>2、<a target="_blank" rel="noopener" href="https://www.xmsec.cc/re-modify-kernel-bypass-antidebug/">逆向修改内核，绕过TracerPID反调试</a></p>
@@ -195,7 +195,7 @@ fastboot reboot  #重启<span aria-hidden="true" class="line-numbers-rows"><span
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/">https://misakikata.github.io/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/">April 2nd 2019, 1:59:49 pm</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/">January 9th 2023, 10:57:41 am</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2019/04/%E9%80%86%E5%90%91%E4%BF%AE%E6%94%B9%E6%89%8B%E6%9C%BA%E5%86%85%E6%A0%B8%EF%BC%8C%E7%BB%95%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/">January 9th 2023, 11:47:39 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               

@@ -133,17 +133,17 @@
 <h2 id="3-漏洞危害"><a href="#3-漏洞危害" class="headerlink" title="3. 漏洞危害"></a>3. 漏洞危害</h2><p>​		重放攻击本身只是一种行为和方式，并不会直接造成系统的危害，可能在某些系统中，过多和高频次的重复会对系统造成压力。重放攻击的重要点在于重放的是可以造成目的效果的数据包，从而达到修改和多次执行的效果。</p>
 <p>重放攻击主要是针对系统没有效验请求的有效性和时效性，对于多次请求执行，系统将多次响应。在重放攻击利用最多的形式中，短信轰炸算是重放攻击最直接的利用表现。</p>
 <h2 id="4-常见漏洞类型"><a href="#4-常见漏洞类型" class="headerlink" title="4. 常见漏洞类型"></a>4. 常见漏洞类型</h2><h3 id="1-短信轰炸"><a href="#1-短信轰炸" class="headerlink" title="1. 短信轰炸"></a>1. 短信轰炸</h3><p>​		短线轰炸算是重放攻击中最为直接的利用形式，当系统端没有效验请求的时间差或者只在前端做请求限制的时候，可以无限的请求短信来达到短信轰炸的目的。例如，如下APP请求注册时可以使用手机号和验证码注册登录，但是没有限制短信请求次数和时间间隔。</p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566961437755.png" alt="1566961437755"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566961437755.png" alt="1566961437755"></p>
 <p>多次请求后可以在手机上看到请求到的短信</p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566961575824.png" alt="1566961575824"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566961575824.png" alt="1566961575824"></p>
 <h3 id="2-暴力破解"><a href="#2-暴力破解" class="headerlink" title="2. 暴力破解"></a>2. 暴力破解</h3><p>​		暴力破解是重放攻击中，典型的非只重放而达到的攻击类型，而是利用重放这个动作来达到暴力破解的目的。当系统端未做请求验证和错误次数限制时，就可以根据字典或者设定的字符串来破解特定的参数。</p>
 <h4 id="a-暴力破解密码"><a href="#a-暴力破解密码" class="headerlink" title="a. 暴力破解密码"></a>a. 暴力破解密码</h4><p>​		当用户登陆时，缺少验证码或者验证码不失效，并且账号没有错误的次数限制。可以通过暴力破解碰撞密码来登录。例如此处，暴力破解原密码来登陆绑定账号。</p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566963013422.png" alt="1566963013422"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566963013422.png" alt="1566963013422"></p>
 <p>此处验证码只判断是否存在，并不失效，且可以多次尝试绑定账号，例如如下，当返回为1的时候就是密码正确，绑定成功。</p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566963100686.png" alt="1566963100686"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566963100686.png" alt="1566963100686"></p>
 <h4 id="b-暴力破解验证码"><a href="#b-暴力破解验证码" class="headerlink" title="b. 暴力破解验证码"></a>b. 暴力破解验证码</h4><p>​		当我们申请修改账号密码等操作时，往往需要给手机号或者邮箱发送一个验证码，当需要修改他们或者越权操作的时候并不一定可以通过修改接收手机或邮箱来收到验证码，这时候可以尝试暴力破解验证码。例如：</p>
 <p>对此请求多次重放后发现仍然返回修改密码失败，说明验证码可以多次使用，这种情况下很有可能是验证码在没有正确验证使用时，后台并不会失效。那么我们尝试爆破验证码，如果成功将修改账号密码。</p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566963823305.png" alt="1566963823305"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566963823305.png" alt="1566963823305"></p>
 <h4 id="c-暴力破解参数"><a href="#c-暴力破解参数" class="headerlink" title="c. 暴力破解参数"></a>c. 暴力破解参数</h4><p>​		此情况大都在尝试越权的时候，还有尝试修改某些不可知但是可预测的参数，例如此篇文章：</p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/164510.html">重置凭证可暴破</a></p>
 <h4 id="d-暴力破解hash密码"><a href="#d-暴力破解hash密码" class="headerlink" title="d. 暴力破解hash密码"></a>d. 暴力破解hash密码</h4><p>​		此种暴力破解类似破解密码，但此种一般不需要考虑某些验证条件，常在获取到主机权限后，利用hash抓取工具获得，例如Windows平台的hash抓取工具：mimikaze， pwdump7等。获取到Windows的NTLM。</p>
@@ -211,17 +211,17 @@ email&#x3D;qq@qq.com&amp;code&#x3D;123456<span aria-hidden="true" class="line-nu
     login_form &#x3D; forms.UserForm()
     return render(request, &#39;login&#x2F;login.html&#39;, locals())<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566973835279.png" alt="1566973835279"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566973835279.png" alt="1566973835279"></p>
 <p>抓包登陆，在没有验证码，且csrf_token在没有起到唯一性的时候，可以通过爆破密码登陆。</p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566974303157.png" alt="1566974303157"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566974303157.png" alt="1566974303157"></p>
 <p>把数据包丢到Intruder中，多次爆破后发现当密码正确的时候会产生302的跳转。</p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566974456178.png" alt="1566974456178"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566974456178.png" alt="1566974456178"></p>
 <p>漏洞修复：添加验证码，虽然此处可以添加框架自带的验证码，但建议使用请求式验证码。如不能使用验证码也可以给账号登陆错误次数做一次限制。</p>
 <h2 id="6-漏洞测试工具"><a href="#6-漏洞测试工具" class="headerlink" title="6. 漏洞测试工具"></a>6. 漏洞测试工具</h2><p>重复攻击一般采用可以抓包的工具都可以重复，例如：Charles、burp等。此处较为常用burp。因为在payload上，处理较为灵活，当然如果需要的只是重放，Charles应该不会让你失望。</p>
 <p>burp: <a target="_blank" rel="noopener" href="https://portswigger.net/burp">https://portswigger.net/burp</a></p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566975371357.png" alt="1566975371357"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566975371357.png" alt="1566975371357"></p>
 <p>Charles：<a target="_blank" rel="noopener" href="https://www.charlesproxy.com/">https://www.charlesproxy.com/</a></p>
-<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/%5C1566975429924.png" alt="1566975429924"></p>
+<p><img src="/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1566975429924.png" alt="1566975429924"></p>
 <h2 id="7-漏洞修改"><a href="#7-漏洞修改" class="headerlink" title="7. 漏洞修改"></a>7. 漏洞修改</h2><ol>
 <li>添加图片验证码，为了应对偏爆破类的重放攻击，添加验证字段是最简单有效的手段。当然你要保证验证是在一次使用后及时失效。</li>
 <li>限制请求次数，有些地方并不适用于添加验证码，或者不能添加验证码。这时候针对同一账户的错误次数限制就显得很有必要。例如，当错误次数连续达到五次的时候，暂时十分钟内不能登陆。</li>
@@ -235,7 +235,7 @@ email&#x3D;qq@qq.com&amp;code&#x3D;123456<span aria-hidden="true" class="line-nu
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/">https://misakikata.github.io/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/">August 28th 2019, 3:19:36 pm</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/">January 9th 2023, 10:59:10 am</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2019/08/%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/">January 9th 2023, 11:50:16 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               
