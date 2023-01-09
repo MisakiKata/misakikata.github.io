@@ -129,9 +129,9 @@
         <div class="section">
           <div class="post_content">
               <h2 id="关于项目"><a href="#关于项目" class="headerlink" title="关于项目"></a>关于项目</h2><ol>
-<li> 项目是一个代理扫描器，现有的代理扫描平台有xray，w13scan等，只是我希望关于SQL注入的使用sqlmap来检测执行，所以就有了这个平台，本质上和GroudScan是差不多的，只是把w13scan也加入到其中来检测别的漏洞。</li>
-<li> 同时也期望这个东西能做到代理扫描上的统一化，在实际工作中，开发测试对于新功能并不会实时进行安全申报，所以希望平台化的被动扫描可以帮助实现安全的加固。</li>
-<li> 地址：<a target="_blank" rel="noopener" href="https://github.com/MisakiKata/mitescan">https://github.com/MisakiKata/mitescan</a></li>
+<li>项目是一个代理扫描器，现有的代理扫描平台有xray，w13scan等，只是我希望关于SQL注入的使用sqlmap来检测执行，所以就有了这个平台，本质上和GroudScan是差不多的，只是把w13scan也加入到其中来检测别的漏洞。</li>
+<li>同时也期望这个东西能做到代理扫描上的统一化，在实际工作中，开发测试对于新功能并不会实时进行安全申报，所以希望平台化的被动扫描可以帮助实现安全的加固。</li>
+<li>地址：<a target="_blank" rel="noopener" href="https://github.com/MisakiKata/mitescan">https://github.com/MisakiKata/mitescan</a></li>
 </ol>
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
 <li>环境使用MySQL，建议手动调整连接超时时间，代码会检测连接是否超时，但是可以调整超时来延缓长连接。不修改本质上也没事。</li>
@@ -165,13 +165,13 @@ tld&#x3D;&#x3D;0.9.3
 urllib3&#x3D;&#x3D;1.25.3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ol start="3">
-<li> 代理模块使用mitmproxy，如果需要代理https，请在开启代理后访问地址<code>http://mitm.it/</code>下载证书，默认代理为<code>0.0.0.0:18088</code>。如需修改在myproxy/myproxys.py中修改。</li>
-<li> 需要开启sqlmapapi</li>
+<li>代理模块使用mitmproxy，如果需要代理https，请在开启代理后访问地址<code>http://mitm.it/</code>下载证书，默认代理为<code>0.0.0.0:18088</code>。如需修改在myproxy&#x2F;myproxys.py中修改。</li>
+<li>需要开启sqlmapapi</li>
 </ol>
 <pre class="line-numbers language-none"><code class="language-none">python sqlmapapi.py -s <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <ol start="5">
-<li> 为了避免流量数据堆积，只显示最近三天的流量，检索也是按照最近三天检索，如果需要修改<code>apps/proxy/views.py</code>中修改<code>timedelta(days=3)</code>为想要的天数。</li>
+<li>为了避免流量数据堆积，只显示最近三天的流量，检索也是按照最近三天检索，如果需要修改<code>apps/proxy/views.py</code>中修改<code>timedelta(days=3)</code>为想要的天数。</li>
 </ol>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>配置setting的数据库信息</p>
 <pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">python manage.py makemigrations

@@ -205,11 +205,11 @@ fi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><
 <p>后门先进行进程的清理，然后在root下修改定时任务文件，删除了一个shell文件<code>/etc/newinit.sh</code>，我去查了一下这个文件，发现也是一个挖矿的定时程序，原来是先把别的程序给他删了，再去执行自己的。同时修改文件的属性，便于更改。后续还删除了<code>pnscan</code>，这个是针对reids的挖矿病毒，会修改top文件为top.original，这里也贴心的帮你修改过来了。</p>
 <p>原pnscan病毒会修改top为：<code>echo &quot;top.original \$@ | grep -v \&quot;zzh\|pnscan\&quot;&quot;&gt;&gt;/bin/top</code></p>
 <p>只是它还会修改ps命令，这里没有修改回来，看来还不够贴心。</p>
-<p>不管你系统是多少内存啥的，反正都给你运行函数<code>SlowAndSteady</code>。会解压在/var/tmp目录下，更改名称为.xri。执行目录下的<code>chmod +x * ; ./init0</code>，同时给你删除掉命令记录，同时删除下载的压缩包。</p>
+<p>不管你系统是多少内存啥的，反正都给你运行函数<code>SlowAndSteady</code>。会解压在&#x2F;var&#x2F;tmp目录下，更改名称为.xri。执行目录下的<code>chmod +x * ; ./init0</code>，同时给你删除掉命令记录，同时删除下载的压缩包。</p>
 <p>从文件内看到一个key文件，里面是ssh的公钥，说明保留采用公钥的方式登陆的后门。</p>
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;root&#x2F;.ssh&#x2F;authorized_keys<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>会在/etc/crontab里写入定时任务</p>
+<p>会在&#x2F;etc&#x2F;crontab里写入定时任务</p>
 <pre class="line-numbers language-none"><code class="language-none">@weekly root &#x2F;var&#x2F;tmp&#x2F;.x&#x2F;secure
 @reboot root &#x2F;var&#x2F;tmp&#x2F;.x&#x2F;secure<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
@@ -219,7 +219,7 @@ fi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><
             &quot;pass&quot;: &quot;x&quot;,
             &quot;rig-id&quot;: &quot;pooled&quot;,<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>执行的程序为/var/tmp/.xri下的xri文件，后续还会在/var/tmp/.x下把scp和secure拷贝进来，上面的定时任务也是针对这个secure文件。</p>
+<p>执行的程序为&#x2F;var&#x2F;tmp&#x2F;.xri下的xri文件，后续还会在&#x2F;var&#x2F;tmp&#x2F;.x下把scp和secure拷贝进来，上面的定时任务也是针对这个secure文件。</p>
 <p>程序还会在创建一个cheeki的普通用户，密码写在shadow文件内，看起来是跟root一个密码。但是这个密码是修改过，也就是root的密码修改为其他密码了。</p>
 <pre class="line-numbers language-none"><code class="language-none">root:$6$u3a2aCKC$TULEOlBwPWBIAYZkG0NNNbWM.9tRozeHUO2HyRvlTQpekaOQ2E3S5E5&#x2F;gqyOnVAtaF8G41oZS0KRioLw7PfzT1:19011:0:99999:7:::
 bin:*:18353:0:99999:7:::

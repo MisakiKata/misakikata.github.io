@@ -141,11 +141,11 @@
 <p>从上面布隆过滤器的实现原理可以看出，它不支持删除， 一旦将某个key对应的bit位置0，可能会导致同样bit位的其他key的存在性判断错误。</p>
 <h3 id="如何在python中使用布隆过滤器"><a href="#如何在python中使用布隆过滤器" class="headerlink" title="如何在python中使用布隆过滤器"></a>如何在python中使用布隆过滤器</h3><ol>
 <li><p>先去这个网站下载<code>bitarray</code>这个依赖 <code>https://www.lfd.uci.edu/~gohlke/pythonlibs/#bitarray</code></p>
-<p> 直接安装会报错<code>error: Microsoft Visual C++ 14.0 is required. Get it with &quot;Build Tools for Visual Studio&quot;: https://visualstudio.microsoft.com/downloads/</code></p>
+<p>直接安装会报错<code>error: Microsoft Visual C++ 14.0 is required. Get it with &quot;Build Tools for Visual Studio&quot;: https://visualstudio.microsoft.com/downloads/</code></p>
 </li>
-<li><p> 安装<code>wheel</code>文件, 防止我们主动安装报这样的错误<code>pip3 install bitarray-1.1.0-cp36-cp36m-win_amd64.whl</code></p>
+<li><p>安装<code>wheel</code>文件, 防止我们主动安装报这样的错误<code>pip3 install bitarray-1.1.0-cp36-cp36m-win_amd64.whl</code></p>
 </li>
-<li><p> <code>pip3 install pybloom_live</code></p>
+<li><p><code>pip3 install pybloom_live</code></p>
 </li>
 </ol>
 <p>该模块包含两个类实现布隆过滤器功能。<code>BloomFilter</code> 是定容。<code>ScalableBloomFilter</code> 可以自动扩容</p>
@@ -422,9 +422,9 @@ while True:
 
 <p>结果首先把桶内的泄露完，此后每秒泄露五个。如果修改泄露数为30，这样结果任然是最多20个泄露。</p>
 <p>参考文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yscl/p/12003359.html">https://www.cnblogs.com/yscl/p/12003359.html</a></p>
-<p>​                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/chuxiuhong/p/8215719.html">https://www.cnblogs.com/chuxiuhong/p/8215719.html</a></p>
-<p>​                        <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68418134">https://zhuanlan.zhihu.com/p/68418134</a></p>
-<p>​                        <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c02899c30bbd">https://www.jianshu.com/p/c02899c30bbd</a></p>
+<p>​						<a target="_blank" rel="noopener" href="https://www.cnblogs.com/chuxiuhong/p/8215719.html">https://www.cnblogs.com/chuxiuhong/p/8215719.html</a></p>
+<p>​						<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68418134">https://zhuanlan.zhihu.com/p/68418134</a></p>
+<p>​						<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c02899c30bbd">https://www.jianshu.com/p/c02899c30bbd</a></p>
 
           </div>
           <br><br>

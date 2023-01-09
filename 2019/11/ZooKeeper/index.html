@@ -131,22 +131,22 @@
               <h2 id="什么是Apache-ZooKeeper？"><a href="#什么是Apache-ZooKeeper？" class="headerlink" title="什么是Apache ZooKeeper？"></a>什么是Apache ZooKeeper？</h2><p>Apache ZooKeeper是由集群（节点组）使用的一种服务，用于在自身之间协调，并通过稳健的同步技术维护共享数据。ZooKeeper本身是一个分布式应用程序，为写入分布式应用程序提供服务。</p>
 <p>ZooKeeper提供的常见服务如下 :</p>
 <ul>
-<li>  <strong>命名服务</strong> - 按名称标识集群中的节点。它类似于DNS，但仅对于节点。</li>
-<li>  <strong>配置管理</strong> - 加入节点的最近的和最新的系统配置信息。</li>
-<li>  <strong>集群管理</strong> - 实时地在集群和节点状态中加入/离开节点。</li>
-<li>  <strong>选举算法</strong> - 选举一个节点作为协调目的的leader。</li>
-<li>  <strong>锁定和同步服务</strong> - 在修改数据的同时锁定数据。此机制可帮助你在连接其他分布式应用程序（如Apache HBase）时进行自动故障恢复。</li>
-<li>  <strong>高度可靠的数据注册表</strong> - 即使在一个或几个节点关闭时也可以获得数据。</li>
+<li><strong>命名服务</strong> - 按名称标识集群中的节点。它类似于DNS，但仅对于节点。</li>
+<li><strong>配置管理</strong> - 加入节点的最近的和最新的系统配置信息。</li>
+<li><strong>集群管理</strong> - 实时地在集群和节点状态中加入&#x2F;离开节点。</li>
+<li><strong>选举算法</strong> - 选举一个节点作为协调目的的leader。</li>
+<li><strong>锁定和同步服务</strong> - 在修改数据的同时锁定数据。此机制可帮助你在连接其他分布式应用程序（如Apache HBase）时进行自动故障恢复。</li>
+<li><strong>高度可靠的数据注册表</strong> - 即使在一个或几个节点关闭时也可以获得数据。</li>
 </ul>
 <p>分布式应用程序提供了很多好处，但它们也抛出了一些复杂和难以解决的挑战。ZooKeeper框架提供了一个完整的机制来克服所有的挑战。竞争条件和死锁使用<strong>故障安全同步方法</strong>进行处理。另一个主要缺点是数据的不一致性，ZooKeeper使用<strong>原子性</strong>解析。</p>
 <h2 id="ZooKeeper的好处"><a href="#ZooKeeper的好处" class="headerlink" title="ZooKeeper的好处"></a>ZooKeeper的好处</h2><p>以下是使用ZooKeeper的好处：</p>
 <ul>
-<li>  <strong>简单的分布式协调过程</strong></li>
-<li>  <strong>同步</strong> - 服务器进程之间的相互排斥和协作。此过程有助于Apache HBase进行配置管理。</li>
-<li>  <strong>有序的消息</strong></li>
-<li>  <strong>序列化</strong> - 根据特定规则对数据进行编码。确保应用程序运行一致。这种方法可以在MapReduce中用来协调队列以执行运行的线程。</li>
-<li>  <strong>可靠性</strong></li>
-<li>  <strong>原子性</strong> - 数据转移完全成功或完全失败，但没有事务是部分的。</li>
+<li><strong>简单的分布式协调过程</strong></li>
+<li><strong>同步</strong> - 服务器进程之间的相互排斥和协作。此过程有助于Apache HBase进行配置管理。</li>
+<li><strong>有序的消息</strong></li>
+<li><strong>序列化</strong> - 根据特定规则对数据进行编码。确保应用程序运行一致。这种方法可以在MapReduce中用来协调队列以执行运行的线程。</li>
+<li><strong>可靠性</strong></li>
+<li><strong>原子性</strong> - 数据转移完全成功或完全失败，但没有事务是部分的。</li>
 </ul>
 <h2 id="Java环境"><a href="#Java环境" class="headerlink" title="Java环境"></a>Java环境</h2><p>最新版zookeeper需要Java1.8.211以上。</p>
 <p>比如利用源安装</p>
@@ -300,7 +300,7 @@ clientPort&#x3D;2181
 server.1&#x3D;127.0.0.1:7788:8890
 server.2&#x3D;127.0.0.1:7789:8891<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="创建data-myid文件"><a href="#创建data-myid文件" class="headerlink" title="创建data/myid文件"></a>创建data/myid文件</h3><p>创建文件myid，写入配置文件中的server名。文件的存在位置跟配置文件中的dataDir一致。</p>
+<h3 id="创建data-x2F-myid文件"><a href="#创建data-x2F-myid文件" class="headerlink" title="创建data&#x2F;myid文件"></a>创建data&#x2F;myid文件</h3><p>创建文件myid，写入配置文件中的server名。文件的存在位置跟配置文件中的dataDir一致。</p>
 <pre class="line-numbers language-none"><code class="language-none">[root@VM_0_6_centos zookeeper1]# echo &quot;1&quot; &gt; myid
 [root@VM_0_6_centos zookeeper1]# ls
 myid<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>

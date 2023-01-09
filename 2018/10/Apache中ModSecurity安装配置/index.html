@@ -150,7 +150,7 @@ cp unicode.mapping &#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;<span aria-hidden="true
 
 <p>安装完成后调整配置，修改httpd.conf</p>
 <pre class="line-numbers language-none"><code class="language-none">LoadModule security2_module modules&#x2F;mod_security2.so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>如下配置，需要根据目录位置修改，因为modsecurity安装在/etc/httpd目录，配置文件在conf文件，所以不在写入以下配置。</p>
+<p>如下配置，需要根据目录位置修改，因为modsecurity安装在&#x2F;etc&#x2F;httpd目录，配置文件在conf文件，所以不在写入以下配置。</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;IfModule security2_module&gt;
 
    Include conf.d&#x2F;modsecurity.conf
@@ -178,12 +178,12 @@ Include modsecurity-crs&#x2F;rules&#x2F;*.conf<span aria-hidden="true" class="li
 <pre class="line-numbers language-none"><code class="language-none">service httpd restart<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>完成以后尝试SQL注入攻击，可以看到被拦截的页面。</p>
-<p><img src="%5C2018%5C10%5CApache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%5C1539936020823.png" alt="1539936020823"></p>
+<p><img src="/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/%5C1539936020823.png" alt="1539936020823"></p>
 <p>在apache日志中查看error信息：</p>
-<p><img src="%5C2018%5C10%5CApache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%5C1539941434534.png" alt="1539941434534"></p>
+<p><img src="/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/%5C1539941434534.png" alt="1539941434534"></p>
 <p>从上图可以看到拦截的类型和规则id，还有规则的目录文件。去对应的规则处查看规则文件，可以看到如下的规则匹配。</p>
-<p><img src="%5C2018%5C10%5CApache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%5C1539941488517.png" alt="1539941488517"></p>
-<p>关于modsecurity的配置，根据各自设置的地址，比如当前地址为/etc/httpd/conf.d中。</p>
+<p><img src="/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/%5C1539941488517.png" alt="1539941488517"></p>
+<p>关于modsecurity的配置，根据各自设置的地址，比如当前地址为&#x2F;etc&#x2F;httpd&#x2F;conf.d中。</p>
 <ul>
 <li><p>SecRuleEngine On 设置为mod是否开启，默认设置为Detection Only，作用是只检测。Off则是关闭mod。</p>
 </li>
@@ -191,11 +191,11 @@ Include modsecurity-crs&#x2F;rules&#x2F;*.conf<span aria-hidden="true" class="li
 </li>
 <li><p>SecAuditEngine RelevantOnly<br>SecAuditLogRelevantStatus “^(?:5|4(?!04))”    </p>
 <p>SecAuditLogParts ABIJDEFHZ</p>
-<p>SecAuditLogType Serial<br>SecAuditLog /var/log/modsec_audit.log</p>
+<p>SecAuditLogType Serial<br>SecAuditLog &#x2F;var&#x2F;log&#x2F;modsec_audit.log</p>
 <p>记录日志审计内容，文件地址等，如下图所示，ABCE等，修改SecAuditLogParts参数，可以记录不同的日志部分。对调试waf，修改配置策略很有用。</p>
 </li>
 </ul>
-<p><img src="%5C2018%5C10%5CApache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%5C1540192226114.png" alt="1540192226114"></p>
+<p><img src="/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/%5C1540192226114.png" alt="1540192226114"></p>
 <p>然后，如果需要修改其他配置项，比如403错误页面，直接再httpd.conf中修改403错误页面即可。</p>
 <p>参考链接：</p>
 <p><a target="_blank" rel="noopener" href="http://www.vue5.com/centos/23142.html">http://www.vue5.com/centos/23142.html</a></p>
@@ -208,7 +208,7 @@ Include modsecurity-crs&#x2F;rules&#x2F;*.conf<span aria-hidden="true" class="li
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">https://misakikata.github.io/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">October 22nd 2018, 3:54:13 pm</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">October 22nd 2018, 6:28:19 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2018/10/Apache%E4%B8%ADModSecurity%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">January 9th 2023, 11:00:05 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               

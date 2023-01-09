@@ -128,8 +128,8 @@
       <div class="container">
         <div class="section">
           <div class="post_content">
-              <h3 id="python遍历路径破解表单"><a href="#python遍历路径破解表单" class="headerlink" title="python遍历路径破解表单"></a>python遍历路径破解表单</h3><p>​    首先是利用python遍历路径，采用字典爆破的形式，当然如果只是单纯的爆破路径，简单写一个多线程脚本就行了。这里考虑如何对爆破到的路径进行第二步利用，此处尝试对猜解到的路径进行表单发现及登陆爆破处理。</p>
-<p>​    首先就是路径爆破，采用多线程队列，爆破路径，判断形式为200响应码。</p>
+              <h3 id="python遍历路径破解表单"><a href="#python遍历路径破解表单" class="headerlink" title="python遍历路径破解表单"></a>python遍历路径破解表单</h3><p>​	首先是利用python遍历路径，采用字典爆破的形式，当然如果只是单纯的爆破路径，简单写一个多线程脚本就行了。这里考虑如何对爆破到的路径进行第二步利用，此处尝试对猜解到的路径进行表单发现及登陆爆破处理。</p>
+<p>​	首先就是路径爆破，采用多线程队列，爆破路径，判断形式为200响应码。</p>
 <pre class="line-numbers language-none"><code class="language-none">while not self._queue.empty():
     queue &#x3D; self._queue.get(timeout&#x3D;0.5)
     try:

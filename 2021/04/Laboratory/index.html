@@ -204,7 +204,7 @@ irb(main):004:0&gt;<span aria-hidden="true" class="line-numbers-rows"><span></sp
 
 <p>登陆后发现还有一个SecureDocker库。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210401163609462.png" alt="image-20210401163609462"></p>
-<p>在目录下找到一个dexter/.ssh目录，里面存在ssh的私钥信息。那就直接登陆查看。试了一圈发现不能登陆，一直提示格式不对，查了一圈发现这个id_rsa是新的openssh生成的新格式私钥。</p>
+<p>在目录下找到一个dexter&#x2F;.ssh目录，里面存在ssh的私钥信息。那就直接登陆查看。试了一圈发现不能登陆，一直提示格式不对，查了一圈发现这个id_rsa是新的openssh生成的新格式私钥。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210402112405208.png" alt="image-20210402112405208"></p>
 <p>内容是<code>OPENSSH PRIVATE</code>开头的，服务器上需要的可能不是新格式，所以我们需要转换为<code>RSA PRIVATE</code>格式。</p>
 <pre class="line-numbers language-none"><code class="language-none">-----BEGIN OPENSSH PRIVATE KEY-----
@@ -215,7 +215,7 @@ XCVyJn9QMEbE4fdpKGVF+MS&#x2F;CkfE+JaNH9KOLvMrlw0bx3At681vxUS&#x2F;VeISQyoQGLw&#x
 uJvh4tAHnotmkAAAAPcm9vdEBsYWJvcmF0b3J5AQIDBA&#x3D;&#x3D;
 -----END OPENSSH PRIVATE KEY-----<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>下载<a target="_blank" rel="noopener" href="https://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe">https://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe</a>，然后打开File–&gt;load private key，加载后点击conversions–&gt;export openssh key第一项导出即可。格式如下。</p>
+<p>下载<a target="_blank" rel="noopener" href="https://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe">https://the.earth.li/~sgtatham&#x2F;putty&#x2F;latest&#x2F;x86&#x2F;puttygen.exe</a>，然后打开File–&gt;load private key，加载后点击conversions–&gt;export openssh key第一项导出即可。格式如下。</p>
 <pre class="line-numbers language-none"><code class="language-none">-----BEGIN RSA PRIVATE KEY-----
 MIIG4wIBAAKCAYEAsZfDj3ASdb5YS3MwjsD8+5JvnelUs+yI27VuDD7P21odSfNU
 ......
@@ -229,7 +229,7 @@ MIIG4wIBAAKCAYEAsZfDj3ASdb5YS3MwjsD8+5JvnelUs+yI27VuDD7P21odSfNU
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210402112936133.png" alt="image-20210402112936133"></p>
 <p>按照惯例，先查看SUID位，发现存在一个不和谐的文件<code>/usr/local/bin/docker-security</code>。是一个二进制文件，执行没有反应。利用ltrace来查看一个调用跟踪。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210402114714292.png" alt="image-20210402114714292"></p>
-<p>大概就是一个限制docker权限的文件，先设置uid和gid位，后续执行chmod来调整权限。相当于用root的权限来限制。没有设置全路径，所以可以修改文件的执行目录，让先从我们设定的目录开始查找命令执行。利用环境变量来提权，参考：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2767">https://xz.aliyun.com/t/2767</a>。现在/tmp下新建一个反弹shell，名为chmod。赋予执行权限。</p>
+<p>大概就是一个限制docker权限的文件，先设置uid和gid位，后续执行chmod来调整权限。相当于用root的权限来限制。没有设置全路径，所以可以修改文件的执行目录，让先从我们设定的目录开始查找命令执行。利用环境变量来提权，参考：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2767">https://xz.aliyun.com/t/2767</a>。现在&#x2F;tmp下新建一个反弹shell，名为chmod。赋予执行权限。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210402124831047.png" alt="image-20210402124831047"></p>
 <p>监听端口后可以获取一个root的shell</p>
 

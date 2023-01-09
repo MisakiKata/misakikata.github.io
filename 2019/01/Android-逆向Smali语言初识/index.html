@@ -128,8 +128,8 @@
       <div class="container">
         <div class="section">
           <div class="post_content">
-              <h3 id="Android-逆向Smali语言初识"><a href="#Android-逆向Smali语言初识" class="headerlink" title="Android 逆向Smali语言初识"></a>Android 逆向Smali语言初识</h3><p>​    Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。</p>
-<h4 id="函数语法"><a href="#函数语法" class="headerlink" title="函数语法"></a>函数语法</h4><p>​    Smali 语法规范与格式Smali 是对 Dalvik 虚拟机字节码的一种解释，虽然不是官方标准语言，但所有语句都遵循一套语法规范。要了解 smali 语法规范，可以先从了解 Dalvik 虚拟机字节码的指令格式开始。3.1 Dalvik 虚拟机字节码指令格式在 Android 4.0 源码 Dalvik/docs 目录下提供了一份文档 instruction-formats.html，里面详细列举了 Dalvik 虚拟机字节码指令的所有格式。<br>    Dalvik 虚拟机字节码的类型、方法和字段的表示方法3.2.1 类型Dalvik 字节码有两种类型，基本类型和引用类型。对象和数组是引用类型，其它都是基本类型。</p>
+              <h3 id="Android-逆向Smali语言初识"><a href="#Android-逆向Smali语言初识" class="headerlink" title="Android 逆向Smali语言初识"></a>Android 逆向Smali语言初识</h3><p>​	Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。</p>
+<h4 id="函数语法"><a href="#函数语法" class="headerlink" title="函数语法"></a>函数语法</h4><p>​	Smali 语法规范与格式Smali 是对 Dalvik 虚拟机字节码的一种解释，虽然不是官方标准语言，但所有语句都遵循一套语法规范。要了解 smali 语法规范，可以先从了解 Dalvik 虚拟机字节码的指令格式开始。3.1 Dalvik 虚拟机字节码指令格式在 Android 4.0 源码 Dalvik&#x2F;docs 目录下提供了一份文档 instruction-formats.html，里面详细列举了 Dalvik 虚拟机字节码指令的所有格式。<br>    Dalvik 虚拟机字节码的类型、方法和字段的表示方法3.2.1 类型Dalvik 字节码有两种类型，基本类型和引用类型。对象和数组是引用类型，其它都是基本类型。</p>
 <p>Dalvik 字节码类型描述符 </p>
 <p>​      描述符       类型 </p>
 <ul>
@@ -140,7 +140,7 @@
 <li>C             charI intJ long（64 位）</li>
 <li>F             floatD double（64 位）</li>
 <li>L             Java 类类型</li>
-<li>[              数组类型 </li>
+<li>[              数组类型</li>
 </ul>
 <p>常见的代码含义：</p>
 <pre class="line-numbers language-none"><code class="language-none">#表示当前代码在源java文件中的行数。

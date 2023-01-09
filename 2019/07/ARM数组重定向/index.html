@@ -184,32 +184,32 @@ int main()
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>利用之前的makefile文件进行编译，打可执行文件丢入IDA中打开。选择main函数，大概就是酱紫</p>
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563864556080.png" alt="1563864556080"></p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563864556080.png" alt="1563864556080"></p>
 <p>选择第一个函数PrintAddr来查看其中的实现代码。根据其中的注释就可以看出来输出是的打印g_Table和g_Table2。</p>
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563865049285.png" alt="1563865049285"></p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563865049285.png" alt="1563865049285"></p>
 <p>而对于其中的这两个参数只有类似如下数组地址值，所以打印就是数组的地址。</p>
 <pre class="line-numbers language-none"><code class="language-none">.text:00000400                 LDR     R2, &#x3D;(g_Table_ptr - 0x1FE4)
 .text:00000404                 LDR     R2, [R3,R2] ; g_Table<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>回到main函数中，重新选择InitTable函数，在图表视图中可以看到此函数实现了两个循环，具体是哪种循环暂不得知，首先查看第一个循环，从开始的循环赋值和比较开始，</p>
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563866904258.png" alt="1563866904258"></p>
-<p>在左侧的循环体中，获取的是循环变量的值，在STR指令中，把循环变量存入到了R3(g_Table数组的地址值)，R2、*4代表了int型的四字节长度，所以此处意义是array[i] = i。按照循环变量的增长值按顺序存入到了数组中。</p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563866904258.png" alt="1563866904258"></p>
+<p>在左侧的循环体中，获取的是循环变量的值，在STR指令中，把循环变量存入到了R3(g_Table数组的地址值)，R2、*4代表了int型的四字节长度，所以此处意义是array[i] &#x3D; i。按照循环变量的增长值按顺序存入到了数组中。</p>
 <p>当循环变量大于99时，跳出循环走到右边的步骤，获取R3的地址值，R3则代表的是一串字符串，其后使用puts输出，利用puts是输出后，会自动在其后添加换行符。然后再对循环体重赋值。</p>
 <p>继续查看第二个循环体，由于跟第一个循环一致，不在细看。</p>
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563868287872.png" alt="1563868287872"></p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563868287872.png" alt="1563868287872"></p>
 <p>分析完InitTable函数后，可以得知，这是一个对全局数组进行赋值的操作。也许后面会用到这个数组。回到main函数中，其后调用了两次write函数，对每个write函数进行两个参数的引用。查看write函数。</p>
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563868846505.png" alt="1563868846505"></p>
-<p>函数跟InitTable其中对数组的操作类似，都是根据参数进入数组的赋值，如下的对write函数中的第一个参数作为数组的下标，以第二个参数作为需要重新赋值的数组值。array[var_8] = var_c。</p>
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563870802372.png" alt="1563870802372"></p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563868846505.png" alt="1563868846505"></p>
+<p>函数跟InitTable其中对数组的操作类似，都是根据参数进入数组的赋值，如下的对write函数中的第一个参数作为数组的下标，以第二个参数作为需要重新赋值的数组值。array[var_8] &#x3D; var_c。</p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563870802372.png" alt="1563870802372"></p>
 <p>在去选择search函数，查看函数实现和逻辑，其中传入参数var_10为200，进入循环判断是否大于99，进入循环体，获取数组的下标对应的值，来和传入的参数进行对比不相同则跳转继续循环。相同则跳出循环，获取数组下标值返回，类似如下</p>
 <pre class="line-numbers language-none"><code class="language-none">R1 &#x3D; array[var_8] &#x3D; array[i]
 R3 &#x3D; var_10 &#x3D; 200
 if array[var_8] &#x3D;&#x3D; var_10:
 	return var_8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563874211104.png" alt="1563874211104"></p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563874211104.png" alt="1563874211104"></p>
 <p>最后的main函数，重新调用了write函数，利用search的返回值来判断是否是-1，CMN是做负数对比。而R3的负数来源search函数的大于99后仍然没有找到返回值时，返回-1。</p>
-<p><img src="%5C2019%5C07%5CARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91%5C1563875783761.png" alt="1563875783761"></p>
+<p><img src="/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/%5C1563875783761.png" alt="1563875783761"></p>
 
           </div>
           <br><br>
@@ -218,7 +218,7 @@ if array[var_8] &#x3D;&#x3D; var_10:
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/">https://misakikata.github.io/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/">July 26th 2019, 5:23:36 pm</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/">July 26th 2019, 5:56:13 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2019/07/ARM%E6%95%B0%E7%BB%84%E9%87%8D%E5%AE%9A%E5%90%91/">January 9th 2023, 11:01:13 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               

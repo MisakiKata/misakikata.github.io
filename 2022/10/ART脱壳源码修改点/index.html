@@ -129,7 +129,7 @@
         <div class="section">
           <div class="post_content">
               <p>在将 dex 文件编译为 oat 文件的过程中 , 只要出现了 DexFile 对象 , 就可以将该对象对应的 dex 文件导出</p>
-<h2 id="已知的脱壳点"><a href="#已知的脱壳点" class="headerlink" title="已知的脱壳点"></a>已知的脱壳点</h2><p><strong>/art/runtime/dex_file.cc#OpenMemory</strong><br>OpenMemory算是常见的脱壳点，在# frida-unpack中也是使用此脱壳点来导出dex对象。</p>
+<h2 id="已知的脱壳点"><a href="#已知的脱壳点" class="headerlink" title="已知的脱壳点"></a>已知的脱壳点</h2><p><strong>&#x2F;art&#x2F;runtime&#x2F;dex_file.cc#OpenMemory</strong><br>OpenMemory算是常见的脱壳点，在# frida-unpack中也是使用此脱壳点来导出dex对象。</p>
 <pre class="line-numbers language-none"><code class="language-none">std::unique_ptr&lt;const DexFile&gt; DexFile::OpenMemory(const uint8_t* base, 
 size_t size,  
 const std::string&amp; location,   

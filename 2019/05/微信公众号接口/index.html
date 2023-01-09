@@ -268,7 +268,7 @@ https:&#x2F;&#x2F;api.weixin.qq.com&#x2F;customservice&#x2F;kfaccount&#x2F;del?a
      &quot;errmsg&quot; : &quot;ok&quot;,
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="9、用户授权登陆第三方应用"><a href="#9、用户授权登陆第三方应用" class="headerlink" title="9、用户授权登陆第三方应用"></a>9、用户授权登陆第三方应用</h3><p>第三方使用网站应用授权登录前请注意已获取相应网页授权作用域（scope=snsapi_login）。</p>
+<h3 id="9、用户授权登陆第三方应用"><a href="#9、用户授权登陆第三方应用" class="headerlink" title="9、用户授权登陆第三方应用"></a>9、用户授权登陆第三方应用</h3><p>第三方使用网站应用授权登录前请注意已获取相应网页授权作用域（scope&#x3D;snsapi_login）。</p>
 <h4 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h4><pre class="line-numbers language-none"><code class="language-none">https:&#x2F;&#x2F;open.weixin.qq.com&#x2F;connect&#x2F;qrconnect?appid&#x3D;APPID&amp;redirect_uri&#x3D;REDIRECT_URI&amp;response_type&#x3D;code&amp;scope&#x3D;SCOPE&amp;state&#x3D;STATE#wechat_redirect<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h5 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a><strong>参数说明</strong></h5><pre class="line-numbers language-none"><code class="language-none">参数	          是否必须	                说明
@@ -315,22 +315,22 @@ grant_type	       是	  填authorization_code<span aria-hidden="true" class="lin
 </thead>
 <tbody><tr>
 <td align="left">snsapi_base</td>
-<td align="left">/sns/oauth2/access_token</td>
+<td align="left">&#x2F;sns&#x2F;oauth2&#x2F;access_token</td>
 <td align="left">通过code换取access_token、refresh_token和已授权scope</td>
 </tr>
 <tr>
 <td align="left">snsapi_base</td>
-<td align="left">/sns/oauth2/refresh_token</td>
+<td align="left">&#x2F;sns&#x2F;oauth2&#x2F;refresh_token</td>
 <td align="left">刷新或续期access_token使用</td>
 </tr>
 <tr>
 <td align="left">snsapi_base</td>
-<td align="left">/sns/auth</td>
+<td align="left">&#x2F;sns&#x2F;auth</td>
 <td align="left">检查access_token有效性</td>
 </tr>
 <tr>
 <td align="left">snsapi_userinfo</td>
-<td align="left">/sns/userinfo</td>
+<td align="left">&#x2F;sns&#x2F;userinfo</td>
 <td align="left">获取用户个人信息</td>
 </tr>
 </tbody></table>

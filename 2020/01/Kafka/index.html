@@ -173,7 +173,7 @@ config&#x2F;server-1.properties:
 <pre class="line-numbers language-none"><code class="language-none">.&#x2F;bin&#x2F;kafka-server-start.sh config&#x2F;server-1.properties &amp;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>重新创建一个主题，然后通过生产者和消费者来处理消息，处理方式和上一样，只是需要更改不同的topic</p>
-<h4 id="导入-导出文件"><a href="#导入-导出文件" class="headerlink" title="导入/导出文件"></a>导入/导出文件</h4><p>使用官方提高的三个配置文件，首先是Kafka Connect的配置文件，包含常用的配置，如Kafka brokers连接方式和数据的序列化格式。 其余的配置文件均指定一个要创建的连接器。这些文件包括连接器的唯一名称，类的实例，以及其他连接器所需的配置。</p>
+<h4 id="导入-x2F-导出文件"><a href="#导入-x2F-导出文件" class="headerlink" title="导入&#x2F;导出文件"></a>导入&#x2F;导出文件</h4><p>使用官方提高的三个配置文件，首先是Kafka Connect的配置文件，包含常用的配置，如Kafka brokers连接方式和数据的序列化格式。 其余的配置文件均指定一个要创建的连接器。这些文件包括连接器的唯一名称，类的实例，以及其他连接器所需的配置。</p>
 <pre class="line-numbers language-none"><code class="language-none">.&#x2F;bin&#x2F;connect-standalone.sh config&#x2F;connect-standalone.properties config&#x2F;connect-file-source.properties config&#x2F;connect-file-sink.properties<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>一连串输出后，提示没有test.txt文件。</p>

@@ -214,7 +214,7 @@ GPOST &#x2F; HTTP&#x2F;1.1
 <p>也就是说前端服务器处理te块消息使用了第一个te头来当作标准解析，而后端服务器中使用了第二个te头来当作标准解析。</p>
 <h3 id="请求走私利用"><a href="#请求走私利用" class="headerlink" title="请求走私利用"></a>请求走私利用</h3><p>上面几种情况说明了请求走私的利用方式，现在同样利用实验室来尝试一下请求走私能获取到什么。</p>
 <p>实验室：<a target="_blank" rel="noopener" href="https://portswigger.net/web-security/request-smuggling/exploiting/lab-bypass-front-end-controls-cl-te">https://portswigger.net/web-security/request-smuggling/exploiting/lab-bypass-front-end-controls-cl-te</a></p>
-<h4 id="CL-TE-1"><a href="#CL-TE-1" class="headerlink" title="CL-TE"></a>CL-TE</h4><p>利用CL-TE漏洞方式，来访问前端服务器不能访问的/admin页面。同时删除carlos用户。</p>
+<h4 id="CL-TE-1"><a href="#CL-TE-1" class="headerlink" title="CL-TE"></a>CL-TE</h4><p>利用CL-TE漏洞方式，来访问前端服务器不能访问的&#x2F;admin页面。同时删除carlos用户。</p>
 <p><img src="/images/2020/03/12/1f1b2700-6417-11ea-8626-838e679dac65.png" alt="image20200312103959649.png"></p>
 <p>尝试直接访问的时候提示页面不能访问，然后修改为cl-te的方式</p>
 <p><img src="/images/2020/03/12/25645820-6417-11ea-8626-838e679dac65.png" alt="image20200312104623997.png"></p>
@@ -236,7 +236,7 @@ GPOST &#x2F; HTTP&#x2F;1.1
 <p>执行删除用户，查看已删除。</p>
 <p><img src="/images/2020/03/12/46effda0-6417-11ea-8626-838e679dac65.png" alt="image20200312110345830.png"></p>
 <h4 id="请求走私重写请求"><a href="#请求走私重写请求" class="headerlink" title="请求走私重写请求"></a>请求走私重写请求</h4><p>实验室：<a target="_blank" rel="noopener" href="https://portswigger.net/web-security/request-smuggling/exploiting/lab-reveal-front-end-request-rewriting">https://portswigger.net/web-security/request-smuggling/exploiting/lab-reveal-front-end-request-rewriting</a></p>
-<p>利用请求走私来达到访问/admin页面，但是需要添加请求头，类似xff头，但不是xff头，然后再去删除用户。</p>
+<p>利用请求走私来达到访问&#x2F;admin页面，但是需要添加请求头，类似xff头，但不是xff头，然后再去删除用户。</p>
 <p><img src="/images/2020/03/12/5891cdf0-6416-11ea-ac1a-19f07685b6f0.png" alt="image20200312111010862.png"></p>
 <p>实验室有个搜索功能，说明这个功能可能帮助我们获得需要的请求头。先访问admin页面</p>
 <p><img src="/images/2020/03/12/60894b50-6416-11ea-ac1a-19f07685b6f0.png" alt="image20200312112425807.png"></p>

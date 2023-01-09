@@ -214,7 +214,7 @@ misaki<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 misaki\user<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>这里exec不需要导入就可以直接引用，当然不需要导入就可以引用的函数不止这一个，因为一个内建函数的原因。</p>
-<h3 id="builtins"><a href="#builtins" class="headerlink" title="__builtins__"></a>__builtins__</h3><p>__builtins__即时引用，在程序还为执行代码的时候就已经加载进来了。此模块并不需要导入，可以在任何模块中执行引用。比如在python2中</p>
+<h3 id="builtins"><a href="#builtins" class="headerlink" title="_builtins_"></a>_<em>builtins</em>_</h3><p>__builtins__即时引用，在程序还为执行代码的时候就已经加载进来了。此模块并不需要导入，可以在任何模块中执行引用。比如在python2中</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200424150423.png" alt="image-20200421095142948"></p>
 <p>在python3中</p>
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200424150425.png" alt="image-20200421095205061"></p>
@@ -1213,7 +1213,7 @@ Cookie: aa&#x3D;__class__;bb&#x3D;__mro__;cc&#x3D;__subclasses__<span aria-hidde
 
 <p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/20200424150557.png" alt="image-20200424145127596"></p>
 <p>如果<code>attr</code>被禁用，这种也不能使用，或者能使用<code>__getattribute__</code>替代，但是原代码里已经禁用了。</p>
-<p>文章参考：<a target="_blank" rel="noopener" href="https://hatboy.github.io/2018/04/19/Python%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E6%80%BB%E7%BB%93">Python沙箱逃逸总结</a>，<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/52">Python沙箱逃逸的n种姿势</a>，<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/203208.html">一文看懂Python沙箱逃逸</a>，<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/288">Python格式化字符串漏洞</a>，<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/Lj4nCz0hag-AKQF_s79fQw">一文掌握CTF中Python全部考点</a>，<a target="_blank" rel="noopener" href="https://0day.work/jinja2-template-injection-filter-bypasses/">Jinja2 template injection filter bypasses</a>，<a target="_blank" rel="noopener" href="https://p0sec.net/index.php/archives/120/">Flask/Jinja2模板注入中的一些绕过姿势</a></p>
+<p>文章参考：<a target="_blank" rel="noopener" href="https://hatboy.github.io/2018/04/19/Python%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E6%80%BB%E7%BB%93">Python沙箱逃逸总结</a>，<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/52">Python沙箱逃逸的n种姿势</a>，<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/203208.html">一文看懂Python沙箱逃逸</a>，<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/288">Python格式化字符串漏洞</a>，<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/Lj4nCz0hag-AKQF_s79fQw">一文掌握CTF中Python全部考点</a>，<a target="_blank" rel="noopener" href="https://0day.work/jinja2-template-injection-filter-bypasses/">Jinja2 template injection filter bypasses</a>，<a target="_blank" rel="noopener" href="https://p0sec.net/index.php/archives/120/">Flask&#x2F;Jinja2模板注入中的一些绕过姿势</a></p>
 
           </div>
           <br><br>

