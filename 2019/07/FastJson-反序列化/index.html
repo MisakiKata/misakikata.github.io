@@ -148,7 +148,7 @@ public class poc &#123;
 
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%5C1563011101595.png" alt="1563011101595"></p>
+<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/1563011101595.png" alt="1563011101595"></p>
 <p>创建一个RMI服务器。可以利用如下的JAVA代码。</p>
 <pre class="line-numbers language-none"><code class="language-none">import com.sun.jndi.rmi.registry.ReferenceWrapper;
 import javax.naming.Reference;
@@ -199,9 +199,9 @@ public class Exploit implements ObjectFactory &#123;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>此处利用mar创建的RMI服务器来验证：</p>
-<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%5C1563012977594.png" alt="1563012977594"></p>
+<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/1563012977594.png" alt="1563012977594"></p>
 <p>查看HTTP服务，可以看到请求的恶意class请求。</p>
-<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%5C1563013067020.png" alt="1563013067020"></p>
+<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/1563013067020.png" alt="1563013067020"></p>
 <p>如果请求了RMI服务后一直卡在没有请求HTTP服务的话，可以查看一下防火墙设置。我就不说卡在这里多久了。23333</p>
 <p>当然如果也可以使用之前老RCE的恶意class文件</p>
 <pre class="line-numbers language-none"><code class="language-none">import java.io.BufferedInputStream;
@@ -234,7 +234,7 @@ public class exploit2 &#123;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>执行后，查看携带响应的请求</p>
-<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%5C1563013609323.png" alt="1563013609323"></p>
+<p><img src="/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/1563013609323.png" alt="1563013609323"></p>
 <p>内容部分POC来源：<a target="_blank" rel="noopener" href="https://www.03sec.com/3240.shtml">https://www.03sec.com/3240.shtml</a></p>
 
           </div>
@@ -244,7 +244,7 @@ public class exploit2 &#123;
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">https://misakikata.github.io/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">July 15th 2019, 10:16:07 am</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">January 9th 2023, 11:02:00 am</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2019/07/FastJson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">January 9th 2023, 11:13:40 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               

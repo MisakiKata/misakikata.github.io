@@ -131,13 +131,13 @@
               <p>某日在GitHub中看到了一些CTF使用的安卓逆向分析题，其中一个是SWPUCTF，是个没怎么听过的CTF。虽然我不怎么了解CTF。23333</p>
 <p>于是，抽时间分析看看是否可以做出来。两个APK。</p>
 <h3 id="app-debug1-apk"><a href="#app-debug1-apk" class="headerlink" title="app-debug1.apk"></a>app-debug1.apk</h3><p>把apk丢到AK中，反编译，结果中有一个目录是assert&#x2F;timg_2.zip。讲道理，第一反应看到这个，肯定是多多少少有点关系的，本以为是做了代码抽取，动态加载。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566788175183.png" alt="1566788175183"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566788175183.png" alt="1566788175183"></p>
 <p>但是这并不是一个zip包，使用010editor查看，发现真不是一个zip包，而是一个完整的jpg格式文件。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566788301451.png" alt="1566788301451"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566788301451.png" alt="1566788301451"></p>
 <p>而在文件nextcontent.class中也发现了这个所谓的zip包被当作jpg来读取。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566788437235.png" alt="1566788437235"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566788437235.png" alt="1566788437235"></p>
 <p>直接修改为jpg格式图片，打开。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566788351717.png" alt="1566788351717"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566788351717.png" alt="1566788351717"></p>
 <p>嗯。。。。这就。。。肯定是姿势不对，换一种方式。</p>
 <p>既然此处是纯JAVA层文件，是对输入的密码的效验，那么采用调试的方式来做。</p>
 <p>此处采用jeb调试，其中，对密码效验的关键方法为check。</p>
@@ -197,9 +197,9 @@
 
 <p>获取了Broadcast组件，在mainfast.xml文件中有关于这个组件的定义，于是在上把v2修改为组件名字符串。</p>
 <p>重编译安装，第一个输入只需要随便输入几个不重复的字母，跳到第二个输入，只需要点击确认，就会弹出写有flag的图片。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566800681246.png" alt="1566800681246"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566800681246.png" alt="1566800681246"></p>
 <h3 id="app-debug2-apk"><a href="#app-debug2-apk" class="headerlink" title="app-debug2.apk"></a>app-debug2.apk</h3><p>同样，丢到AK中反编译，反编译内容如下，其中包含JNI.smail文件，所以大概率是分析so文件。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566801125774.png" alt="1566801125774"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566801125774.png" alt="1566801125774"></p>
 <p>在MainActivity$1.smali中看到了jni的调用getResult方法。</p>
 <pre class="line-numbers language-none"><code class="language-none">.method public onClick(Landroid&#x2F;view&#x2F;View;)V
     .locals 3
@@ -237,14 +237,14 @@
 
 <p>使用IDA打开lib目录下的libNative.so文件。</p>
 <p>在Exports中找到对应的方法，在F5一下查看伪代码</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566801664205.png" alt="1566801664205"></p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566804309855.png" alt="1566804309855"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566801664205.png" alt="1566801664205"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566804309855.png" alt="1566804309855"></p>
 <p>此处先判断是否是长度为15位，然后用malloc申请三个长度为一字节的变量来初始化。至于Init函数是做什么用的。在如下处，点击进入，看到其中又调用了Init函数，再点击进入。</p>
 <pre class="line-numbers language-none"><code class="language-none">.text:000011B0                 MOV             R3, R8  ; char *
 .text:000011B2                 BLX             j__Z4InitPcS_S_PKci<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>在如下地址处：</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566804524606.png" alt="1566804524606"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566804524606.png" alt="1566804524606"></p>
 <p>不过，并没看懂这是啥意思。。。。先继续往下看。</p>
 <p>后面使用了First函数进行处理，如下处。</p>
 <pre class="line-numbers language-none"><code class="language-none">.text:000011B6                 MOV             R0, R6  ; char *
@@ -273,11 +273,11 @@
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>把传进来的字符串进行按位乘2和0x80异或，如果等于LN^dl，返回v3为1，不等于则返回v3为0。那么此处需要v3等不等于0呢，查看主要函数的下一步判断是if非，跳转到LABEL_14处，那么需要v3不为0，也就是a1等于LN^dl。同样代表了传入的字符串要乘2异或0x80后等于LN^dl。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566805704718.png" alt="1566805704718"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566805704718.png" alt="1566805704718"></p>
 <p>其中需要v4跟一个字符串对于，字符串为以下</p>
 <pre class="line-numbers language-none"><code class="language-none">0x20, 0x35, 0x2D, 0x16, 0x61<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566807615894.png" alt="1566807615894"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566807615894.png" alt="1566807615894"></p>
 <p>整体的逻辑就是先分成三个字符串，然后判断第一个异或处理后是否为LN^dl，是的话对下一个字符串异或，对比相等，继续处理最后一个字符串，等于AFBo}则返回需要的1。那么就剩下一个Init不确定意义，根据分配的大小和函数的内容，猜测应该是把15位的字符串，每一位分配给三个字符串组，毕竟Init中有一个循环操作，且标志增加。也就是</p>
 <pre class="line-numbers language-none"><code class="language-none">123456分配两组：
 135  246<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -325,7 +325,7 @@ for x in range(len(str1)):
 print(flagstr)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>但是结果很怪，肯定是后面出了问题，但是理论上异或处理是错的，不该只出现在最后一位上，后面找了<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/168338#h3-20">官方的WP</a>，看了别人的Java版poc，感觉也一样。莫非是一些编码和语言上处理的差别？暂时没处理掉此问题。</p>
-<p><img src="/2019/08/2018-SWPUCTF/%5C1566812912519.png" alt="1566812912519"></p>
+<p><img src="/2019/08/2018-SWPUCTF/1566812912519.png" alt="1566812912519"></p>
 
           </div>
           <br><br>
@@ -334,7 +334,7 @@ print(flagstr)<span aria-hidden="true" class="line-numbers-rows"><span></span><s
                     <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
                     <p>原文链接：<a href="https://misakikata.github.io/2019/08/2018-SWPUCTF/">https://misakikata.github.io/2019/08/2018-SWPUCTF/</a>
                     <p>发表日期：<a href="https://misakikata.github.io/2019/08/2018-SWPUCTF/">August 26th 2019, 5:54:14 pm</a>
-                    <p>更新日期：<a href="https://misakikata.github.io/2019/08/2018-SWPUCTF/">January 9th 2023, 11:04:48 am</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2019/08/2018-SWPUCTF/">January 9th 2023, 11:16:38 am</a>
                     <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
                 </div>
               
