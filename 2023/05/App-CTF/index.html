@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="One way to choose one">
+    <meta name="author" content="Misaki">
+    <meta name="keywords" content="">
+    <title>App CTF  ~ Misaki&#39;s Blog</title>
+    
+<link rel="stylesheet" href="/css/Material_Icons.css">
+
+    <!-- 
+<link rel="stylesheet" href="/css/font-awesome.css">
+ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+        
+<link rel="stylesheet" href="/css/post.css">
+
+        
+            
+<link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+
+        
+    
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Misaki&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/MisakiKata" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://misakikata.github.io/atom.xml" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="mailto:misakikatas@gmail.com" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/img/2022/12/29/10-47-19-8d33d040e42d9f086a13827162cc246a-下载-17fdcb.png" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-comments"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">App CTF </h1>
+        <p class="text-center"><b>Tuesday, May 9th 2023, 4:45 pm</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h3 id="羊城杯-2021-Ez-android"><a href="#羊城杯-2021-Ez-android" class="headerlink" title="[羊城杯 2021]Ez_android"></a>[羊城杯 2021]Ez_android</h3><p>反编译APP</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-01-0c5c3236fd1f7550e7e76cac92a099e0-image-20230420124310331-b9c585.png" alt="image-20230420124310331"></p>
+<p>首先就是输入账号密码，正确后才能进入下一个函数的判断，但是这个getKeyAndRedirect需要联网获取key，才能进行下一步的加密验证。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-05-e7d378da392f6f32310a968a1fa78244-image-20230420124350850-b6ac64.png" alt="image-20230420124350850"></p>
+<p>获取到key之后就可以进行下一步计算</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-08-85231a2557128861a4f779e26e75d36a-image-20230420124450904-6a4b6b.png" alt="image-20230420124450904"></p>
+<p>这里就是获取flag的关键代码了。</p>
+<pre class="line-numbers language-none"><code class="language-none">private boolean checkFlag(String arg3) &#123;
+        return new String(EncodeUtils.encode(arg3.getBytes(StandardCharsets.UTF_8), false, this.key.getBytes(StandardCharsets.UTF_8))).equals(&quot;3lkHi9iZNK87qw0p6U391t92qlC5rwn5iFqyMFDl1t92qUnL6FQjqln76l-P&quot;);
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>也就是加密后需要输入的flag跟上面的字符串一致。这里的输入的账号密码很重要，因为需要后续输入密码来请求key，我们可以先过一遍流程，已知的账号为admin,加密后的密码为：<code>c232666f1410b3f5010dc51cec341f58</code>。而这个字符串是md5加密后再每一位减1得到，也就是需要把上面的再加1。结果就是：<code>c33367701511b4f6020ec61ded352059</code>。解密可以得到密码为：654321。</p>
+<p>再把这个密码提交到平台上得到key：<code>TGtUnkaJD0frq61uCQYw3-FxMiRvNOB/EWjgVcpKSzbs8yHZ257X9LldIeh4APom</code></p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-12-e7dadf211b6ba5b899ba5af24a45a5a9-image-20230420132711887-f527a2.png" alt="image-20230420132711887"></p>
+<p>需要计算出来的结果为：<code>3lkHi9iZNK87qw0p6U391t92qlC5rwn5iFqyMFDl1t92qUnL6FQjqln76l-P</code></p>
+<p>这开头熟悉的乘除法和下面的计算过程，应该算法是base64的编码过程，其中key就是替换了原本的字符。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-15-c96bc38c5d6f036ee87593e2d911e8a6-image-20230420150602353-6ce7a5.png" alt="image-20230420150602353"></p>
+<p>可以从Java中把base64解码的代码抠出来本地执行，代码过长不贴出来了，运行后显示如下，需要把前缀进行替换。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-17-5da06f9cec4a054a2f0fbdccef72e849-image-20230420181201727-a54a9f.png" alt="image-20230420181201727"></p>
+<h3 id="CISCN-2022-东北-crackme-Android"><a href="#CISCN-2022-东北-crackme-Android" class="headerlink" title="[CISCN 2022 东北]crackme_Android"></a>[CISCN 2022 东北]crackme_Android</h3><p>找到onCreate，onClick在其中，那就直接找关键函数，flag长38位，去掉前后的位数，中间的字符为32位，且需要把每四位进行一次看似是md5的加密，最后拼接的结果为：<code>8393931a16db5a00f464a24abe24b17a9040b57d9cb2cbfa6bdc61d12e9b51f2789e8a8ae9406c969118e75e9bc65c4327fbc7c3accdf2c54675b0ddf3e0a6099b1b81046d525495e3a14ff6eae76eddfa1740cd6bd483da0f7684b2e4ec84b371f07bf95f0113eefab12552181dd832af8d1eb220186400c494db7091e402b0</code></p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-20-794f61eb9448921ffd8e47d591aaab60-image-20230421105414513-f80dae.png" alt="image-20230421105414513"></p>
+<p>md5算法中的传参是字符的每四位</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-23-88028427e407b3bdb05bf903ac8b3884-image-20230421105704911-cf8fb0.png" alt="image-20230421105704911"></p>
+<p>先把上面的字符串分割为8段解密</p>
+<pre class="line-numbers language-none"><code class="language-none">8393931a16db5a00f464a24abe24b17a   &#x2F;&#x2F;4aea
+9040b57d9cb2cbfa6bdc61d12e9b51f2   &#x2F;&#x2F;146e
+789e8a8ae9406c969118e75e9bc65c43   &#x2F;&#x2F;9dc7
+27fbc7c3accdf2c54675b0ddf3e0a609   &#x2F;&#x2F;365e
+9b1b81046d525495e3a14ff6eae76edd   &#x2F;&#x2F;4ec9
+fa1740cd6bd483da0f7684b2e4ec84b3   &#x2F;&#x2F;31f5
+71f07bf95f0113eefab12552181dd832   &#x2F;&#x2F;4728
+af8d1eb220186400c494db7091e402b0   &#x2F;&#x2F;4822<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再把解密出来的拼接，加上flag的前缀即可。</p>
+<h3 id="鹏城杯-2022-baby-re"><a href="#鹏城杯-2022-baby-re" class="headerlink" title="[鹏城杯 2022]baby_re"></a>[鹏城杯 2022]baby_re</h3><p>反编译后发现是一个JNI的题，需要传入一个chararray的值</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-25-1dc3374526003a7233cdc706386af32e-image-20230421154034979-7e5b57.png" alt="image-20230421154034979"></p>
+<p>并且这个值再亦或后需要等于[0x77, 9, 40, 44, 106, 83, 0x7E, 0x7B, 33, 87, 0x71, 0x7B, 0x70, 93, 0x7D, 0x7F, 41, 82, 44, 0x7F, 39, 3, 0x7E, 0x7D, 0x77, 87, 0x2F, 0x7D, 33, 6, 44, 0x7F, 0x70, 0, 0x7E, 0x7B, 0x73, 24]</p>
+<p>直接拖到IDA里面，找到调用函数，这个函数只有按位异或key这一个操作，但是key不知道，v5是传入的array数组。v6是数组长度。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-27-a2270dd8bb510aeda00e3fe641b59e90-image-20230421154120686-1f47f4.png" alt="image-20230421154120686"></p>
+<p>点击查找，发现key是一个int类型的4位数组，第一个值0x56，函数列里有一个hide_key，这个函数是init_array内加载，就是给了一个key的原始数组，再进行异或替换。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-30-eda35e9e43a5e2d7072bea64845938ca-image-20230421154458480-577c97.png" alt="image-20230421154458480"></p>
+<p>key原始值是：[0x56,0x57,0x58,0x59]</p>
+<p>key异或后的值是：[0x11, 0x65, 0x49, 0x4b]</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-33-aeb53a3da6f7e2e0acf3e6fc114baba3-image-20230421154410345-f62a78.png" alt="image-20230421154410345"></p>
+<p>编写脚本还原，上面的*(v5 + 4 * i)并不代表参数加值，而且指针变量，存储是地址值，int是4字节。</p>
+<pre class="line-numbers language-none"><code class="language-none">out &#x3D; [0x77, 9, 40, 44, 106, 83, 0x7E, 0x7B, 33, 87, 0x71, 0x7B, 0x70, 93, 0x7D, 0x7F, 41, 82, 44, 0x7F, 39, 3, 0x7E, 0x7D, 0x77, 87, 0x2F, 0x7D, 33, 6, 44, 0x7F, 0x70, 0, 0x7E, 0x7B, 0x73, 24];
+key &#x3D; [0x11, 0x65, 0x49, 0x4b]
+​
+a &#x3D; &#39;&#39;
+for i in range(0, len(out)):
+    c &#x3D; key[i % 4] ^ out[i]
+    a &#x3D; a + chr(c)
+    print(a)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>结果是：flag{6700280a84487e46f76f2f60ce4ae70b}</p>
+<h3 id="HGAME-2022-week1-flagchecker"><a href="#HGAME-2022-week1-flagchecker" class="headerlink" title="[HGAME 2022 week1]flagchecker"></a>[HGAME 2022 week1]flagchecker</h3><p>反编译后查看内容，是一个需要进行RC4加密，然后再进行base64编码输出的过程。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-36-7bc6ca6fcc771c69fe89123c63e40615-image-20230423103021841-099496.png" alt="image-20230423103021841"></p>
+<p>解密代码</p>
+<pre class="line-numbers language-none"><code class="language-none">#coding:utf-8
+​
+from Crypto.Cipher import ARC4
+import base64
+​
+def rc4_decrypt(key, data):
+    cipher &#x3D; ARC4.new(key)
+    return cipher.decrypt(base64.b64decode(data))
+​
+key &#x3D; b&#39;carol&#39;
+data &#x3D; b&#39;mg6CITV6GEaFDTYnObFmENOAVjKcQmGncF90WhqvCFyhhsyqq1s&#x3D;&#39;
+​
+decrypted_data &#x3D; rc4_decrypt(key, data)
+print(decrypted_data)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="SWPU-2019-ThousandYearsAgo"><a href="#SWPU-2019-ThousandYearsAgo" class="headerlink" title="[SWPU 2019]ThousandYearsAgo"></a>[SWPU 2019]ThousandYearsAgo</h3><p>反编译APP失败，解压缩发现dex异常，在res下发现所谓的真正的APP，一个txt文件，但是是压缩包，打开发现是APP目录格式，修改后缀打开即可。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-40-6ee479279b0bd8cae537a6bd613a01b7-image-20230423150327583-124251.png" alt="image-20230423150327583"></p>
+<p>Java层没有发现有用的东西，jni层调用了两个函数，反编译libnative-lib.so。</p>
+<p>jni内有JNI_Onload函数，其中做了一个函数调用的判断。检查是否能获取到环境变量，然后再去检查是否存在MainActivity，然后调用stringFromJNI。</p>
+<p>其中还有一个StringFromJNI，这个函数就是一个提示，会返回<code>flag是flag&#123;WeLcome_to-SWPU&#125;&#125;加密的结果</code>。</p>
+<p>直接还原方法stringFromJNI</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+​
+int main() &#123;
+    size_t i;
+    char a1[35] &#x3D; &quot;flag&#123;WeLcome_to-SWPU&#125;&#125;&quot;;
+    int a2 &#x3D; 5;
+    for ( i &#x3D; 0; i &lt; strlen(a1); ++i ) &#123;
+        if ( a1[i] &lt; 0x41 || a1[i] &gt; 0x5A ) &#123;
+            if ( a1[i] &gt;&#x3D; 0x61 &amp;&amp; a1[i] &lt;&#x3D; 0x7A )
+                a1[i] &#x3D; (a1[i] + a2 - 97) % 26 + 97;
+        &#125; else &#123;
+            a1[i] &#x3D; (a1[i] + a2 - 65) % 26 + 65;
+        &#125;
+    &#125;
+    printf(a1);
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>结果是：kqfl{BjQhtrj_yt-XBUZ}}，再加上flag的前后缀即可。</p>
+<h3 id="鹤城杯-2021-AreYouRich"><a href="#鹤城杯-2021-AreYouRich" class="headerlink" title="[鹤城杯 2021]AreYouRich"></a>[鹤城杯 2021]AreYouRich</h3><p>反编译发现是一个计算过程，这个关于账号密码没有提示，比如账号<code>qweasdzxcr</code>，计算出来的密码就是<code>qweasdzxcr_SUGCQFXZAP@001</code></p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-44-1edf7942a221a73c3bfaae3539fbd271-image-20230424141047967-aeb7f5.png" alt="image-20230424141047967"></p>
+<p>在UserActivity内，有一个判断余额是否大于499999999的计算，大于则购买成功返回flag,还原后是<code>flag&#123;~1fHrTY8Y@_61$H*rPf6n3y!!&#125;</code>，但是这个flag并不正确，说明token不对。</p>
+<pre class="line-numbers language-none"><code class="language-none">public static void main(String[] args) throws Exception &#123;
+        byte[] arr_b &#x3D; &#123;0x40, 0x30, 0x30, 49&#125;;
+        byte[] arr_b1 &#x3D; &quot;qweasdzxcr&quot;.getBytes();
+        for(int v &#x3D; 0; v &lt; arr_b1.length; ++v) &#123;
+            arr_b1[v] &#x3D; (byte)(arr_b1[v] ^ 34);
+        &#125;
+​
+        String p &#x3D; new String(arr_b1) + new String(arr_b);
+        String ss &#x3D; &quot;qweasdzxcr&quot; + &quot;_&quot; + p + &quot;_&quot; + System.currentTimeMillis(); 
+        System.out.println(ss);
+​
+        String s;
+        byte[] arr_b0 &#x3D; &#123;102, 108, 97, 103, 0x7B&#125;;
+        byte[] arr_b11 &#x3D; &#123;0x7D&#125;;
+        byte[] arr_b22 &#x3D; new byte[]&#123;15, 70, 3, 41, 1, 0x30, 35, 0x40, 58, 50, 0, 101, 100, 99, 11, 0x7B, 52, 8, 60, 0x77, 62, 0x73, 73, 17, 16&#125;;
+        byte[] arr_b3 &#x3D; ss.getBytes();
+        if(25 &gt; arr_b3.length) &#123;
+            s &#x3D; &quot;&quot;;
+        &#125;
+        else &#123;
+            for(int v &#x3D; 0; v &lt; 25; ++v) &#123;
+                arr_b22[v] &#x3D; (byte)(arr_b22[v] ^ arr_b3[v]);
+            &#125;
+​
+            s &#x3D; new String(arr_b0) + new String(arr_b22) + new String(arr_b11);
+        &#125;
+​
+        System.out.println(s);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后再去查看另一个计算余额的过程，发现其中有涉及到token，就是账号密码的组合值，这个token至少是一个固定值，才可以正确计算出flag，先逆推出token。</p>
+<pre class="line-numbers language-none"><code class="language-none">public static void main(String[] args) throws Exception &#123;
+​
+        int[] arr_v &#x3D; new int[1];
+        byte[] arr_bq &#x3D; new byte[]&#123;81, -13, 84, -110, 72, 77, (byte)0xA0, 77, 0x20, (byte)0x8D, -75, -38, -97, 69, (byte)0xC0, 49, 8, -27, 56, 0x72, -68, -82, 76, -106, -34&#125;;
+        byte[] arr_b2 &#x3D; &quot;5FQ5AaBGbqLGfYwjaRAuWGdDvyjbX5nH&quot;.getBytes();
+        byte[] arr_b3 &#x3D; new byte[0x100];
+        for(int v &#x3D; 0; v &lt; 0x100; ++v) &#123;
+            arr_b3[v] &#x3D; (byte)v;
+        &#125;
+​
+        if(arr_b2.length &#x3D;&#x3D; 0) &#123;
+            arr_b3 &#x3D; null;
+        &#125;
+        else &#123;
+            int v2 &#x3D; 0;
+            int v3 &#x3D; 0;
+            for(int v1 &#x3D; 0; v1 &lt; 0x100; ++v1) &#123;
+                v3 &#x3D; (arr_b2[v2] &amp; 0xFF) + (arr_b3[v1] &amp; 0xFF) + v3 &amp; 0xFF;
+                byte b &#x3D; arr_b3[v1];
+                arr_b3[v1] &#x3D; arr_b3[v3];
+                arr_b3[v3] &#x3D; b;
+                v2 &#x3D; (v2 + 1) % arr_b2.length;
+            &#125;
+        &#125;
+        String string;
+​
+        int v4 &#x3D; Math.min(25, arr_bq.length);
+        int v5 &#x3D; 16;
+        int v7 &#x3D; 0;
+        int v8 &#x3D; 0;
+        char[] chrCharArray &#x3D; new char[25];
+        for(int v6 &#x3D; 0; v6 &lt; v4; ++v6) &#123;
+            v7 &#x3D; v7 + 1 &amp; 0xFF;
+            v8 &#x3D; (arr_b3[v7] &amp; 0xFF) + v8 &amp; 0xFF;
+            byte b1 &#x3D; arr_b3[v7];
+            arr_b3[v7] &#x3D; arr_b3[v8];
+            arr_b3[v8] &#x3D; b1;
+​
+            chrCharArray[v6] &#x3D; (char) (arr_b3[(arr_b3[v7] &amp; 0xFF) + (arr_b3[v8] &amp; 0xFF) &amp; 0xFF] ^ arr_bq[v6]);
+        &#125;
+​
+        System.out.println(chrCharArray);
+​
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>得到的token为：<code>vvvvipuser_TTTTKRWQGP@001</code>，账号密码就出来了，再把这个token放进去计算flag。</p>
+<pre class="line-numbers language-none"><code class="language-none">public static void main(String[] args) throws Exception &#123;
+​
+        String s;
+        byte[] arr_b0 &#x3D; &#123;102, 108, 97, 103, 0x7B&#125;;
+        byte[] arr_b11 &#x3D; &#123;0x7D&#125;;
+        byte[] arr_b22 &#x3D; new byte[]&#123;15, 70, 3, 41, 1, 0x30, 35, 0x40, 58, 50, 0, 101, 100, 99, 11, 0x7B, 52, 8, 60, 0x77, 62, 0x73, 73, 17, 16&#125;;
+        byte[] arr_b3 &#x3D; &quot;vvvvipuser_TTTTKRWQGP@001&quot;.getBytes();
+        if(25 &gt; arr_b3.length) &#123;
+            s &#x3D; &quot;&quot;;
+        &#125;
+        else &#123;
+            for(int v &#x3D; 0; v &lt; 25; ++v) &#123;
+                arr_b22[v] &#x3D; (byte)(arr_b22[v] ^ arr_b3[v]);
+            &#125;
+​
+            s &#x3D; new String(arr_b0) + new String(arr_b22) + new String(arr_b11);
+        &#125;
+​
+        System.out.println(s);
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>得到flag：<code>flag&#123;y0u_h@V3_@_107_0f_m0n3y!!&#125;</code></p>
+<h3 id="鹤城杯-2021-designEachStep"><a href="#鹤城杯-2021-designEachStep" class="headerlink" title="[鹤城杯 2021]designEachStep"></a>[鹤城杯 2021]designEachStep</h3><p>这个APP流程有点麻烦，但不难，就是需要把输入的字符串分为三部分，每8个字符跟特定的数据比对，相同则下一步，也就是可以跟据特定的数据来获取那8个字符串，首先是data.bin文件前8个字节，然后是des解密后再用Inflater压缩获取前8位跟输入字符串的中间8位一致，des再解密后LZ4解压缩获取最后字符串的8位。反编译代码太长这里不贴，直接写计算代码：</p>
+<p>下面的data是我手动解压后，不然还需要再进行一次解压缩。</p>
+<pre class="line-numbers language-none"><code class="language-none">public static void getEncodeStr() throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException &#123;
+        byte[] des_decry;
+        byte[] arr_b14;
+        byte[] arr_b10 &#x3D; new byte[0];
+        byte[] arr_b3 &#x3D; null;
+        try (FileInputStream fis &#x3D; new FileInputStream(&quot;E:\\Java_File\\File\\src\\data&quot;)) &#123;
+            byte[] header &#x3D; new byte[8];
+            int bytesRead &#x3D; fis.read(header, 0, 8);
+            byte[] data &#x3D; new byte[fis.available()];
+            bytesRead &#x3D; fis.read(data);
+​
+            Cipher cipher0 &#x3D; Cipher.getInstance(&quot;DES&quot;);
+            cipher0.init(2, j(header));
+            des_decry &#x3D; cipher0.doFinal(data);
+​
+            Inflater inflater &#x3D; new Inflater();
+            inflater.setInput(des_decry);
+            ByteArrayOutputStream byteArrayOutputStream1 &#x3D; new ByteArrayOutputStream(des_decry.length);
+            try &#123;
+                byte[] des_decry2 &#x3D; new byte[0x400];
+                while (!inflater.finished()) &#123;
+                    byteArrayOutputStream1.write(des_decry2, 0, inflater.inflate(des_decry2));
+                &#125;
+                byteArrayOutputStream1.close();
+            &#125; catch (Exception exception0) &#123;
+                System.out.println(&quot;error&quot;);
+            &#125;
+​
+            byte[] output &#x3D; new byte[des_decry.length];
+            int resultLength &#x3D; inflater.inflate(output);
+            inflater.end();
+            byte[] result &#x3D; byteArrayOutputStream1.toByteArray();
+            byte[] arr_b12 &#x3D; new byte[0];
+            if (result.length &gt;&#x3D; 8) &#123;
+                arr_b12 &#x3D; new byte[8];
+                System.arraycopy(result, 0, arr_b12, 0, 8);
+                byte[] arr_b13 &#x3D; new byte[result.length - 8];
+                System.arraycopy(result, 8, arr_b13, 0, result.length - 8);
+                Cipher cipher1 &#x3D; Cipher.getInstance(&quot;DES&quot;);
+                cipher1.init(2, j(arr_b12));
+                arr_b14 &#x3D; cipher1.doFinal(arr_b13);
+                arr_b10 &#x3D; arr_b14;
+            &#125;
+​
+            LZ4SafeDecompressor lZ4SafeDecompressor0 &#x3D; LZ4Factory.safeInstance().safeDecompressor();
+            byte[] arr_b15 &#x3D; new byte[arr_b10.length * 5];
+            int v1 &#x3D; lZ4SafeDecompressor0.decompress(arr_b10, 0, arr_b10.length, arr_b15, 0);
+            byte[] arr_b16 &#x3D; new byte[v1];
+            System.arraycopy(arr_b15, 0, arr_b16, 0, v1);
+            byte[] arr_b17 &#x3D; new byte[0];
+            if (v1 &gt;&#x3D; 8) &#123;
+                arr_b17 &#x3D; new byte[8];
+                System.arraycopy(arr_b16, 0, arr_b17, 0, 8);
+                int v2 &#x3D; v1 - 8;
+                byte[] arr_b18 &#x3D; new byte[v2];
+                System.arraycopy(arr_b16, 8, arr_b18, 0, v2);
+                Cipher cipher2 &#x3D; Cipher.getInstance(&quot;DES&quot;);
+                cipher2.init(2, j(arr_b17));
+                arr_b3 &#x3D; cipher2.doFinal(arr_b18);
+            &#125;
+            byte[] m &#x3D; mergeBytes(header, arr_b12, arr_b17);
+​
+            System.out.println(new String(m));
+        &#125; catch (DataFormatException e) &#123;
+            throw new RuntimeException(e);
+        &#125;
+    &#125;
+    
+    public static byte[] mergeBytes(byte[]... bytes) &#123;
+        int length &#x3D; 0;
+        for (byte[] b : bytes) &#123;
+            length +&#x3D; b.length;
+        &#125;
+        byte[] result &#x3D; new byte[length];
+        int destPos &#x3D; 0;
+        for (byte[] b : bytes) &#123;
+            System.arraycopy(b, 0, result, destPos, b.length);
+            destPos +&#x3D; b.length;
+        &#125;
+        return result;
+    &#125;
+    
+    public static Key j(byte[] arr_b) &#123;
+        byte[] arr_b1 &#x3D; new byte[8];
+        for(int v &#x3D; 0; v &lt; arr_b.length &amp;&amp; v &lt; 8; ++v) &#123;
+            arr_b1[v] &#x3D; arr_b[v];
+        &#125;
+​
+        return new SecretKeySpec(arr_b1, &quot;DES&quot;);
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>得到flag的值：<code>DE5_c0mpr355_m@y_c0nfu53</code></p>
+<h3 id="GFCTF-2021-easy-low"><a href="#GFCTF-2021-easy-low" class="headerlink" title="[GFCTF 2021]easy_low"></a>[GFCTF 2021]easy_low</h3><p>反编译得到一个类似账号密码判断的流程，但是需要逆推出</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-51-d63561919c03b936c972b3613ab980cb-image-20230427175818488-e456c7.png" alt="image-20230427175818488"></p>
+<p>输入的账号也就是字符串s进行encode操作</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-53-0b6cbccb5f92488154526bdc8483de42-image-20230427175901885-24339b.png" alt="image-20230427175901885"></p>
+<p>字符串计算前后相等，这样可以爆破出账号s，得到结果为：<code>LOHILMNMLKHILKHI</code></p>
+<pre class="line-numbers language-none"><code class="language-none">public static int encode(byte[] arr_b) &#123;
+        byte[] arr_b2 &#x3D; new byte[16];
+        byte[] ast &#x3D; &quot;qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM&quot;.getBytes();
+​
+        for(int v1 &#x3D; 0; v1 &lt; 16; ++v1) &#123;
+            for(int x &#x3D; 0; x &lt; ast.length; ++x) &#123;
+                arr_b2[v1] &#x3D; (byte)((ast[x] + arr_b[v1]) % 61);
+​
+                arr_b2[v1] &#x3D; (byte)(arr_b2[v1] * 2 - v1);
+                if (arr_b2[v1] &#x3D;&#x3D; ast[x]) &#123;
+                    System.out.println((char) arr_b2[v1]);
+                &#125;
+            &#125;   &#x2F;&#x2F;LOHILMNMLKHILKHI
+        &#125;
+        return 0;
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后再去计算密码，可得到结果：<code>nmjknoloni_@0011</code></p>
+<pre class="line-numbers language-none"><code class="language-none">public static void main(String[] args) throws Exception &#123;
+​
+        byte[] arr_b &#x3D; &#123;0x40, 0x30, 0x30, 49, 49&#125;;
+        byte[] arr_b1 &#x3D; encode(&quot;LOHILMNMLKHILKHI&quot;, new byte[]&#123;23, 22, 26, 26, 25, 25, 25, 26, 27, 28, 30, 30, 29, 30, 0x20, 0x20&#125;);
+        for(int v &#x3D; 0; v &lt; arr_b1.length; ++v) &#123;
+            arr_b1[v] &#x3D; (byte)(arr_b1[v] ^ 34);
+        &#125;
+​
+        char[] arr_c &#x3D; new String(arr_b1).toCharArray();
+        String s2 &#x3D; &quot;&quot;;
+        for(int v1 &#x3D; 0; v1 &lt; 10; ++v1) &#123;
+            s2 &#x3D; s2 + arr_c[v1];
+        &#125;
+        System.out.println(s2 + &quot;_&quot; + new String(arr_b));  &#x2F;&#x2F;nmjknoloni_@0011
+​
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后找到b类，这个类应该才是最后的验证，其中有个<code>f0.oho</code>，这个是JNI层函数调用，这里的<code>O().v</code>跟上面的计算过程一样，都是encode的过程。所以输入的参数为：密码，用户名，拼接字段。</p>
+<p><img src="https://github-1300513062.cos.ap-shanghai.myqcloud.com/img/2023/05/09/16-43-57-dc82e0522f8e0f84aa1af5483f80724d-image-20230427183126137-38f381.png" alt="image-20230427183126137"></p>
+<p>这里直接贴最后的WP，不要问，问就是没还原出来。。。</p>
+<pre class="line-numbers language-none"><code class="language-none">#include &lt;bits&#x2F;stdc++.h&gt;
+using namespace std;
+int main() &#123;
+  char key1[]&#x3D;&#123;&quot;nNjLnHlL&quot;&#125;;
+  int count&#x3D;1;
+  int key[7];&#x2F;&#x2F;nNjLnHlL
+  for (int i &#x3D; 0; i &lt; 6; ++i) &#123;
+    key[i] &#x3D; key1[count];
+    count++;
+  &#125;
+  unsigned int ks[6]&#x3D;&#123;0x5d950ef2,0x86cca2de,0xc039bbf4,0xc5948102,0xaed55e9c,0x89f14377&#125;;
+  unsigned int k&#x3D;0,bk&#x3D;0;
+  unsigned int p[4];
+  for(int i&#x3D;5;i&gt;&#x3D;0;i--)
+    if(i&gt;0) ks[i]^&#x3D;ks[i-1];
+  for(int i&#x3D;0;i&lt;24;i+&#x3D;4)&#123;
+    k&#x3D;ks[i&#x2F;4];
+    k&#x3D;(1&lt;&lt;key[i&#x2F;4])^k;
+    k&#x3D;((k&gt;&gt;16)) | ((~(k&lt;&lt;16))&amp;0xffff0000); 
+    k&#x3D;((k&lt;&lt;key[i&#x2F;4])) | (k&gt;&gt;(32-key[i&#x2F;4]));
+    for(int j&#x3D;0; j&lt;4; j++) printf(&quot;%c&quot;, *((char*)&amp;k+3-j));
+  &#125;
+  return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>结果就是：<code>WelCOme_To_mAkaBakA!BrO!</code></p>
+
+          </div>
+          <br><br>
+              
+                <div class="license-wrapper">
+                    <p>原文作者：<a href="https://misakikata.github.io">Misaki</a>
+                    <p>原文链接：<a href="https://misakikata.github.io/2023/05/App-CTF/">https://misakikata.github.io/2023/05/App-CTF/</a>
+                    <p>发表日期：<a href="https://misakikata.github.io/2023/05/App-CTF/">May 9th 2023, 4:45:00 pm</a>
+                    <p>更新日期：<a href="https://misakikata.github.io/2023/05/App-CTF/">May 9th 2023, 4:45:00 pm</a>
+                    <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+                </div>
+              
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;Android逆向</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+      <div class="">
+        <div id="toc">
+          <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+          <div id="tocbot"></div>
+        </div>
+      </div>
+  
+</div>
+
+
+<!-- Comments -->
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+    
+        
+            <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://misakikata.github.io/2023/05/App-CTF/'; 
+            this.page.identifier = '/2023/05/App-CTF/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+        
+    
+    </div>
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              <b>假如今天的你被生活辜负了，别伤心，因为明天生活还会继续辜负你！</b>
+          </div>
+          <div align="right" style="padding: 15px 0;">
+              <i class="iconfont icon-love" ></i>
+              <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      
+<script src="/js/core/jquery.min.js?v=3.2.1.js"></script>
+
+      
+<script src="/js/main.js"></script>
+
+      
+<script src="/js/core/popper.min.js"></script>
+
+      
+<script src="/js/core/bootstrap-material-design.min.js"></script>
+
+      
+<script src="/js/plugins/moment.min.js"></script>
+
+      
+<script src="/js/material-kit.min.js?v=2.0.5.js"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        
+<script src="/js/post.js"></script>
+
+        
+<script src="/js/plugins/prettify.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
